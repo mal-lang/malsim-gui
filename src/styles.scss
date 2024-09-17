@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+// ============================== THEME COLORS =====================================
+$primary: #912727;
+/*$secondary: #505f68;
+$dark: #141a36;
+$danger: #e60000;
+$warning: #ffe135;
+$light: #f8f9fa;*/
+
+// =================================================================================
+
+/*$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+);*/
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
