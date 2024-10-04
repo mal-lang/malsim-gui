@@ -1,11 +1,25 @@
-<div class="container-fluid p-2 main-container" style="height: 100vh">
-  <div class="row g-2" style="height: 100%">
-    <div class="col-1 text-center">
-      <h1 class="display-2 text-dark">TYR</h1>
-      <!--<app-menu></app-menu>-->
+<div class="container-fluid main-container p-0" style="height: 100vh">
+  <div class="w-100 row g-2 mb-4 pt-2">
+    <div class="col-4 p-4">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <button class="nav-link active" aria-current="page">
+            Attack graph
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link">Model</button>
+        </li>
+      </ul>
     </div>
+    <div class="col-4 text-center">
+      <h1 class="display-2 text-light title">TYR</h1>
+    </div>
+    <div class="col-4"></div>
+  </div>
 
-    <div class="col-11" style="height: 50%">
+  <div class="row g-2 px-3" style="height: 100%">
+    <div class="col-12">
       <div class="card bg-dark" style="height: 100%">
         <div class="card-body">
           <div class="attack-graph-container">
@@ -48,8 +62,7 @@
         </div>
       </div>
     </div>
-    <div class="col-1"></div>
-    <div class="col-4">
+    <div class="col-4" style="height: 40%">
       <div class="card bg-dark" style="height: 100%">
         <div class="card-body">
           <ag-grid-angular
@@ -64,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div class="col-7">
+    <div class="col-8" style="height: 40%">
       <div class="card bg-dark" style="height: 100%">
         <div class="card-body">
           <div #networkContainer class="network-container"></div>

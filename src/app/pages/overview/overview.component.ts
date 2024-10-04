@@ -8,8 +8,8 @@ import {
   _,
 } from 'ag-grid-community';
 import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
-import MODEL from '../../../assets/tyr_scen1_model.json';
-import ATTACKGRAPH from '../../../assets/tyr_scen1_model_attack_graph.json';
+import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
+import ATTACKGRAPH from '../../../assets/2024_09_10_11_58_generated_attack_graph.json';
 
 interface CLObject {
   eid: string;
@@ -51,11 +51,7 @@ export class OverviewComponent implements OnInit {
   // Table variables
   gridApi!: GridApi<CLObject>;
   rowData: Array<CLObject> = [];
-  columnDefs: ColDef[] = [
-    { field: 'eid' },
-    { field: 'name' },
-    { field: 'metaconcept' },
-  ];
+  columnDefs: ColDef[] = [{ field: 'name' }, { field: 'type' }];
 
   defaultColDef: ColDef = {
     sortable: true,
@@ -72,8 +68,8 @@ export class OverviewComponent implements OnInit {
     layout: {
       hierarchical: {
         enabled: true,
-        direction: 'LR',
-        nodeSpacing: 150,
+        direction: 'UD',
+        nodeSpacing: 400,
         levelSeparation: 370,
         shakeTowards: 'leaves',
       },
@@ -102,7 +98,7 @@ export class OverviewComponent implements OnInit {
       },
     },
     physics: {
-      enabled: true,
+      enabled: false,
     },
   };
 
@@ -123,13 +119,14 @@ export class OverviewComponent implements OnInit {
   }
 
   createAttackGraph() {
-    let attackNodes: Array<AttackNode> = [];
-    let attackLinks: Array<AttackLink> = [];
+    let attackNodes: Array<any> = [];
+    let attackLinks: Array<any> = [];
 
-    ATTACKGRAPH.forEach((event) => {
-      let capitlized =
-        event.atkname.charAt(0).toUpperCase() + event.atkname.slice(1);
-      let splitLabel = capitlized.split(/(?=[A-Z])/);
+    let steps: any = ATTACKGRAPH.attack_steps;
+    Object.keys(steps).forEach((event: any, index: number) => {
+      let step: any = steps[event];
+      let capitlized = step.name.charAt(0).toUpperCase() + step.name.slice(1);
+      let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
 
       let label = '';
       splitLabel.forEach((word, index) => {
@@ -139,55 +136,67 @@ export class OverviewComponent implements OnInit {
         label += word;
       });
 
-      attackNodes.push({ id: event.id, label: label, type: event.type });
-    });
+      if (step.id) {
+        attackNodes.push({
+          id: step.id.toString(),
+          label: label,
+          type: step.type,
+        });
+      }
 
-    ATTACKGRAPH.forEach((event) => {
-      event.links.forEach((link, index) => {
+      Object.keys(step.children).forEach((link, index) => {
         attackLinks.push({
-          id: event.id + index,
-          source: event.id,
-          target: link,
+          id: index + '_id:' + step.id + '_link',
+          from: step.id.toString(),
+          to: link,
         });
       });
     });
+    console.log(attackLinks);
+    console.log(attackNodes);
 
-    this.attackLinks = attackLinks;
-    this.attackNodes = attackNodes;
+    //TODO does not work with this large file
+    //this.attackLinks = attackLinks;
+    //this.attackNodes = attackNodes;
   }
 
   createModelData() {
-    let objectdict: { [key: string]: CLObject } = MODEL.objects;
-    let associations: Array<Association> = MODEL.associations;
+    let assets: { [key: string]: any } = MODEL.assets;
+    let associations: Array<any> = MODEL.associations;
 
     var visData: { nodes: Array<Node>; edges: Array<Edge> } = {
       nodes: [],
       edges: [],
     };
 
-    Object.keys(objectdict).forEach((index: string) => {
-      let object: any = objectdict[index];
-      this.rowData.push(object);
-      console.log(object);
+    Object.keys(assets).forEach((index: string) => {
+      let asset: any = assets[index];
+      this.rowData.push(asset);
       let colorOptions = { border: '#FF4C4C', background: '#FF4C4C' };
-      if (object.metaconcept === 'SoftwareVulnerability') {
+      if (asset.type === 'SoftwareVulnerability') {
         colorOptions.border = '#4CA6FF';
         colorOptions.background = '#4CA6FF';
       }
 
       visData.nodes.push({
-        id: object.eid,
+        id: Number(index),
         font: { multi: 'html', size: 20 },
-        label: object.metaconcept + '\n <b>' + object.name + '</b>',
+        label: asset.type + '\n <b>' + asset.name + '</b>',
         color: colorOptions,
-        image: this.selectIcon(object.metaconcept),
+        image: this.selectIcon(asset.type),
       });
     });
 
     associations.forEach((association) => {
+      let edgePoints: Array<number> = [];
+      Object.keys(association).forEach((a) => {
+        Object.keys(association[a]).forEach((connection) => {
+          edgePoints.push(association[a][connection][0]);
+        });
+      });
       visData.edges.push({
-        to: association.id1,
-        from: association.id2,
+        from: edgePoints[0],
+        to: edgePoints[1],
       });
     });
 

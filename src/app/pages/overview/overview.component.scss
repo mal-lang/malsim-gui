@@ -1,10 +1,24 @@
+.title {
+  font-family: "Cinzel", sans-serif !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #d13d3d;
+}
+
+.nav-link {
+  color: #fff;
+}
+
 .main-container {
   background: rgb(0, 0, 0);
   background: linear-gradient(
     339deg,
     rgba(0, 0, 0, 1) 0%,
-    rgba(43, 28, 28, 1) 52%,
-    rgba(186, 60, 60, 1) 100%
+    rgb(37, 37, 37) 52%,
+    rgb(126, 126, 126) 100%
   );
   overflow-y: scroll;
 }

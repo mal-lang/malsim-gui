@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 // ============================== THEME COLORS =====================================
-$primary: #912727;
+$primary: #d13d3d;
 /*$secondary: #505f68;
 $dark: #141a36;
 $danger: #e60000;
@@ -25,3 +25,8 @@ $light: #f8f9fa;*/
 
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-alpine.css";
+
+@font-face {
+  font-family: "Cinzel";
+  src: url(assets/font/Cinzel-VariableFont_wght.ttf) format("truetype");
+}
