@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "tyr-demo:build:production"
+              "buildTarget": "tyr-demo:build:production"
             },
             "development": {
-              "browserTarget": "tyr-demo:build:development"
+              "buildTarget": "tyr-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tyr-demo:build"
+            "buildTarget": "tyr-demo:build"
           }
         },
         "test": {
