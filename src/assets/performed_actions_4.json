@@ -1,0 +1,1073 @@
+{
+  "attacks": {
+    "875": [
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "krNsppABLu9BFc0M80c2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.3.16",
+            "name": "hq06",
+            "id": "020"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\vmtools\\\\Responder.exe",
+                "processGuid": "{e162455c-0141-6691-4308-000000001800}",
+                "processId": "3240",
+                "utcTime": "2024-07-12 10:11:13.554",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI32402\\\\msvcm90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:11:13.554",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:11:13.554\r\nProcessGuid: {e162455c-0141-6691-4308-000000001800}\r\nProcessId: 3240\r\nImage: c:\\vmtools\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI32402\\msvcm90.dll\r\nCreationUtcTime: 2024-07-12 10:11:13.554\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:11:13.5610303Z",
+                "eventRecordID": "3635",
+                "threadID": "3696",
+                "computer": "hq06.office.tyrdemo.se",
+                "task": "11",
+                "processID": "2184",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 238,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:11:14.467Z",
+          "location": "EventChannel",
+          "id": "1720779074.106719004",
+          "timestamp": "2024-07-12T12:11:14.467+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "lLNsppABLu9BFc0M80c2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.3.16",
+            "name": "hq06",
+            "id": "020"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\vmtools\\\\Responder.exe",
+                "processGuid": "{e162455c-0141-6691-4308-000000001800}",
+                "processId": "3240",
+                "utcTime": "2024-07-12 10:11:13.554",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI32402\\\\msvcr90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:11:13.554",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:11:13.554\r\nProcessGuid: {e162455c-0141-6691-4308-000000001800}\r\nProcessId: 3240\r\nImage: c:\\vmtools\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI32402\\msvcr90.dll\r\nCreationUtcTime: 2024-07-12 10:11:13.554\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:11:13.5657966Z",
+                "eventRecordID": "3637",
+                "threadID": "3696",
+                "computer": "hq06.office.tyrdemo.se",
+                "task": "11",
+                "processID": "2184",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 240,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:11:14.495Z",
+          "location": "EventChannel",
+          "id": "1720779074.106723996",
+          "timestamp": "2024-07-12T12:11:14.495+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "k7NsppABLu9BFc0M80c2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.3.16",
+            "name": "hq06",
+            "id": "020"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\vmtools\\\\Responder.exe",
+                "processGuid": "{e162455c-0141-6691-4308-000000001800}",
+                "processId": "3240",
+                "utcTime": "2024-07-12 10:11:13.554",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI32402\\\\msvcp90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:11:13.554",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:11:13.554\r\nProcessGuid: {e162455c-0141-6691-4308-000000001800}\r\nProcessId: 3240\r\nImage: c:\\vmtools\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI32402\\msvcp90.dll\r\nCreationUtcTime: 2024-07-12 10:11:13.554\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:11:13.5628556Z",
+                "eventRecordID": "3636",
+                "threadID": "3696",
+                "computer": "hq06.office.tyrdemo.se",
+                "task": "11",
+                "processID": "2184",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 239,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:11:14.480Z",
+          "location": "EventChannel",
+          "id": "1720779074.106721500",
+          "timestamp": "2024-07-12T12:11:14.480+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "lrNsppABLu9BFc0M80c2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.3.16",
+            "name": "hq06",
+            "id": "020"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\vmtools\\\\Responder.exe",
+                "processGuid": "{e162455c-0141-6691-4308-000000001800}",
+                "processId": "3240",
+                "utcTime": "2024-07-12 10:11:13.570",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI32402\\\\sqlite3.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:11:13.570",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:11:13.570\r\nProcessGuid: {e162455c-0141-6691-4308-000000001800}\r\nProcessId: 3240\r\nImage: c:\\vmtools\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI32402\\sqlite3.dll\r\nCreationUtcTime: 2024-07-12 10:11:13.570\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:11:13.5790533Z",
+                "eventRecordID": "3639",
+                "threadID": "3696",
+                "computer": "hq06.office.tyrdemo.se",
+                "task": "11",
+                "processID": "2184",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 242,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:11:14.527Z",
+          "location": "EventChannel",
+          "id": "1720779074.106728992",
+          "timestamp": "2024-07-12T12:11:14.527+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "lbNsppABLu9BFc0M80c2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.3.16",
+            "name": "hq06",
+            "id": "020"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\vmtools\\\\Responder.exe",
+                "processGuid": "{e162455c-0141-6691-4308-000000001800}",
+                "processId": "3240",
+                "utcTime": "2024-07-12 10:11:13.570",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI32402\\\\python27.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:11:13.570",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:11:13.570\r\nProcessGuid: {e162455c-0141-6691-4308-000000001800}\r\nProcessId: 3240\r\nImage: c:\\vmtools\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI32402\\python27.dll\r\nCreationUtcTime: 2024-07-12 10:11:13.570\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:11:13.5757123Z",
+                "eventRecordID": "3638",
+                "threadID": "3696",
+                "computer": "hq06.office.tyrdemo.se",
+                "task": "11",
+                "processID": "2184",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 241,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:11:14.511Z",
+          "location": "EventChannel",
+          "id": "1720779074.106726492",
+          "timestamp": "2024-07-12T12:11:14.511+0200"
+        }
+      }
+    ],
+    "94": [
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "DbNuppABLu9BFc0MM0i1",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.44",
+            "name": "ca",
+            "id": "008"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\temp\\\\Responder.exe",
+                "processGuid": "{6EBABFA0-018C-6691-BA06-000000001000}",
+                "processId": "360",
+                "utcTime": "2024-07-12 10:12:28.476",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI3602\\\\python27.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:12:28.476",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:12:28.476\r\nProcessGuid: {6EBABFA0-018C-6691-BA06-000000001000}\r\nProcessId: 360\r\nImage: c:\\temp\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI3602\\python27.dll\r\nCreationUtcTime: 2024-07-12 10:12:28.476\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:12:28.487704900Z",
+                "eventRecordID": "2884",
+                "threadID": "2420",
+                "computer": "ca.office.tyrdemo.se",
+                "task": "11",
+                "processID": "1832",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 249,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:12:36.926Z",
+          "location": "EventChannel",
+          "id": "1720779156.106950216",
+          "timestamp": "2024-07-12T12:12:36.926+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "CbNuppABLu9BFc0MM0i1",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.44",
+            "name": "ca",
+            "id": "008"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\temp\\\\Responder.exe",
+                "processGuid": "{6EBABFA0-018C-6691-BA06-000000001000}",
+                "processId": "360",
+                "utcTime": "2024-07-12 10:12:28.461",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI3602\\\\msvcm90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:12:28.461",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:12:28.461\r\nProcessGuid: {6EBABFA0-018C-6691-BA06-000000001000}\r\nProcessId: 360\r\nImage: c:\\temp\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI3602\\msvcm90.dll\r\nCreationUtcTime: 2024-07-12 10:12:28.461\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:12:28.473185500Z",
+                "eventRecordID": "2881",
+                "threadID": "2420",
+                "computer": "ca.office.tyrdemo.se",
+                "task": "11",
+                "processID": "1832",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 245,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:12:36.863Z",
+          "location": "EventChannel",
+          "id": "1720779156.106940320",
+          "timestamp": "2024-07-12T12:12:36.863+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "CrNuppABLu9BFc0MM0i1",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.44",
+            "name": "ca",
+            "id": "008"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\temp\\\\Responder.exe",
+                "processGuid": "{6EBABFA0-018C-6691-BA06-000000001000}",
+                "processId": "360",
+                "utcTime": "2024-07-12 10:12:28.461",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI3602\\\\msvcp90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:12:28.461",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:12:28.461\r\nProcessGuid: {6EBABFA0-018C-6691-BA06-000000001000}\r\nProcessId: 360\r\nImage: c:\\temp\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI3602\\msvcp90.dll\r\nCreationUtcTime: 2024-07-12 10:12:28.461\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:12:28.474968500Z",
+                "eventRecordID": "2882",
+                "threadID": "2420",
+                "computer": "ca.office.tyrdemo.se",
+                "task": "11",
+                "processID": "1832",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 246,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:12:36.879Z",
+          "location": "EventChannel",
+          "id": "1720779156.106942794",
+          "timestamp": "2024-07-12T12:12:36.879+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "C7NuppABLu9BFc0MM0i1",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.44",
+            "name": "ca",
+            "id": "008"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\temp\\\\Responder.exe",
+                "processGuid": "{6EBABFA0-018C-6691-BA06-000000001000}",
+                "processId": "360",
+                "utcTime": "2024-07-12 10:12:28.476",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI3602\\\\msvcr90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:12:28.476",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:12:28.476\r\nProcessGuid: {6EBABFA0-018C-6691-BA06-000000001000}\r\nProcessId: 360\r\nImage: c:\\temp\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI3602\\msvcr90.dll\r\nCreationUtcTime: 2024-07-12 10:12:28.476\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:12:28.477953200Z",
+                "eventRecordID": "2883",
+                "threadID": "2420",
+                "computer": "ca.office.tyrdemo.se",
+                "task": "11",
+                "processID": "1832",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 247,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:12:36.925Z",
+          "location": "EventChannel",
+          "id": "1720779156.106945268",
+          "timestamp": "2024-07-12T12:12:36.925+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "DLNuppABLu9BFc0MM0i1",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.44",
+            "name": "ca",
+            "id": "008"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\temp\\\\Responder.exe",
+                "processGuid": "{6EBABFA0-018C-6691-BA06-000000001000}",
+                "processId": "360",
+                "utcTime": "2024-07-12 10:12:28.476",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI3602\\\\sqlite3.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:12:28.476",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:12:28.476\r\nProcessGuid: {6EBABFA0-018C-6691-BA06-000000001000}\r\nProcessId: 360\r\nImage: c:\\temp\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI3602\\sqlite3.dll\r\nCreationUtcTime: 2024-07-12 10:12:28.476\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:12:28.491124100Z",
+                "eventRecordID": "2885",
+                "threadID": "2420",
+                "computer": "ca.office.tyrdemo.se",
+                "task": "11",
+                "processID": "1832",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 248,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:12:36.925Z",
+          "location": "EventChannel",
+          "id": "1720779156.106947742",
+          "timestamp": "2024-07-12T12:12:36.925+0200"
+        }
+      }
+    ],
+    "520": [
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "MbNuppABLu9BFc0M1EkD",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.2.13",
+            "name": "historian",
+            "id": "003"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\test\\\\Responder.exe",
+                "processGuid": "{e898a682-01bc-6691-2506-000000000a00}",
+                "processId": "5024",
+                "utcTime": "2024-07-12 10:13:16.708",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI50242\\\\python27.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:13:16.708",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:13:16.708\r\nProcessGuid: {e898a682-01bc-6691-2506-000000000a00}\r\nProcessId: 5024\r\nImage: c:\\test\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI50242\\python27.dll\r\nCreationUtcTime: 2024-07-12 10:13:16.708\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:13:16.722858300Z",
+                "eventRecordID": "3615",
+                "threadID": "3280",
+                "computer": "historian.tyrdemo.se",
+                "task": "11",
+                "processID": "2480",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 253,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:13:17.721Z",
+          "location": "EventChannel",
+          "id": "1720779197.107191003",
+          "timestamp": "2024-07-12T12:13:17.721+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "L7NuppABLu9BFc0M1EkD",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.2.13",
+            "name": "historian",
+            "id": "003"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\test\\\\Responder.exe",
+                "processGuid": "{e898a682-01bc-6691-2506-000000000a00}",
+                "processId": "5024",
+                "utcTime": "2024-07-12 10:13:16.708",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI50242\\\\msvcp90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:13:16.708",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:13:16.708\r\nProcessGuid: {e898a682-01bc-6691-2506-000000000a00}\r\nProcessId: 5024\r\nImage: c:\\test\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI50242\\msvcp90.dll\r\nCreationUtcTime: 2024-07-12 10:13:16.708\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:13:16.710050900Z",
+                "eventRecordID": "3613",
+                "threadID": "3280",
+                "computer": "historian.tyrdemo.se",
+                "task": "11",
+                "processID": "2480",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 251,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:13:17.690Z",
+          "location": "EventChannel",
+          "id": "1720779197.107186025",
+          "timestamp": "2024-07-12T12:13:17.690+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "MrNuppABLu9BFc0M1EkD",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.2.13",
+            "name": "historian",
+            "id": "003"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\test\\\\Responder.exe",
+                "processGuid": "{e898a682-01bc-6691-2506-000000000a00}",
+                "processId": "5024",
+                "utcTime": "2024-07-12 10:13:16.723",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI50242\\\\sqlite3.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:13:16.723",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:13:16.723\r\nProcessGuid: {e898a682-01bc-6691-2506-000000000a00}\r\nProcessId: 5024\r\nImage: c:\\test\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI50242\\sqlite3.dll\r\nCreationUtcTime: 2024-07-12 10:13:16.723\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:13:16.726511400Z",
+                "eventRecordID": "3616",
+                "threadID": "3280",
+                "computer": "historian.tyrdemo.se",
+                "task": "11",
+                "processID": "2480",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 254,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:13:17.737Z",
+          "location": "EventChannel",
+          "id": "1720779197.107193496",
+          "timestamp": "2024-07-12T12:13:17.737+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "LrNuppABLu9BFc0M1EkD",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.2.13",
+            "name": "historian",
+            "id": "003"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\test\\\\Responder.exe",
+                "processGuid": "{e898a682-01bc-6691-2506-000000000a00}",
+                "processId": "5024",
+                "utcTime": "2024-07-12 10:13:16.692",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI50242\\\\msvcm90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:13:16.692",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:13:16.692\r\nProcessGuid: {e898a682-01bc-6691-2506-000000000a00}\r\nProcessId: 5024\r\nImage: c:\\test\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI50242\\msvcm90.dll\r\nCreationUtcTime: 2024-07-12 10:13:16.692\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:13:16.708268800Z",
+                "eventRecordID": "3612",
+                "threadID": "3280",
+                "computer": "historian.tyrdemo.se",
+                "task": "11",
+                "processID": "2480",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 250,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:13:17.676Z",
+          "location": "EventChannel",
+          "id": "1720779197.107183536",
+          "timestamp": "2024-07-12T12:13:17.676+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "MLNuppABLu9BFc0M1EkD",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.2.13",
+            "name": "historian",
+            "id": "003"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "c:\\\\test\\\\Responder.exe",
+                "processGuid": "{e898a682-01bc-6691-2506-000000000a00}",
+                "processId": "5024",
+                "utcTime": "2024-07-12 10:13:16.708",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\_MEI50242\\\\msvcr90.dll",
+                "ruleName": "DLL",
+                "creationUtcTime": "2024-07-12 10:13:16.708",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: DLL\r\nUtcTime: 2024-07-12 10:13:16.708\r\nProcessGuid: {e898a682-01bc-6691-2506-000000000a00}\r\nProcessId: 5024\r\nImage: c:\\test\\Responder.exe\r\nTargetFilename: C:\\Windows\\Temp\\_MEI50242\\msvcr90.dll\r\nCreationUtcTime: 2024-07-12 10:13:16.708\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:13:16.712987900Z",
+                "eventRecordID": "3614",
+                "threadID": "3280",
+                "computer": "historian.tyrdemo.se",
+                "task": "11",
+                "processID": "2480",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 252,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:13:17.705Z",
+          "location": "EventChannel",
+          "id": "1720779197.107188514",
+          "timestamp": "2024-07-12T12:13:17.705+0200"
+        }
+      }
+    ]
+  },
+  "defenses": {
+    "781": {
+      "weight": 0.02834747652200631,
+      "action": {
+        "agents": [
+          "019"
+        ],
+        "system": "hq05",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "852": {
+      "weight": 0.8357651039198697,
+      "action": {
+        "agents": [
+          "020"
+        ],
+        "system": "hq06",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "568": {
+      "weight": 0.43276706790505337,
+      "action": {
+        "agents": [
+          "016"
+        ],
+        "system": "hq02",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "923": {
+      "weight": 0.762280082457942,
+      "action": {
+        "agents": [
+          "011"
+        ],
+        "system": "hqfile",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    }
+  }
+}

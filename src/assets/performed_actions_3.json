@@ -1,0 +1,61 @@
+{
+  "attacks": {},
+  "defenses": {
+    "781": {
+      "weight": 0.7609624449125756,
+      "action": {
+        "agents": [
+          "019"
+        ],
+        "system": "hq05",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "852": {
+      "weight": 0.47224524357611664,
+      "action": {
+        "agents": [
+          "020"
+        ],
+        "system": "hq06",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "568": {
+      "weight": 0.37961522332372777,
+      "action": {
+        "agents": [
+          "016"
+        ],
+        "system": "hq02",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    },
+    "923": {
+      "weight": 0.20995480637147712,
+      "action": {
+        "agents": [
+          "011"
+        ],
+        "system": "hqfile",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    }
+  }
+}

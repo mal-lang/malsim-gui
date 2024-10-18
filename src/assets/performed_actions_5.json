@@ -1,0 +1,1078 @@
+{
+  "attacks": {
+    "236": [
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "jLNzppABLu9BFc0MJk0h",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-02d8-6691-9709-000000000c00}",
+                "processId": "6020",
+                "utcTime": "2024-07-12 10:18:00.561",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_3fmnphdn.fqb.ps1",
+                "creationUtcTime": "2024-07-12 10:18:00.561",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:18:00.561\r\nProcessGuid: {4bd69357-02d8-6691-9709-000000000c00}\r\nProcessId: 6020\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_3fmnphdn.fqb.ps1\r\nCreationUtcTime: 2024-07-12 10:18:00.561\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:18:00.576076600Z",
+                "eventRecordID": "3976",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 270,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:18:01.226Z",
+          "location": "EventChannel",
+          "id": "1720779481.109135691",
+          "timestamp": "2024-07-12T12:18:01.226+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "JrN0ppABLu9BFc0MEE66",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0313-6691-9e09-000000000c00}",
+                "processId": "3504",
+                "utcTime": "2024-07-12 10:18:59.921",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_kzfbfpd4.534.ps1",
+                "creationUtcTime": "2024-07-12 10:18:59.921",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:18:59.921\r\nProcessGuid: {4bd69357-0313-6691-9e09-000000000c00}\r\nProcessId: 3504\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_kzfbfpd4.534.ps1\r\nCreationUtcTime: 2024-07-12 10:18:59.921\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:18:59.926053800Z",
+                "eventRecordID": "3987",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 319,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:00.227Z",
+          "location": "EventChannel",
+          "id": "1720779540.109631074",
+          "timestamp": "2024-07-12T12:19:00.227+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "ebN0ppABLu9BFc0MlU6s",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0335-6691-ad09-000000000c00}",
+                "processId": "3112",
+                "utcTime": "2024-07-12 10:19:33.499",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_per1fnxt.cbz.ps1",
+                "creationUtcTime": "2024-07-12 10:19:33.499",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:33.499\r\nProcessGuid: {4bd69357-0335-6691-ad09-000000000c00}\r\nProcessId: 3112\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_per1fnxt.cbz.ps1\r\nCreationUtcTime: 2024-07-12 10:19:33.499\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:33.512946400Z",
+                "eventRecordID": "4014",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 327,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:34.022Z",
+          "location": "EventChannel",
+          "id": "1720779574.110124791",
+          "timestamp": "2024-07-12T12:19:34.022+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "8bNxppABLu9BFc0MQUp2",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-025c-6691-8f09-000000000c00}",
+                "processId": "5240",
+                "utcTime": "2024-07-12 10:15:56.343",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_mgzfulpd.cp5.ps1",
+                "creationUtcTime": "2024-07-12 10:15:56.343",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:15:56.343\r\nProcessGuid: {4bd69357-025c-6691-8f09-000000000c00}\r\nProcessId: 5240\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_mgzfulpd.cp5.ps1\r\nCreationUtcTime: 2024-07-12 10:15:56.343\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:15:56.361206800Z",
+                "eventRecordID": "3967",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 257,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:15:57.055Z",
+          "location": "EventChannel",
+          "id": "1720779357.107707127",
+          "timestamp": "2024-07-12T12:15:57.055+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "87NxppABLu9BFc0MRUpf",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-025c-6691-9109-000000000c00}",
+                "processId": "5252",
+                "utcTime": "2024-07-12 10:15:56.499",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_u1bfpddp.kfk.ps1",
+                "creationUtcTime": "2024-07-12 10:15:56.499",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:15:56.499\r\nProcessGuid: {4bd69357-025c-6691-9109-000000000c00}\r\nProcessId: 5252\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_u1bfpddp.kfk.ps1\r\nCreationUtcTime: 2024-07-12 10:15:56.499\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:15:56.506436600Z",
+                "eventRecordID": "3969",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 258,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:15:57.086Z",
+          "location": "EventChannel",
+          "id": "1720779357.107733338",
+          "timestamp": "2024-07-12T12:15:57.086+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "jbNzppABLu9BFc0MJk0h",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-02d8-6691-9909-000000000c00}",
+                "processId": "5476",
+                "utcTime": "2024-07-12 10:18:00.702",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_bg2e5rnz.ntg.ps1",
+                "creationUtcTime": "2024-07-12 10:18:00.702",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:18:00.702\r\nProcessGuid: {4bd69357-02d8-6691-9909-000000000c00}\r\nProcessId: 5476\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_bg2e5rnz.ntg.ps1\r\nCreationUtcTime: 2024-07-12 10:18:00.702\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:18:00.721232800Z",
+                "eventRecordID": "3978",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 271,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:18:01.257Z",
+          "location": "EventChannel",
+          "id": "1720779481.109138342",
+          "timestamp": "2024-07-12T12:18:01.257+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "PrN0ppABLu9BFc0MKE4u",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0319-6691-a609-000000000c00}",
+                "processId": "4024",
+                "utcTime": "2024-07-12 10:19:05.546",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_h140zfqc.ury.ps1",
+                "creationUtcTime": "2024-07-12 10:19:05.546",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:05.546\r\nProcessGuid: {4bd69357-0319-6691-a609-000000000c00}\r\nProcessId: 4024\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_h140zfqc.ury.ps1\r\nCreationUtcTime: 2024-07-12 10:19:05.546\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:05.557396600Z",
+                "eventRecordID": "4003",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 324,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:05.882Z",
+          "location": "EventChannel",
+          "id": "1720779545.109837960",
+          "timestamp": "2024-07-12T12:19:05.882+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "JbN0ppABLu9BFc0MEE66",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0313-6691-9c09-000000000c00}",
+                "processId": "4416",
+                "utcTime": "2024-07-12 10:18:59.764",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_1ge20l54.cek.ps1",
+                "creationUtcTime": "2024-07-12 10:18:59.764",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:18:59.764\r\nProcessGuid: {4bd69357-0313-6691-9c09-000000000c00}\r\nProcessId: 4416\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_1ge20l54.cek.ps1\r\nCreationUtcTime: 2024-07-12 10:18:59.764\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:18:59.783781000Z",
+                "eventRecordID": "3985",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 318,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:00.194Z",
+          "location": "EventChannel",
+          "id": "1720779540.109628423",
+          "timestamp": "2024-07-12T12:19:00.194+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "eLN0ppABLu9BFc0MlU6s",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0335-6691-ab09-000000000c00}",
+                "processId": "2300",
+                "utcTime": "2024-07-12 10:19:33.358",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_awxkm3b5.wo3.ps1",
+                "creationUtcTime": "2024-07-12 10:19:33.358",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:33.358\r\nProcessGuid: {4bd69357-0335-6691-ab09-000000000c00}\r\nProcessId: 2300\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_awxkm3b5.wo3.ps1\r\nCreationUtcTime: 2024-07-12 10:19:33.358\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:33.371295200Z",
+                "eventRecordID": "4012",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 326,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:33.991Z",
+          "location": "EventChannel",
+          "id": "1720779573.110122140",
+          "timestamp": "2024-07-12T12:19:33.991+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "qLN0ppABLu9BFc0M8053",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-034e-6691-b009-000000000c00}",
+                "processId": "5560",
+                "utcTime": "2024-07-12 10:19:58.484",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_szled2rm.xnd.ps1",
+                "creationUtcTime": "2024-07-12 10:19:58.484",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:58.484\r\nProcessGuid: {4bd69357-034e-6691-b009-000000000c00}\r\nProcessId: 5560\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_szled2rm.xnd.ps1\r\nCreationUtcTime: 2024-07-12 10:19:58.484\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:58.486455100Z",
+                "eventRecordID": "4023",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 328,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:58.600Z",
+          "location": "EventChannel",
+          "id": "1720779598.110329665",
+          "timestamp": "2024-07-12T12:19:58.600+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "qrN0ppABLu9BFc0M905g",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-034e-6691-b509-000000000c00}",
+                "processId": "992",
+                "utcTime": "2024-07-12 10:19:58.718",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_lsxhxxsh.5fz.ps1",
+                "creationUtcTime": "2024-07-12 10:19:58.718",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:58.718\r\nProcessGuid: {4bd69357-034e-6691-b509-000000000c00}\r\nProcessId: 992\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_lsxhxxsh.5fz.ps1\r\nCreationUtcTime: 2024-07-12 10:19:58.718\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:58.737587000Z",
+                "eventRecordID": "4029",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 330,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:58.882Z",
+          "location": "EventChannel",
+          "id": "1720779598.110334967",
+          "timestamp": "2024-07-12T12:19:58.882+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "OLN0ppABLu9BFc0MJE5E",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0319-6691-a109-000000000c00}",
+                "processId": "1340",
+                "utcTime": "2024-07-12 10:19:05.327",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_vujy0mlg.10x.ps1",
+                "creationUtcTime": "2024-07-12 10:19:05.327",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:05.327\r\nProcessGuid: {4bd69357-0319-6691-a109-000000000c00}\r\nProcessId: 1340\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_vujy0mlg.10x.ps1\r\nCreationUtcTime: 2024-07-12 10:19:05.327\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:05.343247700Z",
+                "eventRecordID": "3996",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 322,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:05.385Z",
+          "location": "EventChannel",
+          "id": "1720779545.109710837",
+          "timestamp": "2024-07-12T12:19:05.385+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "OrN0ppABLu9BFc0MKE4u",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0319-6691-a409-000000000c00}",
+                "processId": "5140",
+                "utcTime": "2024-07-12 10:19:05.406",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_modtme02.orq.ps1",
+                "creationUtcTime": "2024-07-12 10:19:05.406",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:05.406\r\nProcessGuid: {4bd69357-0319-6691-a409-000000000c00}\r\nProcessId: 5140\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_modtme02.orq.ps1\r\nCreationUtcTime: 2024-07-12 10:19:05.406\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:05.411683800Z",
+                "eventRecordID": "3999",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 323,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:05.807Z",
+          "location": "EventChannel",
+          "id": "1720779545.109752387",
+          "timestamp": "2024-07-12T12:19:05.807+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "QLN0ppABLu9BFc0MKE4u",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-0319-6691-a809-000000000c00}",
+                "processId": "664",
+                "utcTime": "2024-07-12 10:19:05.593",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_ok55lq0d.ujm.ps1",
+                "creationUtcTime": "2024-07-12 10:19:05.593",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:05.593\r\nProcessGuid: {4bd69357-0319-6691-a809-000000000c00}\r\nProcessId: 664\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_ok55lq0d.ujm.ps1\r\nCreationUtcTime: 2024-07-12 10:19:05.593\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:05.606598700Z",
+                "eventRecordID": "4005",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 325,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:05.913Z",
+          "location": "EventChannel",
+          "id": "1720779545.109842026",
+          "timestamp": "2024-07-12T12:19:05.913+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "rLN0ppABLu9BFc0M905g",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-034e-6691-b709-000000000c00}",
+                "processId": "5384",
+                "utcTime": "2024-07-12 10:19:58.905",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_kuabgati.v4v.ps1",
+                "creationUtcTime": "2024-07-12 10:19:58.905",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:58.905\r\nProcessGuid: {4bd69357-034e-6691-b709-000000000c00}\r\nProcessId: 5384\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_kuabgati.v4v.ps1\r\nCreationUtcTime: 2024-07-12 10:19:58.905\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:58.920905400Z",
+                "eventRecordID": "4031",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 331,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:58.995Z",
+          "location": "EventChannel",
+          "id": "1720779598.110358459",
+          "timestamp": "2024-07-12T12:19:58.995+0200"
+        }
+      },
+      {
+        "_index": "wazuh-alerts-4.x-2024.07.12",
+        "_id": "qbN0ppABLu9BFc0M8053",
+        "_score": 2.0,
+        "_source": {
+          "agent": {
+            "ip": "134.23.4.5",
+            "name": "dc",
+            "id": "004"
+          },
+          "manager": {
+            "name": "wazuh"
+          },
+          "data": {
+            "win": {
+              "eventdata": {
+                "image": "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+                "processGuid": "{4bd69357-034e-6691-b209-000000000c00}",
+                "processId": "5612",
+                "utcTime": "2024-07-12 10:19:58.624",
+                "targetFilename": "C:\\\\Windows\\\\Temp\\\\__PSScriptPolicyTest_ldjddym1.3qh.ps1",
+                "creationUtcTime": "2024-07-12 10:19:58.624",
+                "user": "NT AUTHORITY\\\\SYSTEM"
+              },
+              "system": {
+                "eventID": "11",
+                "keywords": "0x8000000000000000",
+                "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+                "level": "4",
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "opcode": "0",
+                "message": "\"File created:\r\nRuleName: -\r\nUtcTime: 2024-07-12 10:19:58.624\r\nProcessGuid: {4bd69357-034e-6691-b209-000000000c00}\r\nProcessId: 5612\r\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\r\nTargetFilename: C:\\Windows\\Temp\\__PSScriptPolicyTest_ldjddym1.3qh.ps1\r\nCreationUtcTime: 2024-07-12 10:19:58.624\r\nUser: NT AUTHORITY\\SYSTEM\"",
+                "version": "2",
+                "systemTime": "2024-07-12T10:19:58.637241200Z",
+                "eventRecordID": "4025",
+                "threadID": "3060",
+                "computer": "dc.office.tyrdemo.se",
+                "task": "11",
+                "processID": "3588",
+                "severityValue": "INFORMATION",
+                "providerName": "Microsoft-Windows-Sysmon"
+              }
+            }
+          },
+          "rule": {
+            "firedtimes": 329,
+            "mail": true,
+            "level": 13,
+            "description": "Unsigned Binary Loaded From Suspicious Location",
+            "groups": [
+              "sigma"
+            ],
+            "id": "900228"
+          },
+          "decoder": {
+            "name": "windows_eventchannel"
+          },
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2024-07-12T10:19:58.836Z",
+          "location": "EventChannel",
+          "id": "1720779598.110332316",
+          "timestamp": "2024-07-12T12:19:58.836+0200"
+        }
+      }
+    ]
+  },
+  "defenses": {
+    "781": {
+      "weight": 0.6958328667684435,
+      "action": {
+        "agents": [
+          "019"
+        ],
+        "system": "hq05",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      }
+    }
+  }
+}

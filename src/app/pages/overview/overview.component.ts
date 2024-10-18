@@ -7,7 +7,7 @@ import {
   GridReadyEvent,
   _,
 } from 'ag-grid-community';
-import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
+//import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
 import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
 import ATTACKGRAPH from '../../../assets/2024_09_10_11_58_generated_attack_graph.json';
 
@@ -59,7 +59,7 @@ export class OverviewComponent implements OnInit {
   };
 
   // Network graph
-  networkGraph: Network;
+  /*networkGraph: Network;
   attackGraph: Network;
   networkNodes: DataSet<Node>;
   networkEdges: DataSet<Edge>;
@@ -100,7 +100,7 @@ export class OverviewComponent implements OnInit {
     physics: {
       enabled: false,
     },
-  };
+  };*/
 
   // Attack graph
   attackLinks: Array<AttackLink> = [];
@@ -118,50 +118,54 @@ export class OverviewComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
+  //TODO: Show only active attack/defences and 3 steps from it
+  //TODO: Show all visualizations and suggested actions at the same time
   createAttackGraph() {
     let attackNodes: Array<any> = [];
     let attackLinks: Array<any> = [];
 
     let steps: any = ATTACKGRAPH.attack_steps;
     Object.keys(steps).forEach((event: any, index: number) => {
-      let step: any = steps[event];
-      let capitlized = step.name.charAt(0).toUpperCase() + step.name.slice(1);
-      let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
+      if (index < 50) {
+        let step: any = steps[event];
+        let capitlized = step.name.charAt(0).toUpperCase() + step.name.slice(1);
+        let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
 
-      let label = '';
-      splitLabel.forEach((word, index) => {
-        if (index > 1) {
-          label += ' ';
+        let label = '';
+        splitLabel.forEach((word, index) => {
+          if (index > 1) {
+            label += ' ';
+          }
+          label += word;
+        });
+
+        if (step.id) {
+          attackNodes.push({
+            id: step.id.toString(),
+            label: label,
+            type: step.type,
+          });
         }
-        label += word;
-      });
 
-      if (step.id) {
-        attackNodes.push({
-          id: step.id.toString(),
-          label: label,
-          type: step.type,
+        Object.keys(step.children).forEach((link, index) => {
+          attackLinks.push({
+            id: index + '_id:' + step.id + '_link',
+            from: step.id.toString(),
+            to: link,
+          });
         });
       }
-
-      Object.keys(step.children).forEach((link, index) => {
-        attackLinks.push({
-          id: index + '_id:' + step.id + '_link',
-          from: step.id.toString(),
-          to: link,
-        });
-      });
     });
     console.log(attackLinks);
     console.log(attackNodes);
 
     //TODO does not work with this large file
-    //this.attackLinks = attackLinks;
-    //this.attackNodes = attackNodes;
+    this.attackLinks = attackLinks;
+    this.attackNodes = attackNodes;
   }
 
   createModelData() {
-    let assets: { [key: string]: any } = MODEL.assets;
+    /*let assets: { [key: string]: any } = MODEL.assets;
     let associations: Array<any> = MODEL.associations;
 
     var visData: { nodes: Array<Node>; edges: Array<Edge> } = {
@@ -212,7 +216,7 @@ export class OverviewComponent implements OnInit {
       this.networkGraph.on('stabilized', () => {
         this.networkGraph.fit();
       });
-    }, 500);
+    }, 500);*/
   }
 
   selectIcon(type: string) {
