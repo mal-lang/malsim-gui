@@ -23,13 +23,29 @@
   overflow-y: scroll;
 }
 
-.network-container {
-  height: 98%;
-  border: 1px rgb(145, 145, 145) solid;
+.instance-container {
+  height: calc(100vh - 225px);
+  border: 1px #68686e solid;
+}
+
+.actions-container {
+  height: calc(100vh - 225px);
 }
 
 .attack-graph-container {
-  height: 100%;
+  height: calc(100vh - 225px);
   width: 100%;
-  border: 1px rgb(145, 145, 145) solid;
+  border: 1px #68686e solid;
+}
+
+.nav-link {
+  color: grey;
+}
+
+.nav-underline .nav-link.active {
+  color: #ffffff;
+}
+
+.tab-pane {
+  width: 100%;
 }

@@ -1,26 +1,86 @@
 <div class="container-fluid main-container p-3" style="height: 100vh">
-  <h2 class="text-light title ps-2">TYR DEMO</h2>
+  <div class="row g-2 mb-3">
+    <div class="col-4" style="height: 40px">
+      <h2 class="text-dark title ps-2 m-0">TYR DEMO</h2>
+    </div>
+    <div
+      class="col-4 d-flex flex-row align-items-center justify-content-center"
+    >
+      <div
+        class="nav flex-row nav-underline me-3"
+        id="v-pills-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        <button
+          class="nav-link active"
+          data-bs-toggle="tab"
+          data-bs-target="#instance-tab"
+          type="button"
+          role="tab"
+        >
+          Instance
+        </button>
+        <div class="vr mx-4 text-light"></div>
+        <button
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#attack-graph-tab"
+          type="button"
+          role="tab"
+        >
+          Attack Graph
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <div class="row" style="height: 100%">
-    <div class="col-12">
-      <div class="card bg-dark" style="height: 100%">
+  <div class="tab-content p-4" id="v-pills-tabContent">
+    <div class="tab-pane fade show active" id="instance-tab">
+      <div class="row g-2">
+        <div class="col-4">
+          <div class="card bg-dark">
+            <div class="card-header text-center">Suggested Actions</div>
+            <div class="card-body">
+              <div class="actions-container">
+                <ag-grid-angular
+                  style="width: 100%; height: 100%"
+                  class="ag-theme-alpine-dark"
+                  [columnDefs]="columnDefs"
+                  [defaultColDef]="defaultColDef"
+                  [rowData]="rowData"
+                  [animateRows]="true"
+                  (gridReady)="onGridReady($event)"
+                ></ag-grid-angular>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-8" style="height: 40%">
+          <div class="card bg-dark" style="height: 100%">
+            <div class="card-header text-center">Instance Model</div>
+            <div class="card-body">
+              <div class="instance-container">
+                <ngx-graph layout="dagre" [draggingEnabled]="false">
+                </ngx-graph>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="attack-graph-tab">
+      <div class="card bg-dark" style="height: calc(100vh -100px)">
+        <div class="card-header text-center">Attack Graph</div>
         <div class="card-body">
           <div class="attack-graph-container">
             <ngx-graph
               layout="dagre"
               [draggingEnabled]="false"
-              [layoutSettings]="{
-              orientation: 'TB',
-              marginX: 5,
-              marginY: 5,
-              edgePadding: 100,
-              rankPadding: 20,
-              nodePadding: 5,
-              multigraph: true,
-              compound: true,
-            }"
-              [links]="attackLinks"
-              [nodes]="attackNodes"
+              [links]="attackGraphLinks"
+              [nodes]="attackGraphNodes"
+              [layoutSettings]="layoutSettings"
+              [zoomToFit$]="zoomToFit$"
             >
               <ng-template #nodeTemplate let-node>
                 <svg:g class="node" ngx-tooltip>
@@ -45,27 +105,19 @@
         </div>
       </div>
     </div>
-    <div class="col-4" style="height: 40%">
-      <div class="card bg-dark" style="height: 100%">
-        <div class="card-body">
-          <ag-grid-angular
-            style="width: 100%; height: 100%"
-            class="ag-theme-alpine-dark"
-            [columnDefs]="columnDefs"
-            [defaultColDef]="defaultColDef"
-            [rowData]="rowData"
-            [animateRows]="true"
-            (gridReady)="onGridReady($event)"
-          ></ag-grid-angular>
-        </div>
-      </div>
-    </div>
-    <div class="col-8" style="height: 40%">
-      <div class="card bg-dark" style="height: 100%">
-        <div class="card-body">
-          <!--<div #networkContainer class="network-container"></div>-->
-        </div>
-      </div>
-    </div>
   </div>
 </div>
+
+<!--              
+              [layoutSettings]="{
+              orientation: 'TB',
+              marginX: 5,
+              marginY: 5,
+              edgePadding: 100,
+              rankPadding: 20,
+              nodePadding: 5,
+              multigraph: true,
+              compound: true,
+            }"
+              [links]="attackLinks"
+              [nodes]="attackNodes"-->

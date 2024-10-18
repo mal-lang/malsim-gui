@@ -7,9 +7,13 @@ import {
   GridReadyEvent,
   _,
 } from 'ag-grid-community';
+import { Subject } from 'rxjs';
 //import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
 import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
 import ATTACKGRAPH from '../../../assets/2024_09_10_11_58_generated_attack_graph.json';
+
+import FIRSTATTACKSTEP from '../../../assets/performed_actions_1.json';
+import { NgxGraphZoomOptions } from '@swimlane/ngx-graph';
 
 interface CLObject {
   eid: string;
@@ -28,6 +32,7 @@ interface AttackNode {
   id: string;
   label: string;
   type: string;
+  active: boolean;
 }
 
 interface AttackLink {
@@ -36,7 +41,13 @@ interface AttackLink {
   target: string;
 }
 
-//TODO decide if you are going to use ngx-graph or vis.js
+//TODO implement suggested actions
+//TODO implement instance model
+//TODO light up active attack/defence steps
+//TODO light up nodes in instance model that is connected to the active attack/defence steps
+//TODO show nr of logs on hover active nodes (attack graph)
+//TODO show modal with logs on active node click
+//TODO prepare for https calls
 
 @Component({
   selector: 'app-overview',
@@ -52,6 +63,12 @@ export class OverviewComponent implements OnInit {
   gridApi!: GridApi<CLObject>;
   rowData: Array<CLObject> = [];
   columnDefs: ColDef[] = [{ field: 'name' }, { field: 'type' }];
+  attackStepMap = new Map<number, string>();
+  maxDepth: number = 2;
+  public layoutSettings = {
+    orientation: 'TB',
+  };
+  zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
 
   defaultColDef: ColDef = {
     sortable: true,
@@ -103,13 +120,14 @@ export class OverviewComponent implements OnInit {
   };*/
 
   // Attack graph
-  attackLinks: Array<AttackLink> = [];
-  attackNodes: Array<AttackNode> = [];
+  attackGraphLinks: Array<AttackLink> = [];
+  attackGraphNodes: Array<AttackNode> = [];
 
   constructor() {}
 
   ngOnInit(): void {
-    this.createAttackGraph();
+    this.mapAvailableAttackSteps();
+    this.updateAttackGraph();
     this.createModelData();
   }
 
@@ -118,50 +136,147 @@ export class OverviewComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  //TODO: Show only active attack/defences and 3 steps from it
+  fitGraph() {
+    this.zoomToFit$.next({ force: true, autoCenter: true });
+  }
+
+  mapAvailableAttackSteps() {
+    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
+
+    Object.keys(availableAttackSteps).forEach((attackName: any) => {
+      this.attackStepMap.set(availableAttackSteps[attackName].id, attackName);
+    });
+  }
   //TODO: Show all visualizations and suggested actions at the same time
-  createAttackGraph() {
-    let attackNodes: Array<any> = [];
-    let attackLinks: Array<any> = [];
+  updateAttackGraph() {
+    let attackGraphNodes: Array<any> = [];
+    let attackGraphLinks: Array<any> = [];
 
-    let steps: any = ATTACKGRAPH.attack_steps;
-    Object.keys(steps).forEach((event: any, index: number) => {
-      if (index < 50) {
-        let step: any = steps[event];
-        let capitlized = step.name.charAt(0).toUpperCase() + step.name.slice(1);
-        let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
+    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
+    let currentAttackSteps: any = FIRSTATTACKSTEP.attacks;
 
-        let label = '';
-        splitLabel.forEach((word, index) => {
-          if (index > 1) {
-            label += ' ';
-          }
-          label += word;
-        });
+    Object.keys(currentAttackSteps).forEach((attackId: any) => {
+      let name = this.attackStepMap.get(Number(attackId));
 
-        if (step.id) {
-          attackNodes.push({
-            id: step.id.toString(),
-            label: label,
-            type: step.type,
-          });
-        }
+      if (name) {
+        let step = availableAttackSteps[name];
 
-        Object.keys(step.children).forEach((link, index) => {
-          attackLinks.push({
-            id: index + '_id:' + step.id + '_link',
-            from: step.id.toString(),
-            to: link,
-          });
-        });
+        let node = this.createAttackGraphNode(step, true);
+
+        attackGraphNodes.push(node);
+
+        this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+        this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
       }
     });
-    console.log(attackLinks);
-    console.log(attackNodes);
 
-    //TODO does not work with this large file
-    this.attackLinks = attackLinks;
-    this.attackNodes = attackNodes;
+    this.attackGraphLinks = attackGraphLinks;
+    this.attackGraphNodes = attackGraphNodes;
+
+    setTimeout(() => {
+      this.fitGraph();
+    }, 100);
+  }
+
+  getChildren(
+    nodes: Array<any>,
+    links: Array<any>,
+    source: string,
+    depth: number
+  ) {
+    //console.log('Get children, depth:', depth);
+    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
+    let step = availableAttackSteps[source];
+
+    Object.keys(step.children).forEach((id) => {
+      let childName = step.children[id];
+      let childStep = availableAttackSteps[childName];
+      let node = this.createAttackGraphNode(childStep, false);
+
+      let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
+      if (nodeIndex === -1) {
+        nodes.push(node);
+        this.createAttackGraphLink(links, step.id.toString(), node.id);
+
+        if (depth < this.maxDepth) {
+          this.getChildren(nodes, links, childName, depth + 1);
+        }
+      } else {
+        this.createAttackGraphLink(
+          links,
+          step.id.toString(),
+          nodes[nodeIndex].id
+        );
+      }
+    });
+  }
+
+  getParents(
+    nodes: Array<any>,
+    links: Array<any>,
+    source: string,
+    depth: number
+  ) {
+    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
+    let step = availableAttackSteps[source];
+
+    Object.keys(step.parents).forEach((id) => {
+      let parentName = step.parents[id];
+      let parentStep = availableAttackSteps[parentName];
+      let node = this.createAttackGraphNode(parentStep, false);
+
+      let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
+      if (nodeIndex === -1) {
+        nodes.push(node);
+        nodes.push(node);
+        this.createAttackGraphLink(links, node.id, step.id.toString());
+
+        if (depth < this.maxDepth) {
+          this.getParents(nodes, links, parentName, depth + 1);
+        }
+      } else {
+        this.createAttackGraphLink(
+          links,
+          step.id.toString(),
+          nodes[nodeIndex].id
+        );
+      }
+    });
+  }
+
+  createAttackGraphNode(event: any, active: boolean) {
+    let capitlized = event.name.charAt(0).toUpperCase() + event.name.slice(1);
+    let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
+
+    let label = '';
+    splitLabel.forEach((word, index) => {
+      if (index > 1) {
+        label += ' ';
+      }
+      label += word;
+    });
+
+    return {
+      id: event.id.toString(),
+      label: label,
+      type: event.type,
+      active: active,
+    };
+  }
+
+  createAttackGraphLink(links: Array<any>, source: string, target: string) {
+    let newId = source + '_' + target + '_link';
+    //Check if node already exists
+    let linkIndex = links.indexOf((l: AttackLink) => l.id === newId);
+    if (linkIndex !== -1) {
+      console.log('Link already exists!!');
+    }
+
+    links.push({
+      id: newId,
+      source: source,
+      target: target,
+    });
   }
 
   createModelData() {
