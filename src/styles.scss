@@ -23,8 +23,9 @@ $light: #f8f9fa;*/
 
 @import "node_modules/bootstrap/scss/bootstrap";
 
-@import "ag-grid-community/styles/ag-grid.css";
-@import "ag-grid-community/styles/ag-theme-alpine.css";
+@import "~tippy.js/dist/tippy.css";
+@import "~tippy.js/themes/light.css";
+@import "~tippy.js/animations/scale.css";
 
 @font-face {
   font-family: "Cinzel";

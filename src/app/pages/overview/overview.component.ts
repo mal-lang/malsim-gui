@@ -1,45 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-import {
-  CellClickedEvent,
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-  _,
-} from 'ag-grid-community';
-import { Subject } from 'rxjs';
-//import { Network, DataSet, Node, Edge } from 'vis-network/standalone';
-import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+
+import PERFORMEDACTIONS1 from '../../../assets/performed_actions_1.json';
+import PERFORMEDACTIONS2 from '../../../assets/performed_actions_2.json';
+import PERFORMEDACTIONS3 from '../../../assets/performed_actions_3.json';
+import PERFORMEDACTIONS4 from '../../../assets/performed_actions_4.json';
+import PERFORMEDACTIONS5 from '../../../assets/performed_actions_5.json';
+import PERFORMEDACTIONS6 from '../../../assets/performed_actions_6.json';
+import PERFORMEDACTIONS7 from '../../../assets/performed_actions_7.json';
 import ATTACKGRAPH from '../../../assets/2024_09_10_11_58_generated_attack_graph.json';
-
-import FIRSTATTACKSTEP from '../../../assets/performed_actions_1.json';
-import { NgxGraphZoomOptions } from '@swimlane/ngx-graph';
-
-interface CLObject {
-  eid: string;
-  metaconcept: string;
-  name: string;
-}
-
-interface Association {
-  id1: string;
-  id2: string;
-  type1: string;
-  type2: string;
-}
-
-interface AttackNode {
-  id: string;
-  label: string;
-  type: string;
-  active: boolean;
-}
-
-interface AttackLink {
-  id: string;
-  source: string;
-  target: string;
-}
+import { InstanceModelComponent } from 'src/app/components/instance-model/instance-model.component';
+import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
+import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 
 //TODO implement suggested actions
 //TODO implement instance model
@@ -54,302 +25,92 @@ interface AttackLink {
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class OverviewComponent implements OnInit {
-  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
-  @ViewChild('networkContainer') networkContainer: ElementRef;
-  @ViewChild('attackGraphContainer') attackGraphContainer: ElementRef;
+export class OverviewComponent {
+  @ViewChild('instanceModel') instanceModel!: InstanceModelComponent;
+  @ViewChild('attackGraph') attackGraph!: AttackGraphComponent;
+  @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
 
-  // Table variables
-  gridApi!: GridApi<CLObject>;
-  rowData: Array<CLObject> = [];
-  columnDefs: ColDef[] = [{ field: 'name' }, { field: 'type' }];
+  tooltipPositions = ['auto', 'top', 'right', 'bottom', 'left'];
+  tooltipAlignments = [
+    { label: 'start', value: '-start' },
+    { label: 'center', value: '' },
+    { label: 'end', value: '-end' },
+  ];
+
+  tooltipTypes = ['popper', 'tooltip', 'popperBorder'];
+
+  noContextText: string | undefined;
+  maxWidth = 300;
+  show = true;
+  intervalIndex: number = 1;
+
+  currentAttackSteps: any = {};
+  currentDefenceSteps: any = {};
+  attackSteps: any = ATTACKGRAPH.attack_steps;
   attackStepMap = new Map<number, string>();
-  maxDepth: number = 2;
-  public layoutSettings = {
-    orientation: 'TB',
-  };
-  zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
-
-  defaultColDef: ColDef = {
-    sortable: true,
-    filter: true,
-  };
-
-  // Network graph
-  /*networkGraph: Network;
-  attackGraph: Network;
-  networkNodes: DataSet<Node>;
-  networkEdges: DataSet<Edge>;
-  networkOptions = {
-    autoResize: true,
-    layout: {
-      hierarchical: {
-        enabled: true,
-        direction: 'UD',
-        nodeSpacing: 400,
-        levelSeparation: 370,
-        shakeTowards: 'leaves',
-      },
-    },
-    height: '100%',
-    width: '100%',
-    edges: { color: 'grey' },
-    nodes: {
-      color: {
-        background: 'white',
-        highlight: {
-          border: 'white',
-          background: 'white',
-        },
-        hover: {
-          border: 'white',
-        },
-      },
-      font: {
-        color: 'white',
-      },
-      shape: 'circularImage',
-      imagePadding: 10,
-      shapeProperties: {
-        borderRadius: 2,
-      },
-    },
-    physics: {
-      enabled: false,
-    },
-  };*/
-
-  // Attack graph
-  attackGraphLinks: Array<AttackLink> = [];
-  attackGraphNodes: Array<AttackNode> = [];
+  loading: boolean = false;
+  intervalId: any;
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.mapAvailableAttackSteps();
-    this.updateAttackGraph();
-    this.createModelData();
-  }
 
-  onGridReady(params: GridReadyEvent<CLObject>) {
-    this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
-  }
-
-  fitGraph() {
-    this.zoomToFit$.next({ force: true, autoCenter: true });
+    this.intervalId = setInterval(() => {
+      this.loading = true;
+      this.updateCurrentAttackSteps();
+    }, 10000);
   }
 
   mapAvailableAttackSteps() {
-    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
+    let availableAttackSteps: any = this.attackSteps;
 
     Object.keys(availableAttackSteps).forEach((attackName: any) => {
       this.attackStepMap.set(availableAttackSteps[attackName].id, attackName);
     });
   }
-  //TODO: Show all visualizations and suggested actions at the same time
-  updateAttackGraph() {
-    let attackGraphNodes: Array<any> = [];
-    let attackGraphLinks: Array<any> = [];
 
-    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
-    let currentAttackSteps: any = FIRSTATTACKSTEP.attacks;
-
-    Object.keys(currentAttackSteps).forEach((attackId: any) => {
-      let name = this.attackStepMap.get(Number(attackId));
-
-      if (name) {
-        let step = availableAttackSteps[name];
-
-        let node = this.createAttackGraphNode(step, true);
-
-        attackGraphNodes.push(node);
-
-        this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
-        this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
-      }
-    });
-
-    this.attackGraphLinks = attackGraphLinks;
-    this.attackGraphNodes = attackGraphNodes;
-
-    setTimeout(() => {
-      this.fitGraph();
-    }, 100);
-  }
-
-  getChildren(
-    nodes: Array<any>,
-    links: Array<any>,
-    source: string,
-    depth: number
-  ) {
-    //console.log('Get children, depth:', depth);
-    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
-    let step = availableAttackSteps[source];
-
-    Object.keys(step.children).forEach((id) => {
-      let childName = step.children[id];
-      let childStep = availableAttackSteps[childName];
-      let node = this.createAttackGraphNode(childStep, false);
-
-      let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
-      if (nodeIndex === -1) {
-        nodes.push(node);
-        this.createAttackGraphLink(links, step.id.toString(), node.id);
-
-        if (depth < this.maxDepth) {
-          this.getChildren(nodes, links, childName, depth + 1);
-        }
-      } else {
-        this.createAttackGraphLink(
-          links,
-          step.id.toString(),
-          nodes[nodeIndex].id
-        );
-      }
-    });
-  }
-
-  getParents(
-    nodes: Array<any>,
-    links: Array<any>,
-    source: string,
-    depth: number
-  ) {
-    let availableAttackSteps: any = ATTACKGRAPH.attack_steps;
-    let step = availableAttackSteps[source];
-
-    Object.keys(step.parents).forEach((id) => {
-      let parentName = step.parents[id];
-      let parentStep = availableAttackSteps[parentName];
-      let node = this.createAttackGraphNode(parentStep, false);
-
-      let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
-      if (nodeIndex === -1) {
-        nodes.push(node);
-        nodes.push(node);
-        this.createAttackGraphLink(links, node.id, step.id.toString());
-
-        if (depth < this.maxDepth) {
-          this.getParents(nodes, links, parentName, depth + 1);
-        }
-      } else {
-        this.createAttackGraphLink(
-          links,
-          step.id.toString(),
-          nodes[nodeIndex].id
-        );
-      }
-    });
-  }
-
-  createAttackGraphNode(event: any, active: boolean) {
-    let capitlized = event.name.charAt(0).toUpperCase() + event.name.slice(1);
-    let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
-
-    let label = '';
-    splitLabel.forEach((word, index) => {
-      if (index > 1) {
-        label += ' ';
-      }
-      label += word;
-    });
-
-    return {
-      id: event.id.toString(),
-      label: label,
-      type: event.type,
-      active: active,
-    };
-  }
-
-  createAttackGraphLink(links: Array<any>, source: string, target: string) {
-    let newId = source + '_' + target + '_link';
-    //Check if node already exists
-    let linkIndex = links.indexOf((l: AttackLink) => l.id === newId);
-    if (linkIndex !== -1) {
-      console.log('Link already exists!!');
-    }
-
-    links.push({
-      id: newId,
-      source: source,
-      target: target,
-    });
-  }
-
-  createModelData() {
-    /*let assets: { [key: string]: any } = MODEL.assets;
-    let associations: Array<any> = MODEL.associations;
-
-    var visData: { nodes: Array<Node>; edges: Array<Edge> } = {
-      nodes: [],
-      edges: [],
-    };
-
-    Object.keys(assets).forEach((index: string) => {
-      let asset: any = assets[index];
-      this.rowData.push(asset);
-      let colorOptions = { border: '#FF4C4C', background: '#FF4C4C' };
-      if (asset.type === 'SoftwareVulnerability') {
-        colorOptions.border = '#4CA6FF';
-        colorOptions.background = '#4CA6FF';
-      }
-
-      visData.nodes.push({
-        id: Number(index),
-        font: { multi: 'html', size: 20 },
-        label: asset.type + '\n <b>' + asset.name + '</b>',
-        color: colorOptions,
-        image: this.selectIcon(asset.type),
-      });
-    });
-
-    associations.forEach((association) => {
-      let edgePoints: Array<number> = [];
-      Object.keys(association).forEach((a) => {
-        Object.keys(association[a]).forEach((connection) => {
-          edgePoints.push(association[a][connection][0]);
-        });
-      });
-      visData.edges.push({
-        from: edgePoints[0],
-        to: edgePoints[1],
-      });
-    });
-
-    // Create network graph
-    setTimeout(() => {
-      var visContainer = this.networkContainer.nativeElement;
-      this.networkGraph = new Network(
-        visContainer,
-        visData,
-        this.networkOptions
-      );
-
-      this.networkGraph.on('stabilized', () => {
-        this.networkGraph.fit();
-      });
-    }, 500);*/
-  }
-
-  selectIcon(type: string) {
-    switch (type) {
-      case 'Network':
-        return '../../../assets/icons/network.png';
-      case 'ConnectionRule':
-        return '../../../assets/icons/networking.png';
-      case 'Attacker':
-        return '../../../assets/icons/icognito.png';
-      case 'Application':
-        return '../../../assets/icons/programming-language.png';
-      case 'SoftwareVulnerability':
-        return '../../../assets/icons/shield.png';
-      case 'Identity':
-        return '../../../assets/icons/id-card.png';
+  updateCurrentAttackSteps() {
+    switch (this.intervalIndex) {
+      case 1:
+        this.currentAttackSteps = PERFORMEDACTIONS1.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS1.defenses;
+        break;
+      case 2:
+        this.currentAttackSteps = PERFORMEDACTIONS2.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS2.defenses;
+        break;
+      case 3:
+        this.currentAttackSteps = PERFORMEDACTIONS3.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS3.defenses;
+        break;
+      case 4:
+        this.currentAttackSteps = PERFORMEDACTIONS4.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS4.defenses;
+        break;
+      case 5:
+        this.currentAttackSteps = PERFORMEDACTIONS5.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS5.defenses;
+        break;
+      case 6:
+        this.currentAttackSteps = PERFORMEDACTIONS6.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS6.defenses;
+        break;
+      case 7:
+        this.currentAttackSteps = PERFORMEDACTIONS7.attacks;
+        this.currentDefenceSteps = PERFORMEDACTIONS7.defenses;
+        clearInterval(this.intervalId);
+        break;
       default:
-        return '';
+      //
     }
+
+    setTimeout(() => {
+      this.instanceModel.markNodes();
+      this.attackGraph.updateAttackGraph();
+      this.suggestedActions.updateSuggestedActions();
+      ++this.intervalIndex;
+      this.loading = false;
+    }, 3000);
   }
 }

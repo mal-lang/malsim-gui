@@ -1,0 +1,26 @@
+<div class="card bg-dark">
+  <div class="card-header text-center">Suggested Actions</div>
+  <div class="card-body">
+    <div class="actions-container">
+      <div class="list-group">
+        <button
+          *ngFor="let action of suggestedActions"
+          class="list-group-item list-group-item-action overflow-y"
+        >
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ action.description }}</h5>
+          </div>
+          <p class="mb-1">
+            System: <strong>{{ action.system }}</strong>
+          </p>
+        </button>
+      </div>
+      <div
+        *ngIf="suggestedActions.length === 0"
+        class="h-75 d-flex align-items-center justify-content-center"
+      >
+        <h6>No actions suggested</h6>
+      </div>
+    </div>
+  </div>
+</div>
