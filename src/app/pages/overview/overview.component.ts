@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import PERFORMEDACTIONS1 from '../../../assets/performed_actions_1.json';
 import PERFORMEDACTIONS2 from '../../../assets/performed_actions_2.json';
@@ -12,12 +12,6 @@ import { InstanceModelComponent } from 'src/app/components/instance-model/instan
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 
-//TODO implement suggested actions
-//TODO implement instance model
-//TODO light up active attack/defence steps
-//TODO light up nodes in instance model that is connected to the active attack/defence steps
-//TODO show nr of logs on hover active nodes (attack graph)
-//TODO show modal with logs on active node click
 //TODO prepare for https calls
 
 @Component({
@@ -99,7 +93,7 @@ export class OverviewComponent {
       case 7:
         this.currentAttackSteps = PERFORMEDACTIONS7.attacks;
         this.currentDefenceSteps = PERFORMEDACTIONS7.defenses;
-        clearInterval(this.intervalId);
+        this.intervalIndex = 0;
         break;
       default:
       //
