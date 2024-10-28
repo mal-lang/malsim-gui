@@ -22,20 +22,24 @@ interface AttackLink {
   styleUrl: './attack-graph.component.scss',
 })
 export class AttackGraphComponent implements OnInit {
-  @Input() currentAttackSteps: any;
-  @Input() currentDefenceSteps: any;
-  @Input() attackSteps: any;
+  @Input() stage: number;
+  @Input() activeDefenceSteps: any;
+  @Input() activeAttackSteps: any;
+  @Input() allAttackSteps: any;
   @Input() attackStepMap: any;
+  @Input() type: string;
   @ViewChild('logModal') logModal: LogModalComponent;
 
   attackGraphLinks: Array<AttackLink> = [];
   attackGraphNodes: Array<AttackNode> = [];
+  internalStage: number = 0;
 
   maxDepth: number = 2;
   public layoutSettings = {
     orientation: 'TB',
   };
   zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
+  update$: Subject<boolean> = new Subject();
 
   ngOnInit() {}
 
@@ -47,39 +51,44 @@ export class AttackGraphComponent implements OnInit {
     let attackGraphNodes: Array<any> = [];
     let attackGraphLinks: Array<any> = [];
 
-    Object.keys(this.currentAttackSteps).forEach((attackId: any) => {
-      let name = this.attackStepMap.get(Number(attackId));
-      if (name) {
-        let step = this.attackSteps[name];
+    Object.keys(this.activeAttackSteps).forEach((stepId: any) => {
+      let name = this.attackStepMap.get(Number(stepId));
 
-        let node = this.createAttackGraphNode(
+      if (name) {
+        let step = this.allAttackSteps[name];
+
+        let node = this.createActiveAttackGraphNode(
+          name,
           step,
-          true,
-          this.currentAttackSteps[attackId].length
+          this.activeAttackSteps[stepId].logs.length
         );
 
         attackGraphNodes.push(node);
 
-        this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
-        this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+        if (this.type === 'horizon') {
+          this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+        }
+        if (this.type === 'historical') {
+          this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+        }
       }
     });
 
-    Object.keys(this.currentDefenceSteps).forEach((defenceId: any) => {
+    Object.keys(this.activeDefenceSteps).forEach((defenceId: any) => {
       let name = this.attackStepMap.get(Number(defenceId));
       if (name) {
-        let step = this.attackSteps[name];
+        let step = this.allAttackSteps[name];
 
-        let node = this.createAttackGraphNode(
-          step,
-          true,
-          this.currentDefenceSteps[defenceId].length
-        );
+        let node = this.createActiveAttackGraphNode(name, step, 0);
 
         attackGraphNodes.push(node);
 
-        this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
-        this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+        if (this.type === 'horizon')
+          this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+
+        if (this.type === 'historical') {
+          this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+        }
       }
     });
 
@@ -87,10 +96,13 @@ export class AttackGraphComponent implements OnInit {
     this.attackGraphNodes = attackGraphNodes;
 
     setTimeout(() => {
-      if (this.attackGraphNodes.length > 0) {
+      if (
+        this.attackGraphNodes.length > 0 &&
+        this.internalStage !== this.stage
+      ) {
         this.fitGraph();
       }
-    }, 100);
+    }, 200);
   }
 
   getChildren(
@@ -99,12 +111,12 @@ export class AttackGraphComponent implements OnInit {
     source: string,
     depth: number
   ) {
-    let step = this.attackSteps[source];
+    let step = this.allAttackSteps[source];
 
     Object.keys(step.children).forEach((id) => {
       let childName = step.children[id];
-      let childStep = this.attackSteps[childName];
-      let node = this.createAttackGraphNode(childStep, false, undefined);
+      let childStep = this.allAttackSteps[childName];
+      let node = this.createAttackGraphNode(childName, childStep);
 
       let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
       if (nodeIndex === -1) {
@@ -130,12 +142,12 @@ export class AttackGraphComponent implements OnInit {
     source: string,
     depth: number
   ) {
-    let step = this.attackSteps[source];
+    let step = this.allAttackSteps[source];
 
     Object.keys(step.parents).forEach((id) => {
       let parentName = step.parents[id];
-      let parentStep = this.attackSteps[parentName];
-      let node = this.createAttackGraphNode(parentStep, false, undefined);
+      let parentStep = this.allAttackSteps[parentName];
+      let node = this.createAttackGraphNode(parentName, parentStep);
 
       let nodeIndex = nodes.findIndex((n: any) => n.id === node.id);
       if (nodeIndex === -1) {
@@ -156,12 +168,8 @@ export class AttackGraphComponent implements OnInit {
     });
   }
 
-  createAttackGraphNode(
-    event: any,
-    active: boolean,
-    logLength: number | undefined
-  ) {
-    let capitlized = event.name.charAt(0).toUpperCase() + event.name.slice(1);
+  createActiveAttackGraphNode(fullName: string, step: any, logLength: number) {
+    let capitlized = fullName.charAt(0).toUpperCase() + fullName.slice(1);
     let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
 
     let label = '';
@@ -172,15 +180,38 @@ export class AttackGraphComponent implements OnInit {
       label += word;
     });
 
-    let color = this.getNodeColor(event, active);
+    let color = this.getNodeColor(step, true);
 
     return {
-      id: event.id.toString(),
+      id: step.id.toString(),
       label: label,
-      type: event.type,
-      active: active,
+      type: step.type,
+      active: true,
       color: color,
       logLength: logLength,
+    };
+  }
+
+  createAttackGraphNode(fullName: string, step: any) {
+    let capitlized = fullName.charAt(0).toUpperCase() + fullName.slice(1);
+    let splitLabel: Array<string> = capitlized.split(/(?=[A-Z])/);
+
+    let label = '';
+    splitLabel.forEach((word, index) => {
+      if (index > 1) {
+        label += ' ';
+      }
+      label += word;
+    });
+
+    let color = this.getNodeColor(step, false);
+
+    return {
+      id: step.id.toString(),
+      label: label,
+      type: step.type,
+      active: false,
+      color: color,
     };
   }
 
@@ -203,6 +234,8 @@ export class AttackGraphComponent implements OnInit {
   }
 
   onNodeClick(event: any, node: AttackNode) {
-    this.logModal.open(node, this.currentAttackSteps[node.id]);
+    if (this.activeAttackSteps[node.id]) {
+      this.logModal.open(node, this.activeAttackSteps[node.id].logs);
+    }
   }
 }

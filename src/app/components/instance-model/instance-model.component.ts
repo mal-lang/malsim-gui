@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { DataSet, Network } from 'vis-network/standalone';
-import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
+
+import { ApiService } from 'src/app/services/api-service/api-service.service';
 
 @Component({
   selector: 'app-instance-model',
@@ -8,9 +9,8 @@ import MODEL from '../../../assets/2024_09_10_11_58_generated_model.json';
   styleUrl: './instance-model.component.scss',
 })
 export class InstanceModelComponent {
-  @Input() currentAttackSteps: any;
-  @Input() currentDefenceSteps: any;
-  @Input() attackSteps: any;
+  @Input() activeAttackSteps: any;
+  @Input() activeDefenceSteps: any;
   @Input() attackStepMap: any;
 
   @ViewChild('networkContainer') networkContainer: ElementRef;
@@ -19,23 +19,16 @@ export class InstanceModelComponent {
   networkGraph: Network;
   networkNodes: DataSet<any> = new DataSet([]);
   networkEdges: DataSet<any> = new DataSet([]);
+  initRender: boolean = true;
   networkOptions = {
     autoResize: true,
-    layout: {
-      hierarchical: {
-        enabled: true,
-        direction: 'UD',
-        nodeSpacing: 400,
-        levelSeparation: 370,
-        shakeTowards: 'leaves',
-      },
-    },
     height: '100%',
     width: '100%',
     edges: { color: 'grey' },
     nodes: {
       color: {
-        background: 'white',
+        background: 'aliceblue',
+        border: 'aliceblue',
         highlight: {
           border: 'white',
           background: 'white',
@@ -54,34 +47,45 @@ export class InstanceModelComponent {
       },
     },
     physics: {
-      enabled: false,
+      enabled: true,
+      solver: 'repulsion',
+      repulsion: {
+        nodeDistance: 400,
+        springLength: 400,
+        centralGravity: 0.01,
+      },
+    },
+    interaction: {
+      dragNodes: false,
+      hover: false,
+      selectable: false,
     },
   };
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.createModelData();
   }
 
   createModelData() {
-    let assets: { [key: string]: any } = MODEL.assets;
-    let associations: Array<any> = MODEL.associations;
+    let model = this.apiService.getModel();
+
+    let assets: { [key: string]: any } = model.assets;
+    let associations: Array<any> = model.associations;
 
     Object.keys(assets).forEach((index: string) => {
       let asset: any = assets[index];
-      let colorOptions = { border: '#902a2a', background: '#902a2a' };
-      if (asset.type === 'SoftwareVulnerability') {
-        colorOptions.border = '#2a5c8e';
-        colorOptions.background = '#2a5c8e';
-      }
 
       this.networkNodes.add({
         id: Number(index),
         font: { multi: 'html', size: 20 },
         label: asset.type + '\n <b>' + asset.name + '</b>',
         name: asset.name,
-        color: colorOptions,
         type: asset.type,
         image: this.selectIcon(asset.type),
+        defenceMarked: false,
+        attackMarked: false,
       });
     });
 
@@ -108,50 +112,70 @@ export class InstanceModelComponent {
       );
 
       this.networkGraph.on('stabilized', () => {
-        this.networkGraph.fit();
+        if (this.initRender) {
+          this.networkGraph.fit();
+          this.initRender = false;
+        }
       });
     }, 500);
   }
 
   markNodes() {
     if (this.networkGraph) {
-      let affectedAssets: Array<string> = [];
+      let updatedNodes: Array<any> = [];
 
-      Object.keys(this.currentAttackSteps).forEach((stepId) => {
-        let stepName = this.attackStepMap.get(Number(stepId));
+      let attackMark: Array<number> = [];
+      let defenceMark: Array<number> = [];
 
-        if (stepName && this.attackSteps[stepName]) {
-          if (!affectedAssets.includes(this.attackSteps[stepName].asset))
-            affectedAssets.push(this.attackSteps[stepName].asset);
-        }
+      Object.keys(this.activeAttackSteps).forEach((id) => {
+        attackMark.push(this.activeAttackSteps[id].asset);
       });
 
-      Object.keys(this.currentDefenceSteps).forEach((stepId) => {
-        let stepName = this.attackStepMap.get(Number(stepId));
-
-        if (stepName && this.attackSteps[stepName]) {
-          if (!affectedAssets.includes(this.attackSteps[stepName].asset))
-            affectedAssets.push(this.attackSteps[stepName].asset);
-        }
+      Object.keys(this.activeDefenceSteps).forEach((id) => {
+        defenceMark.push(this.activeDefenceSteps[id].asset);
       });
 
       this.networkNodes.forEach((node) => {
-        let colorOptions = { border: '#902a2a', background: '#902a2a' };
-        if (node.type === 'SoftwareVulnerability') {
-          colorOptions.border = '#2a5c8e';
-          colorOptions.background = '#2a5c8e';
+        if (attackMark.includes(node.name)) {
+          let colorOptions = { border: '#ff4c4c', background: '#ff4c4c' };
+          updatedNodes.push({
+            id: node.id,
+            color: colorOptions,
+            attackMarked: true,
+          });
         }
 
-        if (affectedAssets.includes(node.name)) {
-          colorOptions = { border: '#FFFFFF', background: '#FF4C4C' };
-          if (node.type === 'SoftwareVulnerability') {
-            colorOptions.border = '#FFFFFF';
-            colorOptions.background = '#4CA6FF';
+        if (defenceMark.includes(node.name)) {
+          let colorOptions = { border: '#4ca6ff', background: '#4ca6ff' };
+          updatedNodes.push({
+            id: node.id,
+            color: colorOptions,
+            defenceMarked: true,
+          });
+        }
+
+        if (
+          !defenceMark.includes(node.name) &&
+          !attackMark.includes(node.name)
+        ) {
+          let colorOptions;
+          if (node.attackMarked && node.defenceMarked) {
+            colorOptions = { border: '#CC99CC', background: '#CC99CC' };
+          } else if (node.attackMarked) {
+            colorOptions = { border: '#FFC9C9', background: '#FFC9C9' };
+          } else if (node.defenceMarked) {
+            colorOptions = { border: '#C9E4FF', background: '#C9E4FF' };
+          } else {
+            colorOptions = { border: 'aliceblue', background: 'aliceblue' };
           }
-        }
 
-        this.networkNodes.update({ id: node.id, color: colorOptions });
+          updatedNodes.push({
+            id: node.id,
+            color: colorOptions,
+          });
+        }
       });
+      this.networkNodes.update(updatedNodes);
     }
   }
 

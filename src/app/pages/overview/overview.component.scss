@@ -30,15 +30,14 @@
 }
 
 .loading-text {
-  color: #ff4c4c;
-  padding-left: 20px;
+  margin-left: 20px;
 }
 
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 20px;
   aspect-ratio: 1;
-  color: #ff4c4c;
+  color: #4ca6ff;
   position: relative;
   background: radial-gradient(10px, currentColor 94%, #0000);
 }

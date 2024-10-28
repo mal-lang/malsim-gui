@@ -25,11 +25,23 @@
         <button
           class="nav-link"
           data-bs-toggle="tab"
-          data-bs-target="#attack-graph-tab"
+          data-bs-target="#horizon-tab"
           type="button"
           role="tab"
+          (click)="attackGraphHorizon.updateAttackGraph()"
         >
-          Attack Graph
+          Attack Graph Horizon
+        </button>
+        <div class="vr mx-4 text-light"></div>
+        <button
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#historical-tab"
+          type="button"
+          role="tab"
+          (click)="historicAttackGraph.updateAttackGraph()"
+        >
+          Historical attack graph
         </button>
       </div>
     </div>
@@ -37,7 +49,11 @@
       class="col-4 d-flex flex-row align-items-center justify-content-center"
     >
       <div *ngIf="loading" class="loader"></div>
-      <span *ngIf="loading" class="loading-text">Updating...</span>
+      <span
+        *ngIf="loading"
+        class="loading-text badge rounded-pill text-bg-primary"
+        >Updating</span
+      >
     </div>
   </div>
 
@@ -47,26 +63,38 @@
         <div class="col-4">
           <app-suggested-actions
             #suggestedActions
-            [currentDefenceSteps]="currentDefenceSteps"
+            [defenderSuggestions]="defenderSuggestions"
           />
         </div>
         <div class="col-8">
           <app-instance-model
             #instanceModel
-            [attackSteps]="attackSteps"
-            [currentDefenceSteps]="currentDefenceSteps"
-            [currentAttackSteps]="currentAttackSteps"
+            [activeDefenceSteps]="activeDefenceSteps"
+            [activeAttackSteps]="activeAttackSteps"
             [attackStepMap]="attackStepMap"
           />
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="attack-graph-tab">
+    <div class="tab-pane fade" id="horizon-tab">
       <app-attack-graph
-        #attackGraph
-        [attackSteps]="attackSteps"
-        [currentDefenceSteps]="currentDefenceSteps"
-        [currentAttackSteps]="currentAttackSteps"
+        #attackGraphHorizon
+        [type]="'horizon'"
+        [stage]="stage"
+        [allAttackSteps]="allAttackSteps"
+        [activeDefenceSteps]="activeDefenceSteps"
+        [activeAttackSteps]="activeAttackSteps"
+        [attackStepMap]="attackStepMap"
+      />
+    </div>
+    <div class="tab-pane fade" id="historical-tab">
+      <app-attack-graph
+        #historicAttackGraph
+        [type]="'historical'"
+        [stage]="stage"
+        [allAttackSteps]="allAttackSteps"
+        [activeDefenceSteps]="activeDefenceSteps"
+        [activeAttackSteps]="activeAttackSteps"
         [attackStepMap]="attackStepMap"
       />
     </div>

@@ -1,18 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
 
-import PERFORMEDACTIONS1 from '../../../assets/performed_actions_1.json';
-import PERFORMEDACTIONS2 from '../../../assets/performed_actions_2.json';
-import PERFORMEDACTIONS3 from '../../../assets/performed_actions_3.json';
-import PERFORMEDACTIONS4 from '../../../assets/performed_actions_4.json';
-import PERFORMEDACTIONS5 from '../../../assets/performed_actions_5.json';
-import PERFORMEDACTIONS6 from '../../../assets/performed_actions_6.json';
-import PERFORMEDACTIONS7 from '../../../assets/performed_actions_7.json';
-import ATTACKGRAPH from '../../../assets/2024_09_10_11_58_generated_attack_graph.json';
 import { InstanceModelComponent } from 'src/app/components/instance-model/instance-model.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 
+import { ApiService } from 'src/app/services/api-service/api-service.service';
+
 //TODO prepare for https calls
+
+//TODO use id instead of name in attack graph
+
+//TODO do two attack graphs (Historic attack graph (parents) and atack graph horizon (children))
+
+//TODO pull every minute
 
 @Component({
   selector: 'app-overview',
@@ -21,7 +21,8 @@ import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/
 })
 export class OverviewComponent {
   @ViewChild('instanceModel') instanceModel!: InstanceModelComponent;
-  @ViewChild('attackGraph') attackGraph!: AttackGraphComponent;
+  @ViewChild('attackGraphHorizon') attackGraphHorizon!: AttackGraphComponent;
+  @ViewChild('historicAttackGraph') historicAttackGraph!: AttackGraphComponent;
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
 
   tooltipPositions = ['auto', 'top', 'right', 'bottom', 'left'];
@@ -38,73 +39,77 @@ export class OverviewComponent {
   show = true;
   intervalIndex: number = 1;
 
-  currentAttackSteps: any = {};
-  currentDefenceSteps: any = {};
-  attackSteps: any = ATTACKGRAPH.attack_steps;
+  activeDefenceSteps: any = {};
+  activeAttackSteps: any = {};
+  allAttackSteps: any = {};
   attackStepMap = new Map<number, string>();
+  defenderSuggestions: any = {};
   loading: boolean = false;
   intervalId: any;
+  intervalTime: number = 1000 * 10; // 60 seconds;
+  stage: number = 0;
 
-  constructor() {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
+    let attackGraph = this.apiService.getAttackGraph();
+    this.allAttackSteps = attackGraph.attack_steps;
     this.mapAvailableAttackSteps();
 
     this.intervalId = setInterval(() => {
       this.loading = true;
       this.updateCurrentAttackSteps();
-    }, 10000);
+    }, this.intervalTime);
   }
 
   mapAvailableAttackSteps() {
-    let availableAttackSteps: any = this.attackSteps;
-
-    Object.keys(availableAttackSteps).forEach((attackName: any) => {
-      this.attackStepMap.set(availableAttackSteps[attackName].id, attackName);
+    Object.keys(this.allAttackSteps).forEach((attackName: any) => {
+      this.attackStepMap.set(this.allAttackSteps[attackName].id, attackName);
     });
   }
 
   updateCurrentAttackSteps() {
-    switch (this.intervalIndex) {
-      case 1:
-        this.currentAttackSteps = PERFORMEDACTIONS1.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS1.defenses;
-        break;
-      case 2:
-        this.currentAttackSteps = PERFORMEDACTIONS2.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS2.defenses;
-        break;
-      case 3:
-        this.currentAttackSteps = PERFORMEDACTIONS3.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS3.defenses;
-        break;
-      case 4:
-        this.currentAttackSteps = PERFORMEDACTIONS4.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS4.defenses;
-        break;
-      case 5:
-        this.currentAttackSteps = PERFORMEDACTIONS5.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS5.defenses;
-        break;
-      case 6:
-        this.currentAttackSteps = PERFORMEDACTIONS6.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS6.defenses;
-        break;
-      case 7:
-        this.currentAttackSteps = PERFORMEDACTIONS7.attacks;
-        this.currentDefenceSteps = PERFORMEDACTIONS7.defenses;
-        this.intervalIndex = 0;
-        break;
-      default:
-      //
-    }
+    this.activeDefenceSteps = this.findDefenceStep(
+      this.apiService.getLatestDefenceStep()
+    );
+    this.activeAttackSteps = this.findAttackSteps(
+      this.apiService.getLatestAttackSteps()
+    );
+    this.defenderSuggestions = this.apiService.getDefenderSuggestions();
 
     setTimeout(() => {
+      this.stage++;
       this.instanceModel.markNodes();
-      this.attackGraph.updateAttackGraph();
+      this.historicAttackGraph.updateAttackGraph();
+      this.attackGraphHorizon.updateAttackGraph();
       this.suggestedActions.updateSuggestedActions();
       ++this.intervalIndex;
       this.loading = false;
-    }, 3000);
+    }, 2000);
+  }
+
+  findDefenceStep(id: number) {
+    let step: any = {};
+    let stepName = this.attackStepMap.get(id);
+    if (stepName) {
+      step[id] = this.allAttackSteps[stepName];
+      step[id].name = stepName;
+    }
+    return step;
+  }
+
+  findAttackSteps(activeSteps: any) {
+    let steps: any = {};
+
+    Object.keys(activeSteps).forEach((activeStepId) => {
+      let stepName = this.attackStepMap.get(Number(activeStepId));
+      if (stepName) {
+        steps[activeStepId] = this.allAttackSteps[stepName];
+        steps[activeStepId].logs = activeSteps[activeStepId];
+        steps[activeStepId].name = stepName;
+      }
+    });
+
+    return steps;
   }
 }

@@ -51,9 +51,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -118,9 +116,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -185,9 +181,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -252,9 +246,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -319,9 +311,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -388,9 +378,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -455,9 +443,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -522,9 +508,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -589,9 +573,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -656,9 +638,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -725,9 +705,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -792,9 +770,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -859,9 +835,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -926,9 +900,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -993,9 +965,7 @@
             "mail": true,
             "level": 13,
             "description": "Unsigned Binary Loaded From Suspicious Location",
-            "groups": [
-              "sigma"
-            ],
+            "groups": ["sigma"],
             "id": "900228"
           },
           "decoder": {
@@ -1013,59 +983,53 @@
     ]
   },
   "defenses": {
-    "781": {
-      "weight": 0.02834747652200631,
-      "action": {
-        "agents": [
-          "019"
-        ],
-        "system": "hq05",
-        "description": "Shutdown machine",
-        "active_response_request": {
-          "command": "shutdown_machine0",
-          "custom": false
+    "agent2": {
+      "781": {
+        "weight": 0.02834747652200631,
+        "action": {
+          "agents": ["019"],
+          "system": "hq05",
+          "description": "Shutdown machine",
+          "active_response_request": {
+            "command": "shutdown_machine0",
+            "custom": false
+          }
         }
-      }
-    },
-    "852": {
-      "weight": 0.8357651039198697,
-      "action": {
-        "agents": [
-          "020"
-        ],
-        "system": "hq06",
-        "description": "Shutdown machine",
-        "active_response_request": {
-          "command": "shutdown_machine0",
-          "custom": false
+      },
+      "852": {
+        "weight": 0.8357651039198697,
+        "action": {
+          "agents": ["020"],
+          "system": "hq06",
+          "description": "Shutdown machine",
+          "active_response_request": {
+            "command": "shutdown_machine0",
+            "custom": false
+          }
         }
-      }
-    },
-    "568": {
-      "weight": 0.43276706790505337,
-      "action": {
-        "agents": [
-          "016"
-        ],
-        "system": "hq02",
-        "description": "Shutdown machine",
-        "active_response_request": {
-          "command": "shutdown_machine0",
-          "custom": false
+      },
+      "568": {
+        "weight": 0.43276706790505337,
+        "action": {
+          "agents": ["016"],
+          "system": "hq02",
+          "description": "Shutdown machine",
+          "active_response_request": {
+            "command": "shutdown_machine0",
+            "custom": false
+          }
         }
-      }
-    },
-    "923": {
-      "weight": 0.762280082457942,
-      "action": {
-        "agents": [
-          "011"
-        ],
-        "system": "hqfile",
-        "description": "Shutdown machine",
-        "active_response_request": {
-          "command": "shutdown_machine0",
-          "custom": false
+      },
+      "923": {
+        "weight": 0.762280082457942,
+        "action": {
+          "agents": ["011"],
+          "system": "hqfile",
+          "description": "Shutdown machine",
+          "active_response_request": {
+            "command": "shutdown_machine0",
+            "custom": false
+          }
         }
       }
     }

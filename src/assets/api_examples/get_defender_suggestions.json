@@ -1,0 +1,110 @@
+{
+  "GNNagent": {
+    "568": {
+      "weight": 0.005618778057396412,
+      "action": {
+        "agents": ["016"],
+        "system": "hq02",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257729
+    },
+    "781": {
+      "weight": 0.005618778057396412,
+      "action": {
+        "agents": ["019"],
+        "system": "hq05",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257795
+    },
+    "852": {
+      "weight": 0.005618778057396412,
+      "action": {
+        "agents": ["020"],
+        "system": "hq06",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.725781
+    },
+    "0": {
+      "weight": 0.005618769209831953,
+      "action": {
+        "agents": ["005"],
+        "system": "boosrv",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257822
+    },
+    "71": {
+      "weight": 0.005618769209831953,
+      "action": {
+        "agents": ["008"],
+        "system": "ca",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257838
+    }
+  },
+  "HeuristicsAgent": {
+    "568": {
+      "weight": 1.0,
+      "action": {
+        "agents": ["016"],
+        "system": "hq02",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257853
+    },
+    "781": {
+      "weight": 1.0,
+      "action": {
+        "agents": ["019"],
+        "system": "hq05",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257864
+    },
+    "852": {
+      "weight": 1.0,
+      "action": {
+        "agents": ["020"],
+        "system": "hq06",
+        "description": "Shutdown machine",
+        "active_response_request": {
+          "command": "shutdown_machine0",
+          "custom": false
+        }
+      },
+      "time_uploaded": 1729856930.7257876
+    }
+  }
+}

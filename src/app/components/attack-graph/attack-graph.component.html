@@ -1,5 +1,9 @@
 <div class="card bg-dark">
-  <div class="card-header text-center">Attack Graph</div>
+  <div class="card-header text-center">
+    {{
+      type === "historical" ? "Historical attack Graph" : "Attack graph horizon"
+    }}
+  </div>
   <div class="card-body">
     <div class="attack-graph-container">
       <ngx-graph

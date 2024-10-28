@@ -1,15 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 // ============================== THEME COLORS =====================================
-$primary: #d13d3d;
+$primary: #4ca6ff;
+$danger: #ff4c4c;
 /*$secondary: #505f68;
 $dark: #141a36;
-$danger: #e60000;
+$danger: #ff4c4c
 $warning: #ffe135;
 $light: #f8f9fa;*/
-
 // =================================================================================
-
 /*$theme-colors: (
   "primary": $primary,
   "secondary": $secondary,
@@ -20,7 +19,6 @@ $light: #f8f9fa;*/
   "light": $light,
   "dark": $dark,
 );*/
-
 @import "node_modules/bootstrap/scss/bootstrap";
 
 @import "~tippy.js/dist/tippy.css";
