@@ -17,55 +17,22 @@
   overflow-y: scroll;
 }
 
+.link-container {
+  border-radius: 6px;
+}
+
+.nav {
+  width: 100%;
+}
+
 .nav-link {
   color: grey;
 }
 
 .nav-underline .nav-link.active {
-  color: #ffffff;
+  color: #4ca6ff;
 }
 
 .tab-pane {
   width: 100%;
-}
-
-.loading-text {
-  margin-left: 20px;
-}
-
-/* HTML: <div class="loader"></div> */
-.loader {
-  width: 20px;
-  aspect-ratio: 1;
-  color: #4ca6ff;
-  position: relative;
-  background: radial-gradient(10px, currentColor 94%, #0000);
-}
-.loader:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(15px at bottom right, #0000 94%, currentColor) top
-      left,
-    radial-gradient(15px at bottom left, #0000 94%, currentColor) top right,
-    radial-gradient(15px at top right, #0000 94%, currentColor) bottom left,
-    radial-gradient(15px at top left, #0000 94%, currentColor) bottom right;
-  background-size: 20px 20px;
-  background-repeat: no-repeat;
-  animation: l18 1.8s infinite cubic-bezier(0.3, 1, 0, 1);
-}
-@keyframes l18 {
-  33% {
-    inset: -12px;
-    transform: rotate(0deg);
-  }
-  66% {
-    inset: -12px;
-    transform: rotate(90deg);
-  }
-  100% {
-    inset: 0;
-    transform: rotate(90deg);
-  }
 }

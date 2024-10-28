@@ -4,10 +4,10 @@
       <h2 class="text-dark title ps-2 m-0">TYR DEMO</h2>
     </div>
     <div
-      class="col-4 d-flex flex-row align-items-center justify-content-center"
+      class="col-4 d-flex flex-row align-items-center justify-content-center bg-dark p-3 link-container"
     >
       <div
-        class="nav flex-row nav-underline me-3"
+        class="nav nav-fill flex-row nav-underline me-3"
         id="v-pills-tab"
         role="tablist"
         aria-orientation="vertical"
@@ -48,16 +48,19 @@
     <div
       class="col-4 d-flex flex-row align-items-center justify-content-center"
     >
-      <div *ngIf="loading" class="loader"></div>
       <span
         *ngIf="loading"
-        class="loading-text badge rounded-pill text-bg-primary"
-        >Updating</span
+        class="badge rounded-pill text-bg-primary d-flex flex-row align-items-center justify-content-center"
+      >
+        <div class="spinner-border spinner-border-sm me-2" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        Updating...</span
       >
     </div>
   </div>
 
-  <div class="tab-content p-4" id="v-pills-tabContent">
+  <div class="tab-content px-4" id="v-pills-tabContent">
     <div class="tab-pane fade show active" id="instance-tab">
       <div class="row g-2">
         <div class="col-4">
