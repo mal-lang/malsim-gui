@@ -1,10 +1,10 @@
 <div class="container-fluid main-container p-3" style="height: 100vh">
   <div class="row g-2 mb-3">
-    <div class="col-4" style="height: 40px">
-      <h2 class="text-dark title ps-2 m-0">TYR DEMO</h2>
+    <div class="col-sm-2 d-flex flex-row align-items-center ps-4">
+      <h2 class="text-dark title m-0">TYR DEMO</h2>
     </div>
     <div
-      class="col-4 d-flex flex-row align-items-center justify-content-center bg-dark p-3 link-container"
+      class="col-sm-8 d-flex flex-row align-items-center justify-content-center bg-dark link-container"
     >
       <div
         class="nav nav-fill flex-row nav-underline me-3"
@@ -46,17 +46,11 @@
       </div>
     </div>
     <div
-      class="col-4 d-flex flex-row align-items-center justify-content-center"
+      class="col-sm-2 d-flex flex-row align-items-center justify-content-center"
     >
-      <span
-        *ngIf="loading"
-        class="badge rounded-pill text-bg-primary d-flex flex-row align-items-center justify-content-center"
-      >
-        <div class="spinner-border spinner-border-sm me-2" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        Updating...</span
-      >
+      <h3 class="text-primary title ps-2 m-0">
+        {{ rewardValue.reward }} points
+      </h3>
     </div>
   </div>
 
@@ -100,6 +94,22 @@
         [activeAttackSteps]="activeAttackSteps"
         [attackStepMap]="attackStepMap"
       />
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div
+    class="toast show align-items-center text-bg-primary border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="toast-body d-flex align-items-center">
+      <div class="spinner-border me-2" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <span style="font-size: 20px">Updating...</span>
     </div>
   </div>
 </div>

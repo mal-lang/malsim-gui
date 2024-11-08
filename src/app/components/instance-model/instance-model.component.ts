@@ -65,12 +65,16 @@ export class InstanceModelComponent {
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.createModelData();
+    this.getModel();
   }
 
-  createModelData() {
-    let model = this.apiService.getModel();
+  getModel() {
+    this.apiService.getModel().subscribe((model) => {
+      this.createModelData(model);
+    });
+  }
 
+  createModelData(model: any) {
     let assets: { [key: string]: any } = model.assets;
     let associations: Array<any> = model.associations;
 

@@ -14,7 +14,7 @@
               ? 'disabled'
               : null
           "
-          (click)="selectAction(action.stepId)"
+          (click)="selectAction(action.stepId, action.iteration)"
         >
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ action.description }}</h5>

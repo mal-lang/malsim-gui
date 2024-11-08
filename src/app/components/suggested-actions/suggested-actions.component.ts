@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
 interface SuggestedAction {
   stepId: number;
   description: string;
+  iteration: number;
   system: string;
   agents: Array<string>;
 }
@@ -34,12 +35,16 @@ export class SuggestedActionsComponent {
         if (index !== -1) {
           actions[index].agents.push(agent);
         } else {
-          let step = this.defenderSuggestions[agent][stepId];
-          if (step.action.description && step.action.system) {
+          let defenderSuggestion = this.defenderSuggestions[agent][stepId];
+          if (
+            defenderSuggestion.action.description &&
+            defenderSuggestion.action.system
+          ) {
             actions.push({
               stepId: Number(stepId),
-              description: step.action.description,
-              system: step.action.system,
+              iteration: defenderSuggestion.iteration,
+              description: defenderSuggestion.action.description,
+              system: defenderSuggestion.action.system,
               agents: [agent],
             });
           }
@@ -50,10 +55,8 @@ export class SuggestedActionsComponent {
     this.suggestedActions = actions;
   }
 
-  selectAction(id: number) {
-    //TODO send to API
-
+  selectAction(id: number, iteration: number) {
     this.selectedAction = id;
-    this.apiService.postDefenderAction(id);
+    this.apiService.postDefenderAction(id, iteration).subscribe(() => {});
   }
 }

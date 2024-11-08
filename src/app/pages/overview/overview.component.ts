@@ -5,14 +5,7 @@ import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-gra
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
-
-//TODO prepare for https calls
-
-//TODO use id instead of name in attack graph
-
-//TODO do two attack graphs (Historic attack graph (parents) and atack graph horizon (children))
-
-//TODO pull every minute
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-overview',
@@ -38,28 +31,40 @@ export class OverviewComponent {
   maxWidth = 300;
   show = true;
   intervalIndex: number = 1;
-
   activeDefenceSteps: any = {};
   activeAttackSteps: any = {};
   allAttackSteps: any = {};
   attackStepMap = new Map<number, string>();
   defenderSuggestions: any = {};
-  loading: boolean = false;
+  loading: boolean = true;
   intervalId: any;
-  intervalTime: number = 1000 * 10; // 60 seconds;
+  intervalTime: number = 1000 * 10; // 10 seconds;
   stage: number = 0;
+  rewardValue: { reward: number; iteration: number } = {
+    reward: 0,
+    iteration: -1,
+  };
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    let attackGraph = this.apiService.getAttackGraph();
-    this.allAttackSteps = attackGraph.attack_steps;
-    this.mapAvailableAttackSteps();
+    this.getAttackGraph();
+  }
 
-    this.intervalId = setInterval(() => {
-      this.loading = true;
-      this.updateCurrentAttackSteps();
-    }, this.intervalTime);
+  getAttackGraph() {
+    this.apiService.getAttackGraph().subscribe({
+      next: (attackGraph) => {
+        this.allAttackSteps = attackGraph.attack_steps;
+        this.mapAvailableAttackSteps();
+
+        this.intervalId = setInterval(() => {
+          this.updateCurrentAttackSteps();
+        }, this.intervalTime);
+      },
+      error: (e) => {
+        console.log(e);
+      },
+    });
   }
 
   mapAvailableAttackSteps() {
@@ -69,23 +74,33 @@ export class OverviewComponent {
   }
 
   updateCurrentAttackSteps() {
+    this.loading = true;
     this.activeDefenceSteps = this.findDefenceStep(
       this.apiService.getLatestDefenceStep()
     );
-    this.activeAttackSteps = this.findAttackSteps(
-      this.apiService.getLatestAttackSteps()
-    );
-    this.defenderSuggestions = this.apiService.getDefenderSuggestions();
 
-    setTimeout(() => {
-      this.stage++;
-      this.instanceModel.markNodes();
-      this.historicAttackGraph.updateAttackGraph();
-      this.attackGraphHorizon.updateAttackGraph();
-      this.suggestedActions.updateSuggestedActions();
-      ++this.intervalIndex;
-      this.loading = false;
-    }, 2000);
+    forkJoin({
+      latestAttackSteps: this.apiService.getLatestAttackSteps(),
+      defenderSuggestions: this.apiService.getDefenderSuggestions(),
+      rewardValue: this.apiService.getRewardValue(),
+    }).subscribe(({ latestAttackSteps, defenderSuggestions, rewardValue }) => {
+      this.activeAttackSteps = this.findAttackSteps(latestAttackSteps);
+
+      this.defenderSuggestions = defenderSuggestions;
+      if (rewardValue.iteration !== this.rewardValue.iteration) {
+        this.rewardValue = rewardValue.reward;
+      }
+
+      setTimeout(() => {
+        this.stage++;
+        this.instanceModel.markNodes();
+        this.historicAttackGraph.updateAttackGraph();
+        this.attackGraphHorizon.updateAttackGraph();
+        this.suggestedActions.updateSuggestedActions();
+        ++this.intervalIndex;
+        this.loading = false;
+      }, 2000);
+    });
   }
 
   findDefenceStep(id: number) {

@@ -17,6 +17,7 @@ import {
   TippyDirective,
 } from '@ngneat/helipopper';
 import { LogModalComponent } from './components/modals/log-modal/log-modal.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { LogModalComponent } from './components/modals/log-modal/log-modal.compo
     TippyDirective,
   ],
   providers: [
+    provideHttpClient(),
     provideTippyConfig({
       defaultVariation: 'tooltip',
       variations: {

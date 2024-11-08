@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 
 import ATTACKGRAPH from '../../../assets/api_examples/get_attack_graph.json';
 import MODEL from '../../../assets/api_examples/get_model.json';
@@ -11,28 +13,21 @@ import LATESTATTACKSTEPS from '../../../assets/api_examples/get_latest_attack_st
   providedIn: 'root',
 })
 export class ApiService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
+  apiUrl: string = 'api/';
   chosenAlternative: number | null = null;
 
-  getAttackGraph() {
-    return ATTACKGRAPH;
+  getAttackGraph(): Observable<any> {
+    return this.http.get(this.apiUrl + 'attack_graph');
   }
 
-  getDefenderSuggestions() {
-    return DEFENDERSUGGESTIONS;
+  getDefenderSuggestions(): Observable<any> {
+    return this.http.get(this.apiUrl + 'defender_suggestions');
   }
 
-  getEnabledAttackSteps() {
-    return ENABLEDATTACKSTEPS;
-  }
-
-  getEnabledDefenceSteps() {
-    return ENABLEDEFENSESTEPS;
-  }
-
-  getLatestAttackSteps() {
-    return LATESTATTACKSTEPS;
+  getLatestAttackSteps(): Observable<any> {
+    return this.http.get(this.apiUrl + 'latest_attack_steps');
   }
 
   getLatestDefenceStep() {
@@ -43,11 +38,19 @@ export class ApiService {
   }
 
   getModel() {
-    return MODEL;
+    return this.http.get(this.apiUrl + 'model');
   }
 
-  postDefenderAction(stepId: number) {
+  postDefenderAction(stepId: number, iteration: number) {
     this.chosenAlternative = stepId;
-    //TODO
+
+    return this.http.post(this.apiUrl + 'defender_action', {
+      iteration: iteration,
+      node_id: stepId,
+    });
+  }
+
+  getRewardValue(): Observable<any> {
+    return this.http.get(this.apiUrl + 'reward_value');
   }
 }
