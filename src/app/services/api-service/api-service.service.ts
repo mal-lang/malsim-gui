@@ -41,6 +41,14 @@ export class ApiService {
     return this.http.get(this.apiUrl + 'model');
   }
 
+  getEnabledAttackSteps(): Observable<any> {
+    return this.http.get(this.apiUrl + 'enabled_attack_steps');
+  }
+
+  getEnabledDefenceSteps(): Observable<any> {
+    return this.http.get(this.apiUrl + 'enabled_defense_steps');
+  }
+
   postDefenderAction(stepId: number, iteration: number) {
     this.chosenAlternative = stepId;
 

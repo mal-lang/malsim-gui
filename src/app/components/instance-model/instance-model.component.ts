@@ -9,9 +9,8 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
   styleUrl: './instance-model.component.scss',
 })
 export class InstanceModelComponent {
-  @Input() activeAttackSteps: any;
-  @Input() activeDefenceSteps: any;
   @Input() attackStepMap: any;
+  @Input() allAttackSteps: any;
 
   @ViewChild('networkContainer') networkContainer: ElementRef;
 
@@ -124,19 +123,36 @@ export class InstanceModelComponent {
     }, 500);
   }
 
-  markNodes() {
+  markNodes(
+    enabledAttackSteps: any,
+    enabledDefenceSteps: any,
+    activeAttackSteps: any,
+    activeDefenceSteps: any
+  ) {
     if (this.networkGraph) {
       let updatedNodes: Array<any> = [];
 
       let attackMark: Array<number> = [];
       let defenceMark: Array<number> = [];
+      let prevAttackedNodes: Array<number> = [];
+      let preDefendedNodes: Array<number> = [];
 
-      Object.keys(this.activeAttackSteps).forEach((id) => {
-        attackMark.push(this.activeAttackSteps[id].asset);
+      Object.keys(activeAttackSteps).forEach((id) => {
+        attackMark.push(activeAttackSteps[id].asset);
       });
 
-      Object.keys(this.activeDefenceSteps).forEach((id) => {
-        defenceMark.push(this.activeDefenceSteps[id].asset);
+      Object.keys(activeDefenceSteps).forEach((id) => {
+        defenceMark.push(activeDefenceSteps[id].asset);
+      });
+
+      enabledAttackSteps.forEach((id: number) => {
+        let name = this.attackStepMap.get(Number(id));
+        prevAttackedNodes.push(this.allAttackSteps[name].asset);
+      });
+
+      enabledDefenceSteps.forEach((id: number) => {
+        let name = this.attackStepMap.get(Number(id));
+        preDefendedNodes.push(this.allAttackSteps[name].asset);
       });
 
       this.networkNodes.forEach((node) => {
@@ -147,30 +163,27 @@ export class InstanceModelComponent {
             color: colorOptions,
             attackMarked: true,
           });
-        }
-
-        if (defenceMark.includes(node.name)) {
+        } else if (defenceMark.includes(node.name)) {
           let colorOptions = { border: '#4ca6ff', background: '#4ca6ff' };
           updatedNodes.push({
             id: node.id,
             color: colorOptions,
             defenceMarked: true,
           });
-        }
-
-        if (
-          !defenceMark.includes(node.name) &&
-          !attackMark.includes(node.name)
+        } else if (
+          preDefendedNodes.includes(node.name) ||
+          prevAttackedNodes.includes(node.name)
         ) {
-          let colorOptions;
-          if (node.attackMarked && node.defenceMarked) {
-            colorOptions = { border: '#CC99CC', background: '#CC99CC' };
-          } else if (node.attackMarked) {
-            colorOptions = { border: '#FFC9C9', background: '#FFC9C9' };
-          } else if (node.defenceMarked) {
-            colorOptions = { border: '#C9E4FF', background: '#C9E4FF' };
-          } else {
-            colorOptions = { border: 'aliceblue', background: 'aliceblue' };
+          let colorOptions = { border: 'aliceblue', background: 'aliceblue' };
+          if (
+            prevAttackedNodes.includes(node.name) &&
+            preDefendedNodes.includes(node.name)
+          ) {
+            colorOptions = { border: '#cc99cc', background: '#cc99cc' };
+          } else if (prevAttackedNodes.includes(node.name)) {
+            colorOptions = { border: '#ff9696', background: '#ff9696' };
+          } else if (preDefendedNodes.includes(node.name)) {
+            colorOptions = { border: '#96cbff', background: '#96cbff' };
           }
 
           updatedNodes.push({

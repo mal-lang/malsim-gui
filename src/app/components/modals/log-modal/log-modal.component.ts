@@ -24,7 +24,6 @@ export class LogModalComponent {
       jsonLogs.push(str);
     });
 
-    console.log(jsonLogs);
     this.parsedLogs = jsonLogs;
   }
 }

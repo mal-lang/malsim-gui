@@ -16,18 +16,16 @@ interface SuggestedAction {
   styleUrl: './suggested-actions.component.scss',
 })
 export class SuggestedActionsComponent {
-  @Input() defenderSuggestions: any;
-
   suggestedActions: Array<SuggestedAction> = [];
   selectedAction: number | null = null;
 
   constructor(private apiService: ApiService) {}
 
-  updateSuggestedActions() {
+  updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
     this.selectedAction = null;
-    Object.keys(this.defenderSuggestions).forEach((agent) => {
-      Object.keys(this.defenderSuggestions[agent]).forEach((stepId) => {
+    Object.keys(defenderSuggestions).forEach((agent) => {
+      Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
         let index = actions.findIndex(
           (a: SuggestedAction) => a.stepId === Number(stepId)
         );
@@ -35,7 +33,7 @@ export class SuggestedActionsComponent {
         if (index !== -1) {
           actions[index].agents.push(agent);
         } else {
-          let defenderSuggestion = this.defenderSuggestions[agent][stepId];
+          let defenderSuggestion = defenderSuggestions[agent][stepId];
           if (
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system

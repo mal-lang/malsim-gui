@@ -22,9 +22,6 @@ interface AttackLink {
   styleUrl: './attack-graph.component.scss',
 })
 export class AttackGraphComponent implements OnInit {
-  @Input() stage: number;
-  @Input() activeDefenceSteps: any;
-  @Input() activeAttackSteps: any;
   @Input() allAttackSteps: any;
   @Input() attackStepMap: any;
   @Input() type: string;
@@ -32,7 +29,7 @@ export class AttackGraphComponent implements OnInit {
 
   attackGraphLinks: Array<AttackLink> = [];
   attackGraphNodes: Array<AttackNode> = [];
-  internalStage: number = 0;
+  activeAttackSteps: any;
 
   maxDepth: number = 2;
   public layoutSettings = {
@@ -47,11 +44,11 @@ export class AttackGraphComponent implements OnInit {
     this.zoomToFit$.next({ force: true, autoCenter: true });
   }
 
-  updateAttackGraph() {
+  updateAttackGraph(activeAttackSteps: any, activeDefenceSteps: any) {
     let attackGraphNodes: Array<any> = [];
     let attackGraphLinks: Array<any> = [];
 
-    Object.keys(this.activeAttackSteps).forEach((stepId: any) => {
+    Object.keys(activeAttackSteps).forEach((stepId: any) => {
       let name = this.attackStepMap.get(Number(stepId));
 
       if (name) {
@@ -60,7 +57,7 @@ export class AttackGraphComponent implements OnInit {
         let node = this.createActiveAttackGraphNode(
           name,
           step,
-          this.activeAttackSteps[stepId].logs.length
+          activeAttackSteps[stepId].logs.length
         );
 
         attackGraphNodes.push(node);
@@ -74,7 +71,7 @@ export class AttackGraphComponent implements OnInit {
       }
     });
 
-    Object.keys(this.activeDefenceSteps).forEach((defenceId: any) => {
+    Object.keys(activeDefenceSteps).forEach((defenceId: any) => {
       let name = this.attackStepMap.get(Number(defenceId));
       if (name) {
         let step = this.allAttackSteps[name];
@@ -92,14 +89,12 @@ export class AttackGraphComponent implements OnInit {
       }
     });
 
+    this.activeAttackSteps = activeAttackSteps;
     this.attackGraphLinks = attackGraphLinks;
     this.attackGraphNodes = attackGraphNodes;
 
     setTimeout(() => {
-      if (
-        this.attackGraphNodes.length > 0 &&
-        this.internalStage !== this.stage
-      ) {
+      if (this.attackGraphNodes.length > 0) {
         this.fitGraph();
       }
     }, 200);

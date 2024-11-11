@@ -1,10 +1,10 @@
 <div class="container-fluid main-container p-3" style="height: 100vh">
   <div class="row g-2 mb-3">
-    <div class="col-sm-2 d-flex flex-row align-items-center ps-4">
-      <h2 class="text-dark title m-0">TYR DEMO</h2>
+    <div class="col-sm-3 d-flex flex-row align-items-center ps-4">
+      <h3 class="text-dark title m-0">TYR DEMO</h3>
     </div>
     <div
-      class="col-sm-8 d-flex flex-row align-items-center justify-content-center bg-dark link-container"
+      class="col-sm-6 d-flex flex-row align-items-center justify-content-center bg-dark link-container"
     >
       <div
         class="nav nav-fill flex-row nav-underline me-3"
@@ -21,36 +21,46 @@
         >
           Instance
         </button>
-        <div class="vr mx-4 text-light"></div>
+        <div class="vr mx-2 text-light"></div>
         <button
           class="nav-link"
           data-bs-toggle="tab"
           data-bs-target="#horizon-tab"
           type="button"
           role="tab"
-          (click)="attackGraphHorizon.updateAttackGraph()"
+          (click)="
+            attackGraphHorizon.updateAttackGraph(
+              activeAttackSteps,
+              activeDefenceSteps
+            )
+          "
         >
           Attack Graph Horizon
         </button>
-        <div class="vr mx-4 text-light"></div>
+        <div class="vr mx-2 text-light"></div>
         <button
           class="nav-link"
           data-bs-toggle="tab"
           data-bs-target="#historical-tab"
           type="button"
           role="tab"
-          (click)="historicAttackGraph.updateAttackGraph()"
+          (click)="
+            historicAttackGraph.updateAttackGraph(
+              activeAttackSteps,
+              activeDefenceSteps
+            )
+          "
         >
           Historical attack graph
         </button>
       </div>
     </div>
     <div
-      class="col-sm-2 d-flex flex-row align-items-center justify-content-center"
+      class="col-sm-3 d-flex flex-row align-items-center justify-content-center"
     >
-      <h3 class="text-primary title ps-2 m-0">
-        {{ rewardValue.reward }} points
-      </h3>
+      <h4 class="text-primary title ps-2 m-0">
+        Impact: {{ rewardValue.reward }}
+      </h4>
     </div>
   </div>
 
@@ -58,16 +68,12 @@
     <div class="tab-pane fade show active" id="instance-tab">
       <div class="row g-2">
         <div class="col-4">
-          <app-suggested-actions
-            #suggestedActions
-            [defenderSuggestions]="defenderSuggestions"
-          />
+          <app-suggested-actions #suggestedActions />
         </div>
         <div class="col-8">
           <app-instance-model
             #instanceModel
-            [activeDefenceSteps]="activeDefenceSteps"
-            [activeAttackSteps]="activeAttackSteps"
+            [allAttackSteps]="allAttackSteps"
             [attackStepMap]="attackStepMap"
           />
         </div>
@@ -77,10 +83,7 @@
       <app-attack-graph
         #attackGraphHorizon
         [type]="'horizon'"
-        [stage]="stage"
         [allAttackSteps]="allAttackSteps"
-        [activeDefenceSteps]="activeDefenceSteps"
-        [activeAttackSteps]="activeAttackSteps"
         [attackStepMap]="attackStepMap"
       />
     </div>
@@ -88,10 +91,7 @@
       <app-attack-graph
         #historicAttackGraph
         [type]="'historical'"
-        [stage]="stage"
         [allAttackSteps]="allAttackSteps"
-        [activeDefenceSteps]="activeDefenceSteps"
-        [activeAttackSteps]="activeAttackSteps"
         [attackStepMap]="attackStepMap"
       />
     </div>
@@ -106,10 +106,10 @@
     aria-atomic="true"
   >
     <div class="toast-body d-flex align-items-center">
-      <div class="spinner-border me-2" role="status">
+      <div class="spinner-border spinner-border-sm me-2" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <span style="font-size: 20px">Updating...</span>
+      <span>Updating...</span>
     </div>
   </div>
 </div>

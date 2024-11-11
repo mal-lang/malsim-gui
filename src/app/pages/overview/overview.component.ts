@@ -30,20 +30,19 @@ export class OverviewComponent {
   noContextText: string | undefined;
   maxWidth = 300;
   show = true;
-  intervalIndex: number = 1;
-  activeDefenceSteps: any = {};
-  activeAttackSteps: any = {};
   allAttackSteps: any = {};
   attackStepMap = new Map<number, string>();
-  defenderSuggestions: any = {};
-  loading: boolean = true;
+  currentDefenderSuggestions: any = {};
+  loading: boolean = false;
   intervalId: any;
   intervalTime: number = 1000 * 10; // 10 seconds;
-  stage: number = 0;
   rewardValue: { reward: number; iteration: number } = {
     reward: 0,
     iteration: -1,
   };
+  latestAttackStepIteration: number = -1;
+  activeDefenceSteps: any;
+  activeAttackSteps: any;
 
   constructor(private apiService: ApiService) {}
 
@@ -75,32 +74,102 @@ export class OverviewComponent {
 
   updateCurrentAttackSteps() {
     this.loading = true;
-    this.activeDefenceSteps = this.findDefenceStep(
-      this.apiService.getLatestDefenceStep()
-    );
 
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
       defenderSuggestions: this.apiService.getDefenderSuggestions(),
       rewardValue: this.apiService.getRewardValue(),
-    }).subscribe(({ latestAttackSteps, defenderSuggestions, rewardValue }) => {
-      this.activeAttackSteps = this.findAttackSteps(latestAttackSteps);
+      enabledDefenceSteps: this.apiService.getEnabledDefenceSteps(),
+      enabledAttackSteps: this.apiService.getEnabledAttackSteps(),
+    }).subscribe(
+      ({
+        latestAttackSteps,
+        defenderSuggestions,
+        rewardValue,
+        enabledDefenceSteps,
+        enabledAttackSteps,
+      }) => {
+        this.activeDefenceSteps = this.findDefenceStep(
+          this.apiService.getLatestDefenceStep()
+        );
 
-      this.defenderSuggestions = defenderSuggestions;
-      if (rewardValue.iteration !== this.rewardValue.iteration) {
-        this.rewardValue = rewardValue.reward;
+        if (this.updateActiveAttackSteps(latestAttackSteps)) {
+          let iteration = Object.keys(latestAttackSteps);
+
+          this.activeAttackSteps = this.findAttackSteps(
+            latestAttackSteps[iteration[0]]
+          );
+
+          this.historicAttackGraph.updateAttackGraph(
+            this.activeAttackSteps,
+            this.activeDefenceSteps
+          );
+          this.attackGraphHorizon.updateAttackGraph(
+            this.activeAttackSteps,
+            this.activeDefenceSteps
+          );
+        }
+
+        if (this.updateDefenderSuggestions(defenderSuggestions)) {
+          this.currentDefenderSuggestions = defenderSuggestions;
+          this.suggestedActions.updateSuggestedActions(defenderSuggestions);
+        }
+
+        this.rewardValue = rewardValue;
+        this.instanceModel.markNodes(
+          enabledAttackSteps,
+          enabledDefenceSteps,
+          this.activeAttackSteps,
+          this.activeDefenceSteps
+        );
+
+        setTimeout(() => {
+          this.loading = false;
+        }, 2000);
       }
+    );
+  }
 
-      setTimeout(() => {
-        this.stage++;
-        this.instanceModel.markNodes();
-        this.historicAttackGraph.updateAttackGraph();
-        this.attackGraphHorizon.updateAttackGraph();
-        this.suggestedActions.updateSuggestedActions();
-        ++this.intervalIndex;
-        this.loading = false;
-      }, 2000);
-    });
+  updateDefenderSuggestions(defenderSuggestions: any) {
+    if (!defenderSuggestions) {
+      return false;
+    }
+
+    let newDefenderSuggestions: any = Object.keys(defenderSuggestions);
+    let oldDefenderSuggestions: any = Object.keys(
+      this.currentDefenderSuggestions
+    );
+
+    if (newDefenderSuggestions.length !== oldDefenderSuggestions.length) {
+      return true;
+    } else {
+      for (let agent of newDefenderSuggestions) {
+        for (let stepId of Object.keys(defenderSuggestions[agent])) {
+          if (
+            !this.currentDefenderSuggestions[agent] ||
+            !this.currentDefenderSuggestions[agent][stepId]
+          ) {
+            return true;
+          } else if (
+            defenderSuggestions[agent][stepId].iteration !==
+            this.currentDefenderSuggestions[agent][stepId].iteration
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  updateActiveAttackSteps(latestAttackSteps: any) {
+    let iteration = Object.keys(latestAttackSteps);
+
+    if (Number(iteration[0]) !== Number(this.latestAttackStepIteration)) {
+      return true;
+    }
+
+    return false;
   }
 
   findDefenceStep(id: number) {

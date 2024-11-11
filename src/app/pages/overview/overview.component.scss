@@ -2,10 +2,6 @@
   font-family: "Cinzel", sans-serif !important;
 }
 
-.nav-link {
-  color: #fff;
-}
-
 .main-container {
   background: rgb(0, 0, 0);
   background: linear-gradient(
@@ -28,6 +24,7 @@
 
 .nav-link {
   color: grey;
+  font-size: small;
 }
 
 .nav-underline .nav-link.active {
