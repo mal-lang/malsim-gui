@@ -29,7 +29,7 @@ export class AttackGraphComponent implements OnInit {
 
   attackGraphLinks: Array<AttackLink> = [];
   attackGraphNodes: Array<AttackNode> = [];
-  activeAttackSteps: any;
+  activeAttackSteps: any = {};
 
   maxDepth: number = 3;
   public layoutSettings = {
@@ -48,48 +48,52 @@ export class AttackGraphComponent implements OnInit {
     let attackGraphNodes: Array<any> = [];
     let attackGraphLinks: Array<any> = [];
 
-    Object.keys(activeAttackSteps).forEach((stepId: any) => {
-      let name = this.attackStepMap.get(Number(stepId));
+    if (activeAttackSteps) {
+      Object.keys(activeAttackSteps).forEach((stepId: any) => {
+        let name = this.attackStepMap.get(Number(stepId));
 
-      if (name) {
-        let step = this.allAttackSteps[name];
+        if (name) {
+          let step = this.allAttackSteps[name];
 
-        let node = this.createActiveAttackGraphNode(
-          name,
-          step,
-          activeAttackSteps[stepId].logs.length
-        );
+          let node = this.createActiveAttackGraphNode(
+            name,
+            step,
+            activeAttackSteps[stepId].logs.length
+          );
 
-        attackGraphNodes.push(node);
+          attackGraphNodes.push(node);
 
-        if (this.type === 'horizon') {
-          this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+          if (this.type === 'horizon') {
+            this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+          }
+          if (this.type === 'historical') {
+            this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+          }
         }
-        if (this.type === 'historical') {
-          this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+      });
+      this.activeAttackSteps = activeAttackSteps;
+    }
+
+    if (activeDefenceSteps) {
+      Object.keys(activeDefenceSteps).forEach((defenceId: any) => {
+        let name = this.attackStepMap.get(Number(defenceId));
+        if (name) {
+          let step = this.allAttackSteps[name];
+
+          let node = this.createActiveAttackGraphNode(name, step, 0);
+
+          attackGraphNodes.push(node);
+
+          if (this.type === 'horizon')
+            this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
+
+          if (this.type === 'historical') {
+            this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
+          }
         }
-      }
-    });
+      });
+    }
 
-    Object.keys(activeDefenceSteps).forEach((defenceId: any) => {
-      let name = this.attackStepMap.get(Number(defenceId));
-      if (name) {
-        let step = this.allAttackSteps[name];
-
-        let node = this.createActiveAttackGraphNode(name, step, 0);
-
-        attackGraphNodes.push(node);
-
-        if (this.type === 'horizon')
-          this.getChildren(attackGraphNodes, attackGraphLinks, name, 1);
-
-        if (this.type === 'historical') {
-          this.getParents(attackGraphNodes, attackGraphLinks, name, 1);
-        }
-      }
-    });
-
-    this.activeAttackSteps = activeAttackSteps;
     this.attackGraphLinks = attackGraphLinks;
     this.attackGraphNodes = attackGraphNodes;
 
@@ -211,7 +215,7 @@ export class AttackGraphComponent implements OnInit {
   }
 
   createAttackGraphLink(links: Array<any>, source: string, target: string) {
-    let newId = source + '_' + target + '_link';
+    let newId = 'link_' + source + '_' + target;
 
     links.push({
       id: newId,
