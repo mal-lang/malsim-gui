@@ -185,14 +185,16 @@ export class OverviewComponent {
   findAttackSteps(activeSteps: any) {
     let steps: any = {};
 
-    Object.keys(activeSteps).forEach((activeStepId) => {
-      let stepName = this.attackStepMap.get(Number(activeStepId));
-      if (stepName) {
-        steps[activeStepId] = this.allAttackSteps[stepName];
-        steps[activeStepId].logs = activeSteps[activeStepId];
-        steps[activeStepId].name = stepName;
-      }
-    });
+    if (activeSteps) {
+      Object.keys(activeSteps).forEach((activeStepId) => {
+        let stepName = this.attackStepMap.get(Number(activeStepId));
+        if (stepName) {
+          steps[activeStepId] = this.allAttackSteps[stepName];
+          steps[activeStepId].logs = activeSteps[activeStepId];
+          steps[activeStepId].name = stepName;
+        }
+      });
+    }
 
     return steps;
   }

@@ -31,7 +31,7 @@ export class AttackGraphComponent implements OnInit {
   attackGraphNodes: Array<AttackNode> = [];
   activeAttackSteps: any;
 
-  maxDepth: number = 2;
+  maxDepth: number = 3;
   public layoutSettings = {
     orientation: 'TB',
   };

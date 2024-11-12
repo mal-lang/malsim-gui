@@ -39,6 +39,16 @@
             </svg:text>
           </svg:g>
         </ng-template>
+
+        <ng-template #linkTemplate let-link>
+          <svg:g class="edge">
+            <svg:path
+              class="line"
+              stroke-width="2"
+              [attr.stroke]="'#d8d8d8'"
+            ></svg:path>
+          </svg:g>
+        </ng-template>
       </ngx-graph>
     </div>
   </div>

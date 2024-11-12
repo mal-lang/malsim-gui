@@ -190,6 +190,13 @@ export class InstanceModelComponent {
             id: node.id,
             color: colorOptions,
           });
+        } else {
+          //Just set to white
+          let colorOptions = { border: 'aliceblue', background: 'aliceblue' };
+          updatedNodes.push({
+            id: node.id,
+            color: colorOptions,
+          });
         }
       });
       this.networkNodes.update(updatedNodes);

@@ -33,7 +33,6 @@ export class ApiService {
   getLatestDefenceStep() {
     // Copy alternative before reset
     let latestDefenceStep = JSON.parse(JSON.stringify(this.chosenAlternative));
-    this.chosenAlternative = null;
     return latestDefenceStep;
   }
 
