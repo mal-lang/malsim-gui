@@ -37,7 +37,7 @@ To serve a devlopment server run: `ng serve --open` in the /core-web folder
 
 ## Development setup
 
-Install all dependencies with `npm install` in tyr-gui/
+Install all dependencies with `npm install --force` in tyr-gui/
 Start and serve a development server with `ng serve --open`
 
 ## Update TYR_GUI managed application
