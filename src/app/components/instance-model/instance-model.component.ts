@@ -146,13 +146,14 @@ export class InstanceModelComponent {
           if (drawnNodes.includes(associatedAsset.id)) return;
 
           this.networkEdges.add({
+            id: asset.id + '-' + associatedAsset.id,
             from: asset.id,
             to: associatedAsset.id,
           });
         });
       });
     });
-    console.log(this.networkNodes.getIds());
+    console.log(this.networkEdges.getIds());
 
     // Create network graph
     setTimeout(() => {

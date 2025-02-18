@@ -516,4 +516,29 @@ describe('InstanceModelComponent', () => {
       0, 1, 2, 25, 26, 27, 28, 63, 64, 65, 88, 89, 90,
     ]);
   });
+
+  it('should create a network with all connections as edges', () => {
+    const restService = TestBed.inject(ApiService);
+
+    spyOn(restService, 'getModel').and.returnValue(of(mockedModel));
+
+    // when
+    component.getModel();
+
+    // then
+    expect(component.networkEdges.getIds()).toEqual([
+      '0-26',
+      '0-63',
+      '0-88',
+      '1-27',
+      '1-64',
+      '1-89',
+      '2-28',
+      '2-65',
+      '2-90',
+      '25-26',
+      '25-27',
+      '25-28',
+    ]);
+  });
 });
