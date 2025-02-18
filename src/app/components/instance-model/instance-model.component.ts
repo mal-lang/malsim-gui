@@ -113,7 +113,6 @@ export class InstanceModelComponent {
       assetList.push({
         id: +assetId,
         name: associatedAssetsTypeList[assetId],
-        edgeIsDrawn: false,
       });
     });
 
@@ -147,6 +146,7 @@ export class InstanceModelComponent {
           if (drawnNodes.includes(associatedAsset.id)) return;
 
           this.networkEdges.add({
+            id: asset.id + '-' + associatedAsset.id,
             from: asset.id,
             to: associatedAsset.id,
           });
@@ -278,24 +278,23 @@ interface networkConnection {
 }
 
 // Model interfaces tailored for MAL-Toolbox version 0.3.3
-interface SimpleAsset {
+export interface SimpleAsset {
   id: number;
   name: string;
-  edgeIsDrawn: boolean;
 }
 
-interface AssetAssociationList {
+export interface AssetAssociationList {
   type: string;
   assets: SimpleAsset[];
 }
 
-interface Asset {
+export interface Asset {
   id: number;
   name: string;
   type: string;
   associatedAssets: AssetAssociationList[];
 }
 
-interface Model {
+export interface Model {
   assets: Asset[];
 }
