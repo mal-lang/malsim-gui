@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SuggestedActionsComponent } from './suggested-actions.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('SuggestedActionsComponent', () => {
   let component: SuggestedActionsComponent;
@@ -8,9 +9,9 @@ describe('SuggestedActionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SuggestedActionsComponent]
-    })
-    .compileComponents();
+      declarations: [SuggestedActionsComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SuggestedActionsComponent);
     component = fixture.componentInstance;
