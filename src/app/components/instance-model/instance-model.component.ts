@@ -153,7 +153,6 @@ export class InstanceModelComponent {
         });
       });
     });
-    console.log(this.networkEdges.getIds());
 
     // Create network graph
     setTimeout(() => {
