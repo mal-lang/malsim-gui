@@ -15,7 +15,7 @@ import LATESTATTACKSTEPS from '../../../assets/api_examples/get_latest_attack_st
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  apiUrl: string = 'api/';
+  apiUrl: string = 'http://localhost:8888/';
   chosenAlternative: number | null = null;
 
   getAttackGraph(): Observable<any> {

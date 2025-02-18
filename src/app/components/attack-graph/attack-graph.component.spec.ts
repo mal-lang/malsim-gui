@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AttackGraphComponent } from './attack-graph.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AttackGraphComponent', () => {
   let component: AttackGraphComponent;
@@ -8,9 +9,9 @@ describe('AttackGraphComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AttackGraphComponent]
-    })
-    .compileComponents();
+      declarations: [AttackGraphComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AttackGraphComponent);
     component = fixture.componentInstance;

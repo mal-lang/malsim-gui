@@ -15,6 +15,7 @@ export class InstanceModelComponent {
   @ViewChild('networkContainer') networkContainer: ElementRef;
 
   // Network graph
+  model: Model;
   networkGraph: Network;
   networkNodes: DataSet<any> = new DataSet([]);
   networkEdges: DataSet<any> = new DataSet([]);
@@ -69,8 +70,8 @@ export class InstanceModelComponent {
 
   getModel() {
     this.apiService.getModel().subscribe((receivedModel) => {
-      let model = this.extractModel(receivedModel);
-      this.createNetwork(model);
+      this.model = this.extractModel(receivedModel);
+      this.createNetwork();
     });
   }
 
@@ -119,12 +120,12 @@ export class InstanceModelComponent {
     return assetList;
   }
 
-  createNetwork(model: Model) {
+  createNetwork() {
     //This array will keep track of the drawn nodes in the network, to avoid duplicating their connections
     let drawnNodes: number[] = [];
 
     //Create network nodes from assets in model
-    model.assets.forEach((asset: Asset) => {
+    this.model.assets.forEach((asset: Asset) => {
       this.networkNodes.add({
         id: asset.id,
         font: { multi: 'html', size: 20 },
