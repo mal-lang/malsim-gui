@@ -70,6 +70,7 @@ export class InstanceModelComponent {
 
   getModel() {
     this.apiService.getModel().subscribe((receivedModel) => {
+      console.log(receivedModel);
       this.model = this.extractModel(receivedModel);
       this.createNetwork();
     });
@@ -113,7 +114,6 @@ export class InstanceModelComponent {
       assetList.push({
         id: +assetId,
         name: associatedAssetsTypeList[assetId],
-        edgeIsDrawn: false,
       });
     });
 
@@ -278,24 +278,23 @@ interface networkConnection {
 }
 
 // Model interfaces tailored for MAL-Toolbox version 0.3.3
-interface SimpleAsset {
+export interface SimpleAsset {
   id: number;
   name: string;
-  edgeIsDrawn: boolean;
 }
 
-interface AssetAssociationList {
+export interface AssetAssociationList {
   type: string;
   assets: SimpleAsset[];
 }
 
-interface Asset {
+export interface Asset {
   id: number;
   name: string;
   type: string;
   associatedAssets: AssetAssociationList[];
 }
 
-interface Model {
+export interface Model {
   assets: Asset[];
 }
