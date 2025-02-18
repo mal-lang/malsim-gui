@@ -61,6 +61,8 @@ export class InstanceModelComponent {
     },
   };
 
+  drawnNetworkConnections: Array<networkConnection>;
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -68,20 +70,66 @@ export class InstanceModelComponent {
   }
 
   getModel() {
-    this.apiService.getModel().subscribe((model) => {
-      this.createModelData(model);
+    this.apiService.getModel().subscribe((receivedModel) => {
+      let model = this.extractModel(receivedModel);
+      this.createNetwork(model);
     });
   }
 
-  createModelData(model: any) {
-    let assets: { [key: string]: any } = model.assets;
-    let associations: Array<any> = model.associations;
+  extractModel(receivedModel: any) {
+    let assets: Asset[] = [];
 
-    Object.keys(assets).forEach((index: string) => {
-      let asset: any = assets[index];
+    //Extracts the assets, which have an id, a name, and a list of associated assets
+    Object.keys(receivedModel.assets).forEach((assetId) => {
+      assets.push({
+        id: +assetId,
+        name: receivedModel.assets[assetId].name,
+        type: receivedModel.assets[assetId].type,
+        associatedAssets: this.extractAssociatedAssets(
+          receivedModel.assets[assetId].associated_assets
+        ),
+      });
+    });
 
+    //Return model
+    return { assets };
+  }
+
+  //Extracts the associated assets, a list of simple assets with a given name
+  extractAssociatedAssets(associatedAssets: any): AssetAssociationList[] {
+    let associatedAssetLists: AssetAssociationList[] = [];
+    Object.keys(associatedAssets).forEach((assetListName) => {
+      associatedAssetLists.push({
+        type: assetListName,
+        assets: this.extractSimpleAssets(associatedAssets[assetListName]),
+      });
+    });
+    return associatedAssetLists;
+  }
+
+  //Extracts simple assets
+  extractSimpleAssets(associatedAssetsTypeList: any): SimpleAsset[] {
+    let assetList: SimpleAsset[] = [];
+    Object.keys(associatedAssetsTypeList).forEach((assetId) => {
+      assetList.push({
+        id: +assetId,
+        name: associatedAssetsTypeList[assetId],
+        edgeIsDrawn: false,
+      });
+    });
+
+    return assetList;
+  }
+
+  createNetwork(model: Model) {
+    //This array will keep track of the drawn edges in the network, to avoid duplicating them
+    let drawnConnections: Array<networkConnection> =
+      new Array<networkConnection>();
+
+    //Create network nodes from assets in model
+    model.assets.forEach((asset: Asset) => {
       this.networkNodes.add({
-        id: Number(index),
+        id: asset.id,
         font: { multi: 'html', size: 20 },
         label: asset.type + '\n <b>' + asset.name + '</b>',
         name: asset.name,
@@ -90,18 +138,29 @@ export class InstanceModelComponent {
         defenceMarked: false,
         attackMarked: false,
       });
-    });
 
-    associations.forEach((association) => {
-      let edgePoints: Array<number> = [];
-      Object.keys(association).forEach((a) => {
-        Object.keys(association[a]).forEach((connection) => {
-          edgePoints.push(association[a][connection][0]);
-        });
+      //Add node in list
+      drawnConnections.push({
+        origin: asset.id,
+        destinations: [],
       });
-      this.networkEdges.add({
-        from: edgePoints[0],
-        to: edgePoints[1],
+
+      //Draw edge only if it has not been drawn yet
+      asset.associatedAssets.forEach((associatedAssetTypeList) => {
+        associatedAssetTypeList.assets.forEach((associatedAsset) => {
+          //Check if edge has already been drawn
+          if (
+            Object.keys(drawnConnections).includes(
+              associatedAsset.id.toString()
+            )
+          ) {
+            return;
+          }
+          this.networkEdges.add({
+            from: asset.id,
+            to: associatedAsset.id,
+          });
+        });
       });
     });
 
@@ -223,10 +282,16 @@ export class InstanceModelComponent {
   }
 }
 
+interface networkConnection {
+  origin: number;
+  destinations: number[];
+}
+
 // Model interfaces tailored for MAL-Toolbox version 0.3.3
 interface SimpleAsset {
   id: number;
   name: string;
+  edgeIsDrawn: boolean;
 }
 
 interface AssetAssociationList {
@@ -237,6 +302,7 @@ interface AssetAssociationList {
 interface Asset {
   id: number;
   name: string;
+  type: string;
   associatedAssets: AssetAssociationList[];
 }
 
