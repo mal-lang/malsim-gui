@@ -61,8 +61,6 @@ export class InstanceModelComponent {
     },
   };
 
-  drawnNetworkConnections: Array<networkConnection>;
-
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -122,9 +120,8 @@ export class InstanceModelComponent {
   }
 
   createNetwork(model: Model) {
-    //This array will keep track of the drawn edges in the network, to avoid duplicating them
-    let drawnConnections: Array<networkConnection> =
-      new Array<networkConnection>();
+    //This array will keep track of the drawn nodes in the network, to avoid duplicating their connections
+    let drawnNodes: number[] = [];
 
     //Create network nodes from assets in model
     model.assets.forEach((asset: Asset) => {
@@ -140,22 +137,14 @@ export class InstanceModelComponent {
       });
 
       //Add node in list
-      drawnConnections.push({
-        origin: asset.id,
-        destinations: [],
-      });
+      drawnNodes.push(asset.id);
 
       //Draw edge only if it has not been drawn yet
       asset.associatedAssets.forEach((associatedAssetTypeList) => {
         associatedAssetTypeList.assets.forEach((associatedAsset) => {
-          //Check if edge has already been drawn
-          if (
-            Object.keys(drawnConnections).includes(
-              associatedAsset.id.toString()
-            )
-          ) {
-            return;
-          }
+          //Check if node connections have already been drawn
+          if (drawnNodes.includes(associatedAsset.id)) return;
+
           this.networkEdges.add({
             from: asset.id,
             to: associatedAsset.id,
