@@ -15,6 +15,166 @@ describe('InstanceModelComponent', () => {
   let component: InstanceModelComponent;
   let fixture: ComponentFixture<InstanceModelComponent>;
 
+  const mockedModel: any = {
+    metadata: {
+      'MAL-Toolbox Version': '0.3.3',
+      info: 'Created by the mal-toolbox model python module.',
+      langID: 'org.mal-lang.coreLang',
+      langVersion: '1.0.0',
+      malVersion: '0.1.0-SNAPSHOT',
+      name: 'Test Model',
+    },
+    assets: {
+      '0': {
+        associated_assets: {
+          appConnections: {
+            '26': 'CR boosrv-134.23.4.0/24',
+          },
+          executionPrivIAMs: {
+            '63': 'Admin Exec User - boosrv',
+          },
+          vulnerabilities: {
+            '88': 'SW Vuln - boosrv',
+          },
+        },
+        name: 'boosrv',
+        type: 'Application',
+      },
+      '1': {
+        associated_assets: {
+          appConnections: {
+            '27': 'CR ca-134.23.4.0/24',
+          },
+          executionPrivIAMs: {
+            '64': 'Admin Exec User - ca',
+          },
+          vulnerabilities: {
+            '89': 'SW Vuln - ca',
+          },
+        },
+        name: 'ca',
+        type: 'Application',
+      },
+      '2': {
+        associated_assets: {
+          appConnections: {
+            '28': 'CR db-134.23.4.0/24',
+          },
+          executionPrivIAMs: {
+            '65': 'Admin Exec User - db',
+          },
+          vulnerabilities: {
+            '90': 'SW Vuln - db',
+          },
+        },
+        name: 'db',
+        type: 'Application',
+      },
+      '25': {
+        associated_assets: {
+          netConnections: {
+            '26': 'CR boosrv-134.23.4.0/24',
+            '27': 'CR ca-134.23.4.0/24',
+            '28': 'CR db-134.23.4.0/24',
+          },
+        },
+        name: '134.23.4.0/24',
+        type: 'Network',
+      },
+      '26': {
+        associated_assets: {
+          applications: {
+            '0': 'boosrv',
+          },
+          networks: {
+            '25': '134.23.4.0/24',
+          },
+        },
+        name: 'CR boosrv-134.23.4.0/24',
+        type: 'ConnectionRule',
+      },
+      '27': {
+        associated_assets: {
+          applications: {
+            '1': 'ca',
+          },
+          networks: {
+            '25': '134.23.4.0/24',
+          },
+        },
+        name: 'CR ca-134.23.4.0/24',
+        type: 'ConnectionRule',
+      },
+      '28': {
+        associated_assets: {
+          applications: {
+            '2': 'db',
+          },
+          networks: {
+            '25': '134.23.4.0/24',
+          },
+        },
+        name: 'CR db-134.23.4.0/24',
+        type: 'ConnectionRule',
+      },
+      '63': {
+        associated_assets: {
+          execPrivApps: {
+            '0': 'boosrv',
+          },
+        },
+        name: 'Admin Exec User - boosrv',
+        type: 'Identity',
+      },
+      '64': {
+        associated_assets: {
+          execPrivApps: {
+            '1': 'ca',
+          },
+        },
+        name: 'Admin Exec User - ca',
+        type: 'Identity',
+      },
+      '65': {
+        associated_assets: {
+          execPrivApps: {
+            '2': 'db',
+          },
+        },
+        name: 'Admin Exec User - db',
+        type: 'Identity',
+      },
+      '88': {
+        associated_assets: {
+          application: {
+            '0': 'boosrv',
+          },
+        },
+        name: 'SW Vuln - boosrv',
+        type: 'SoftwareVulnerability',
+      },
+      '89': {
+        associated_assets: {
+          application: {
+            '1': 'ca',
+          },
+        },
+        name: 'SW Vuln - ca',
+        type: 'SoftwareVulnerability',
+      },
+      '90': {
+        associated_assets: {
+          application: {
+            '2': 'db',
+          },
+        },
+        name: 'SW Vuln - db',
+        type: 'SoftwareVulnerability',
+      },
+    },
+    attackers: {},
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InstanceModelComponent],
@@ -32,166 +192,6 @@ describe('InstanceModelComponent', () => {
 
   it('should create a valid model object', () => {
     const restService = TestBed.inject(ApiService);
-    const mockedModel: any = {
-      metadata: {
-        'MAL-Toolbox Version': '0.3.3',
-        info: 'Created by the mal-toolbox model python module.',
-        langID: 'org.mal-lang.coreLang',
-        langVersion: '1.0.0',
-        malVersion: '0.1.0-SNAPSHOT',
-        name: 'Test Model',
-      },
-      assets: {
-        '0': {
-          associated_assets: {
-            appConnections: {
-              '26': 'CR boosrv-134.23.4.0/24',
-            },
-            executionPrivIAMs: {
-              '63': 'Admin Exec User - boosrv',
-            },
-            vulnerabilities: {
-              '88': 'SW Vuln - boosrv',
-            },
-          },
-          name: 'boosrv',
-          type: 'Application',
-        },
-        '1': {
-          associated_assets: {
-            appConnections: {
-              '27': 'CR ca-134.23.4.0/24',
-            },
-            executionPrivIAMs: {
-              '64': 'Admin Exec User - ca',
-            },
-            vulnerabilities: {
-              '89': 'SW Vuln - ca',
-            },
-          },
-          name: 'ca',
-          type: 'Application',
-        },
-        '2': {
-          associated_assets: {
-            appConnections: {
-              '28': 'CR db-134.23.4.0/24',
-            },
-            executionPrivIAMs: {
-              '65': 'Admin Exec User - db',
-            },
-            vulnerabilities: {
-              '90': 'SW Vuln - db',
-            },
-          },
-          name: 'db',
-          type: 'Application',
-        },
-        '25': {
-          associated_assets: {
-            netConnections: {
-              '26': 'CR boosrv-134.23.4.0/24',
-              '27': 'CR ca-134.23.4.0/24',
-              '28': 'CR db-134.23.4.0/24',
-            },
-          },
-          name: '134.23.4.0/24',
-          type: 'Network',
-        },
-        '26': {
-          associated_assets: {
-            applications: {
-              '0': 'boosrv',
-            },
-            networks: {
-              '25': '134.23.4.0/24',
-            },
-          },
-          name: 'CR boosrv-134.23.4.0/24',
-          type: 'ConnectionRule',
-        },
-        '27': {
-          associated_assets: {
-            applications: {
-              '1': 'ca',
-            },
-            networks: {
-              '25': '134.23.4.0/24',
-            },
-          },
-          name: 'CR ca-134.23.4.0/24',
-          type: 'ConnectionRule',
-        },
-        '28': {
-          associated_assets: {
-            applications: {
-              '2': 'db',
-            },
-            networks: {
-              '25': '134.23.4.0/24',
-            },
-          },
-          name: 'CR db-134.23.4.0/24',
-          type: 'ConnectionRule',
-        },
-        '63': {
-          associated_assets: {
-            execPrivApps: {
-              '0': 'boosrv',
-            },
-          },
-          name: 'Admin Exec User - boosrv',
-          type: 'Identity',
-        },
-        '64': {
-          associated_assets: {
-            execPrivApps: {
-              '1': 'ca',
-            },
-          },
-          name: 'Admin Exec User - ca',
-          type: 'Identity',
-        },
-        '65': {
-          associated_assets: {
-            execPrivApps: {
-              '2': 'db',
-            },
-          },
-          name: 'Admin Exec User - db',
-          type: 'Identity',
-        },
-        '88': {
-          associated_assets: {
-            application: {
-              '0': 'boosrv',
-            },
-          },
-          name: 'SW Vuln - boosrv',
-          type: 'SoftwareVulnerability',
-        },
-        '89': {
-          associated_assets: {
-            application: {
-              '1': 'ca',
-            },
-          },
-          name: 'SW Vuln - ca',
-          type: 'SoftwareVulnerability',
-        },
-        '90': {
-          associated_assets: {
-            application: {
-              '2': 'db',
-            },
-          },
-          name: 'SW Vuln - db',
-          type: 'SoftwareVulnerability',
-        },
-      },
-      attackers: {},
-    };
-
     spyOn(restService, 'getModel').and.returnValue(of(mockedModel));
 
     // when
@@ -501,5 +501,19 @@ describe('InstanceModelComponent', () => {
 
     // then
     expect(component.model).toEqual(model);
+  });
+
+  it('should create a network with all assets as nodes', () => {
+    const restService = TestBed.inject(ApiService);
+
+    spyOn(restService, 'getModel').and.returnValue(of(mockedModel));
+
+    // when
+    component.getModel();
+
+    // then
+    expect(component.networkNodes.getIds()).toEqual([
+      0, 1, 2, 25, 26, 27, 28, 63, 64, 65, 88, 89, 90,
+    ]);
   });
 });

@@ -70,7 +70,6 @@ export class InstanceModelComponent {
 
   getModel() {
     this.apiService.getModel().subscribe((receivedModel) => {
-      console.log(receivedModel);
       this.model = this.extractModel(receivedModel);
       this.createNetwork();
     });
@@ -153,6 +152,7 @@ export class InstanceModelComponent {
         });
       });
     });
+    console.log(this.networkNodes.getIds());
 
     // Create network graph
     setTimeout(() => {
