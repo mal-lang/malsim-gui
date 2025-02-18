@@ -68,20 +68,65 @@ export class InstanceModelComponent {
   }
 
   getModel() {
-    this.apiService.getModel().subscribe((model) => {
-      this.createModelData(model);
+    this.apiService.getModel().subscribe((receivedModel) => {
+      let model = this.extractModel(receivedModel);
+      this.createNetwork(model);
     });
   }
 
-  createModelData(model: any) {
-    let assets: { [key: string]: any } = model.assets;
-    let associations: Array<any> = model.associations;
+  extractModel(receivedModel: any) {
+    let assets: Asset[] = [];
 
-    Object.keys(assets).forEach((index: string) => {
-      let asset: any = assets[index];
+    //Extracts the assets, which have an id, a name, and a list of associated assets
+    Object.keys(receivedModel.assets).forEach((assetId) => {
+      assets.push({
+        id: +assetId,
+        name: receivedModel.assets[assetId].name,
+        type: receivedModel.assets[assetId].type,
+        associatedAssets: this.extractAssociatedAssets(
+          receivedModel.assets[assetId].associated_assets
+        ),
+      });
+    });
 
+    //Return model
+    return { assets };
+  }
+
+  //Extracts the associated assets, a list of simple assets with a given name
+  extractAssociatedAssets(associatedAssets: any): AssetAssociationList[] {
+    let associatedAssetLists: AssetAssociationList[] = [];
+    Object.keys(associatedAssets).forEach((assetListName) => {
+      associatedAssetLists.push({
+        type: assetListName,
+        assets: this.extractSimpleAssets(associatedAssets[assetListName]),
+      });
+    });
+    return associatedAssetLists;
+  }
+
+  //Extracts simple assets
+  extractSimpleAssets(associatedAssetsTypeList: any): SimpleAsset[] {
+    let assetList: SimpleAsset[] = [];
+    Object.keys(associatedAssetsTypeList).forEach((assetId) => {
+      assetList.push({
+        id: +assetId,
+        name: associatedAssetsTypeList[assetId],
+        edgeIsDrawn: false,
+      });
+    });
+
+    return assetList;
+  }
+
+  createNetwork(model: Model) {
+    //This array will keep track of the drawn nodes in the network, to avoid duplicating their connections
+    let drawnNodes: number[] = [];
+
+    //Create network nodes from assets in model
+    model.assets.forEach((asset: Asset) => {
       this.networkNodes.add({
-        id: Number(index),
+        id: asset.id,
         font: { multi: 'html', size: 20 },
         label: asset.type + '\n <b>' + asset.name + '</b>',
         name: asset.name,
@@ -90,18 +135,21 @@ export class InstanceModelComponent {
         defenceMarked: false,
         attackMarked: false,
       });
-    });
 
-    associations.forEach((association) => {
-      let edgePoints: Array<number> = [];
-      Object.keys(association).forEach((a) => {
-        Object.keys(association[a]).forEach((connection) => {
-          edgePoints.push(association[a][connection][0]);
+      //Add node in list
+      drawnNodes.push(asset.id);
+
+      //Draw edge only if it has not been drawn yet
+      asset.associatedAssets.forEach((associatedAssetTypeList) => {
+        associatedAssetTypeList.assets.forEach((associatedAsset) => {
+          //Check if node connections have already been drawn
+          if (drawnNodes.includes(associatedAsset.id)) return;
+
+          this.networkEdges.add({
+            from: asset.id,
+            to: associatedAsset.id,
+          });
         });
-      });
-      this.networkEdges.add({
-        from: edgePoints[0],
-        to: edgePoints[1],
       });
     });
 
@@ -221,4 +269,32 @@ export class InstanceModelComponent {
         return '';
     }
   }
+}
+
+interface networkConnection {
+  origin: number;
+  destinations: number[];
+}
+
+// Model interfaces tailored for MAL-Toolbox version 0.3.3
+interface SimpleAsset {
+  id: number;
+  name: string;
+  edgeIsDrawn: boolean;
+}
+
+interface AssetAssociationList {
+  type: string;
+  assets: SimpleAsset[];
+}
+
+interface Asset {
+  id: number;
+  name: string;
+  type: string;
+  associatedAssets: AssetAssociationList[];
+}
+
+interface Model {
+  assets: Asset[];
 }
