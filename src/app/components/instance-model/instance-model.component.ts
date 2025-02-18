@@ -222,3 +222,24 @@ export class InstanceModelComponent {
     }
   }
 }
+
+// Model interfaces tailored for MAL-Toolbox version 0.3.3
+interface SimpleAsset {
+  id: number;
+  name: string;
+}
+
+interface AssetAssociationList {
+  type: string;
+  assets: SimpleAsset[];
+}
+
+interface Asset {
+  id: number;
+  name: string;
+  associatedAssets: AssetAssociationList[];
+}
+
+interface Model {
+  assets: Asset[];
+}
