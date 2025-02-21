@@ -1,12 +1,31 @@
+export interface AttackStepRelatedNodes {
+  id: string;
+  name: string;
+}
+
+export interface AttackStepTTC {
+  type: string;
+  name: string;
+  arguments: any[]; //Could be configured
+}
+
 export interface AttackStepInformation {
-  _index: string;
-  _id: string;
-  _score: number;
-  _source: Object; //Could be expanded
+  id: number;
+  type: string;
+  name: string;
+  ttc?: AttackStepTTC;
+  children: AttackStepRelatedNodes[];
+  parents: AttackStepRelatedNodes[];
+  compromised_by: [];
+  asset: string;
+  defense_status: string;
+  is_viable: string;
+  is_necessary: string;
+  tags: string;
 }
 
 export interface AttackStep {
-  id: number;
+  id: string;
   information: AttackStepInformation;
 }
 

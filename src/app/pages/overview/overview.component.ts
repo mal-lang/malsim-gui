@@ -5,7 +5,13 @@ import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-gra
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
-import { AttackGraph } from 'src/app/components/attack-graph/attack-graph-interfaces';
+import {
+  AttackGraph,
+  AttackStep,
+  AttackStepInformation,
+  AttackStepTTC,
+  AttackStepRelatedNodes,
+} from 'src/app/components/attack-graph/attack-graph-interfaces';
 
 @Component({
   selector: 'app-overview',
@@ -62,6 +68,8 @@ export class OverviewComponent {
         this.allAttackSteps = attackGraph.attack_steps;
         this.mapAvailableAttackSteps();
 
+        this.attackGraph = this.parseAttackGraph(attackGraph);
+        console.log(this.attackGraph);
         this.intervalId = setInterval(() => {
           this.updateCurrentAttackSteps();
         }, this.intervalTime);
@@ -70,6 +78,50 @@ export class OverviewComponent {
         console.log(e);
       },
     });
+  }
+
+  parseAttackGraph(receivedAttackGraph: any): AttackGraph {
+    let newAttackGraph: AttackGraph = { attackSteps: [] };
+    Object.keys(receivedAttackGraph.attack_steps).forEach((stepId) => {
+      let newAttackStepInfo: AttackStepInformation = receivedAttackGraph
+        .attack_steps[stepId] as AttackStepInformation;
+
+      //Get TTC
+      if (receivedAttackGraph.attack_steps[stepId].ttc) {
+        newAttackStepInfo.ttc = receivedAttackGraph.attack_steps[stepId]
+          .ttc as AttackStepTTC;
+      }
+
+      //Get Children Nodes
+      let childrenNodes: AttackStepRelatedNodes[] = [];
+      Object.keys(receivedAttackGraph.attack_steps[stepId].children).forEach(
+        (child) => {
+          childrenNodes.push({
+            id: child,
+            name: receivedAttackGraph.attack_steps[stepId].children[child],
+          });
+        }
+      );
+      newAttackStepInfo.children = childrenNodes;
+
+      //Get Parent Nodes
+      let parentNodes: AttackStepRelatedNodes[] = [];
+      Object.keys(receivedAttackGraph.attack_steps[stepId].parents).forEach(
+        (parent) => {
+          parentNodes.push({
+            id: parent,
+            name: receivedAttackGraph.attack_steps[stepId].parents[parent],
+          });
+        }
+      );
+      newAttackStepInfo.parents = parentNodes;
+
+      newAttackGraph.attackSteps.push({
+        id: stepId,
+        information: newAttackStepInfo,
+      });
+    });
+    return newAttackGraph;
   }
 
   mapAvailableAttackSteps() {
