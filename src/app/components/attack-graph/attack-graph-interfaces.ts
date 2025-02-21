@@ -22,6 +22,7 @@ export interface AttackStepInformation {
   is_viable: string;
   is_necessary: string;
   tags: string;
+  logs?: any[];
 }
 
 export interface AttackStep {

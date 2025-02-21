@@ -28,12 +28,6 @@
           data-bs-target="#horizon-tab"
           type="button"
           role="tab"
-          (click)="
-            attackGraphHorizon.updateAttackGraph(
-              activeAttackSteps,
-              activeDefenceSteps
-            )
-          "
         >
           Attack Graph Horizon
         </button>
@@ -85,6 +79,7 @@
         [type]="'horizon'"
         [allAttackSteps]="allAttackSteps"
         [attackStepMap]="attackStepMap"
+        [attackGraph]="attackGraph"
       />
     </div>
     <div class="tab-pane fade" id="historical-tab">
@@ -93,6 +88,7 @@
         [type]="'historical'"
         [allAttackSteps]="allAttackSteps"
         [attackStepMap]="attackStepMap"
+        [attackGraph]="attackGraph"
       />
     </div>
   </div>

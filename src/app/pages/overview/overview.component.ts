@@ -65,11 +65,12 @@ export class OverviewComponent {
   getAttackGraph() {
     this.apiService.getAttackGraph().subscribe({
       next: (attackGraph) => {
+        //Eventually delete clone
+        const clone = JSON.parse(JSON.stringify(attackGraph));
+        this.attackGraph = this.parseAttackGraph(clone);
+
         this.allAttackSteps = attackGraph.attack_steps;
         this.mapAvailableAttackSteps();
-
-        this.attackGraph = this.parseAttackGraph(attackGraph);
-        console.log(this.attackGraph);
         this.intervalId = setInterval(() => {
           this.updateCurrentAttackSteps();
         }, this.intervalTime);
@@ -81,47 +82,51 @@ export class OverviewComponent {
   }
 
   parseAttackGraph(receivedAttackGraph: any): AttackGraph {
-    let newAttackGraph: AttackGraph = { attackSteps: [] };
-    Object.keys(receivedAttackGraph.attack_steps).forEach((stepId) => {
-      let newAttackStepInfo: AttackStepInformation = receivedAttackGraph
-        .attack_steps[stepId] as AttackStepInformation;
+    let newAttackGraph: AttackGraph = {
+      attackSteps: this.parseAttackSteps(receivedAttackGraph.attack_steps),
+    };
+
+    return newAttackGraph;
+  }
+
+  parseAttackSteps(receivedSteps: any): AttackStep[] {
+    let steps: AttackStep[] = [];
+    Object.keys(receivedSteps).forEach((stepId) => {
+      let newAttackStepInfo: AttackStepInformation = receivedSteps[
+        stepId
+      ] as AttackStepInformation;
 
       //Get TTC
-      if (receivedAttackGraph.attack_steps[stepId].ttc) {
-        newAttackStepInfo.ttc = receivedAttackGraph.attack_steps[stepId]
-          .ttc as AttackStepTTC;
+      if (receivedSteps[stepId].ttc) {
+        newAttackStepInfo.ttc = receivedSteps[stepId].ttc as AttackStepTTC;
       }
 
       //Get Children Nodes
       let childrenNodes: AttackStepRelatedNodes[] = [];
-      Object.keys(receivedAttackGraph.attack_steps[stepId].children).forEach(
-        (child) => {
-          childrenNodes.push({
-            id: child,
-            name: receivedAttackGraph.attack_steps[stepId].children[child],
-          });
-        }
-      );
+      Object.keys(receivedSteps[stepId].children).forEach((child) => {
+        childrenNodes.push({
+          id: child,
+          name: receivedSteps[stepId].children[child],
+        });
+      });
       newAttackStepInfo.children = childrenNodes;
 
       //Get Parent Nodes
       let parentNodes: AttackStepRelatedNodes[] = [];
-      Object.keys(receivedAttackGraph.attack_steps[stepId].parents).forEach(
-        (parent) => {
-          parentNodes.push({
-            id: parent,
-            name: receivedAttackGraph.attack_steps[stepId].parents[parent],
-          });
-        }
-      );
+      Object.keys(receivedSteps[stepId].parents).forEach((parent) => {
+        parentNodes.push({
+          id: parent,
+          name: receivedSteps[stepId].parents[parent],
+        });
+      });
       newAttackStepInfo.parents = parentNodes;
 
-      newAttackGraph.attackSteps.push({
-        id: stepId,
+      steps.push({
+        id: newAttackStepInfo.id.toString(),
         information: newAttackStepInfo,
       });
     });
-    return newAttackGraph;
+    return steps;
   }
 
   mapAvailableAttackSteps() {
@@ -158,14 +163,23 @@ export class OverviewComponent {
             latestAttackSteps[iteration[0]]
           );
 
-          this.historicAttackGraph.updateAttackGraph(
-            this.activeAttackSteps,
-            this.activeDefenceSteps
-          );
+          const cloneSteps = JSON.parse(JSON.stringify(this.activeAttackSteps));
+          const alerts: AttackStep[] = this.parseAttackSteps(cloneSteps);
+          this.attackGraphHorizon.notifyNewAlert(alerts);
+
+          this.historicAttackGraph.notifyNewAlert(alerts);
+
+          /* 
           this.attackGraphHorizon.updateAttackGraph(
             this.activeAttackSteps,
             this.activeDefenceSteps
           );
+
+          this.historicAttackGraph.updateAttackGraph(
+            this.activeAttackSteps,
+            this.activeDefenceSteps
+          );
+          */
         }
 
         if (this.updateDefenderSuggestions(defenderSuggestions)) {
