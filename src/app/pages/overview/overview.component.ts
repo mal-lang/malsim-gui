@@ -55,6 +55,7 @@ export class OverviewComponent {
   attackGraph: AttackGraph = {
     attackSteps: [],
   };
+  receivedAlerts: AttackStep[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -164,22 +165,9 @@ export class OverviewComponent {
           );
 
           const cloneSteps = JSON.parse(JSON.stringify(this.activeAttackSteps));
-          const alerts: AttackStep[] = this.parseAttackSteps(cloneSteps);
-          this.attackGraphHorizon.notifyNewAlert(alerts);
-
-          this.historicAttackGraph.notifyNewAlert(alerts);
-
-          /* 
-          this.attackGraphHorizon.updateAttackGraph(
-            this.activeAttackSteps,
-            this.activeDefenceSteps
-          );
-
-          this.historicAttackGraph.updateAttackGraph(
-            this.activeAttackSteps,
-            this.activeDefenceSteps
-          );
-          */
+          this.receivedAlerts = this.parseAttackSteps(cloneSteps);
+          this.attackGraphHorizon.notifyNewAlert(this.receivedAlerts);
+          this.historicAttackGraph.notifyNewAlert(this.receivedAlerts);
         }
 
         if (this.updateDefenderSuggestions(defenderSuggestions)) {

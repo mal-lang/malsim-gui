@@ -28,6 +28,7 @@
           data-bs-target="#horizon-tab"
           type="button"
           role="tab"
+          (click)="attackGraphHorizon.notifyNewAlert(receivedAlerts)"
         >
           Attack Graph Horizon
         </button>
@@ -38,12 +39,7 @@
           data-bs-target="#historical-tab"
           type="button"
           role="tab"
-          (click)="
-            historicAttackGraph.updateAttackGraph(
-              activeAttackSteps,
-              activeDefenceSteps
-            )
-          "
+          (click)="historicAttackGraph.notifyNewAlert(receivedAlerts)"
         >
           Historical attack graph
         </button>
