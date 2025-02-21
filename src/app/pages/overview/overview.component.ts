@@ -5,6 +5,7 @@ import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-gra
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
+import { AttackGraph } from 'src/app/components/attack-graph/attack-graph-interfaces';
 
 @Component({
   selector: 'app-overview',
@@ -17,18 +18,19 @@ export class OverviewComponent {
   @ViewChild('historicAttackGraph') historicAttackGraph!: AttackGraphComponent;
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
 
+  //Style
   tooltipPositions = ['auto', 'top', 'right', 'bottom', 'left'];
   tooltipAlignments = [
     { label: 'start', value: '-start' },
     { label: 'center', value: '' },
     { label: 'end', value: '-end' },
   ];
-
   tooltipTypes = ['popper', 'tooltip', 'popperBorder'];
-
   noContextText: string | undefined;
   maxWidth = 300;
   show = true;
+
+  //Variables
   allAttackSteps: any = {};
   attackStepMap = new Map<number, string>();
   currentDefenderSuggestions: any = {};
@@ -42,6 +44,11 @@ export class OverviewComponent {
   latestAttackStepIteration: number = -1;
   activeDefenceSteps: any;
   activeAttackSteps: any;
+
+  //Attack Graph empty object
+  attackGraph: AttackGraph = {
+    attackSteps: [],
+  };
 
   constructor(private apiService: ApiService) {}
 
