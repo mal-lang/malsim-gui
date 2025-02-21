@@ -3,7 +3,6 @@ import { Component, ViewChild } from '@angular/core';
 import { InstanceModelComponent } from 'src/app/components/instance-model/instance-model.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
-
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
 
