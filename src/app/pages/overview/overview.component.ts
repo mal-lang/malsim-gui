@@ -3,9 +3,15 @@ import { Component, ViewChild } from '@angular/core';
 import { InstanceModelComponent } from 'src/app/components/instance-model/instance-model.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 import { SuggestedActionsComponent } from 'src/app/components/suggested-actions/suggested-actions.component';
-
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
+import {
+  AttackGraph,
+  AttackStep,
+  AttackStepInformation,
+  AttackStepTTC,
+  AttackStepRelatedNodes,
+} from 'src/app/components/attack-graph/attack-graph-interfaces';
 
 @Component({
   selector: 'app-overview',
@@ -18,18 +24,19 @@ export class OverviewComponent {
   @ViewChild('historicAttackGraph') historicAttackGraph!: AttackGraphComponent;
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
 
+  //Style
   tooltipPositions = ['auto', 'top', 'right', 'bottom', 'left'];
   tooltipAlignments = [
     { label: 'start', value: '-start' },
     { label: 'center', value: '' },
     { label: 'end', value: '-end' },
   ];
-
   tooltipTypes = ['popper', 'tooltip', 'popperBorder'];
-
   noContextText: string | undefined;
   maxWidth = 300;
   show = true;
+
+  //Variables
   allAttackSteps: any = {};
   attackStepMap = new Map<number, string>();
   currentDefenderSuggestions: any = {};
@@ -44,6 +51,12 @@ export class OverviewComponent {
   activeDefenceSteps: any;
   activeAttackSteps: any;
 
+  //Attack Graph empty object
+  attackGraph: AttackGraph = {
+    attackSteps: [],
+  };
+  receivedAlerts: AttackStep[] = [];
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
@@ -53,9 +66,12 @@ export class OverviewComponent {
   getAttackGraph() {
     this.apiService.getAttackGraph().subscribe({
       next: (attackGraph) => {
+        //Eventually delete clone
+        const clone = JSON.parse(JSON.stringify(attackGraph));
+        this.attackGraph = this.parseAttackGraph(clone);
+
         this.allAttackSteps = attackGraph.attack_steps;
         this.mapAvailableAttackSteps();
-
         this.intervalId = setInterval(() => {
           this.updateCurrentAttackSteps();
         }, this.intervalTime);
@@ -64,6 +80,54 @@ export class OverviewComponent {
         console.log(e);
       },
     });
+  }
+
+  parseAttackGraph(receivedAttackGraph: any): AttackGraph {
+    let newAttackGraph: AttackGraph = {
+      attackSteps: this.parseAttackSteps(receivedAttackGraph.attack_steps),
+    };
+
+    return newAttackGraph;
+  }
+
+  parseAttackSteps(receivedSteps: any): AttackStep[] {
+    let steps: AttackStep[] = [];
+    Object.keys(receivedSteps).forEach((stepId) => {
+      let newAttackStepInfo: AttackStepInformation = receivedSteps[
+        stepId
+      ] as AttackStepInformation;
+
+      //Get TTC
+      if (receivedSteps[stepId].ttc) {
+        newAttackStepInfo.ttc = receivedSteps[stepId].ttc as AttackStepTTC;
+      }
+
+      //Get Children Nodes
+      let childrenNodes: AttackStepRelatedNodes[] = [];
+      Object.keys(receivedSteps[stepId].children).forEach((child) => {
+        childrenNodes.push({
+          id: child,
+          name: receivedSteps[stepId].children[child],
+        });
+      });
+      newAttackStepInfo.children = childrenNodes;
+
+      //Get Parent Nodes
+      let parentNodes: AttackStepRelatedNodes[] = [];
+      Object.keys(receivedSteps[stepId].parents).forEach((parent) => {
+        parentNodes.push({
+          id: parent,
+          name: receivedSteps[stepId].parents[parent],
+        });
+      });
+      newAttackStepInfo.parents = parentNodes;
+
+      steps.push({
+        id: newAttackStepInfo.id.toString(),
+        information: newAttackStepInfo,
+      });
+    });
+    return steps;
   }
 
   mapAvailableAttackSteps() {
@@ -100,14 +164,10 @@ export class OverviewComponent {
             latestAttackSteps[iteration[0]]
           );
 
-          this.historicAttackGraph.updateAttackGraph(
-            this.activeAttackSteps,
-            this.activeDefenceSteps
-          );
-          this.attackGraphHorizon.updateAttackGraph(
-            this.activeAttackSteps,
-            this.activeDefenceSteps
-          );
+          const cloneSteps = JSON.parse(JSON.stringify(this.activeAttackSteps));
+          this.receivedAlerts = this.parseAttackSteps(cloneSteps);
+          this.attackGraphHorizon.notifyNewAlert(this.receivedAlerts);
+          this.historicAttackGraph.notifyNewAlert(this.receivedAlerts);
         }
 
         if (this.updateDefenderSuggestions(defenderSuggestions)) {
