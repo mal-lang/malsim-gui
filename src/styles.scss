@@ -1,24 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 // ============================== THEME COLORS =====================================
-$primary: #4ca6ff;
-$danger: #ff4c4c;
-/*$secondary: #505f68;
-$dark: #141a36;
-$danger: #ff4c4c
-$warning: #ffe135;
-$light: #f8f9fa;*/
+$white: #ffffff;
+$dark: #00080d;
+$dusk: #00080d;
+$clementine: #ffa100;
+$alert: #e04040;
+$alert-target: #e57f7f;
+$controlled: #b1f3ff;
 // =================================================================================
-/*$theme-colors: (
-  "primary": $primary,
-  "secondary": $secondary,
-  "success": $success,
-  "info": $info,
-  "warning": $warning,
-  "danger": $danger,
-  "light": $light,
-  "dark": $dark,
-);*/
 @import "node_modules/bootstrap/scss/bootstrap";
 
 @import "~tippy.js/dist/tippy.css";
@@ -28,4 +18,9 @@ $light: #f8f9fa;*/
 @font-face {
   font-family: "Cinzel";
   src: url(assets/font/Cinzel-VariableFont_wght.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url(assets/font/Inter-VariableFont_opsz_wght.ttf) format("truetype");
 }
