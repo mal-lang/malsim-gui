@@ -1,0 +1,25 @@
+@import "../../../styles.scss";
+
+header {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: $dark;
+  color: $white;
+  align-items: center;
+  font-weight: bold;
+  padding: 0px 16px;
+  * {
+    margin: 0;
+  }
+
+  p {
+    color: $ice;
+    margin-left: auto;
+    font-size: 16px;
+    span {
+      font-size: 24px;
+    }
+  }
+}

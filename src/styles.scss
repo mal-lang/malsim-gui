@@ -8,6 +8,7 @@ $clementine: #ffa100;
 $alert: #e04040;
 $alert-target: #e57f7f;
 $controlled: #b1f3ff;
+$ice: #00e6ff;
 // =================================================================================
 @import "node_modules/bootstrap/scss/bootstrap";
 
@@ -23,4 +24,13 @@ $controlled: #b1f3ff;
 @font-face {
   font-family: "Inter";
   src: url(assets/font/Inter-VariableFont_opsz_wght.ttf) format("truetype");
+}
+
+h1 {
+  font-family: "Inter";
+  font-size: 24px;
+}
+
+p {
+  font-family: "Inter";
 }
