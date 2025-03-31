@@ -4,6 +4,7 @@
 $white: #ffffff;
 $dark: #00080d;
 $dusk: #00080d;
+$border: #343a3e;
 $clementine: #ffa100;
 $alert: #e04040;
 $alert-target: #e57f7f;
@@ -29,6 +30,12 @@ $ice: #00e6ff;
 h1 {
   font-family: "Inter";
   font-size: 24px;
+}
+
+h2 {
+  font-family: "Inter";
+  font-weight: bold;
+  font-size: 12px;
 }
 
 p {
