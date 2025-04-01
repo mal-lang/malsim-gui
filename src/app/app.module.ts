@@ -18,11 +18,19 @@ import {
 } from '@ngneat/helipopper';
 import { LogModalComponent } from './components/modals/log-modal/log-modal.component';
 import { provideHttpClient } from '@angular/common/http';
+import { HomeComponent } from './pages/home/home.component';
+import { HeaderComponent } from './components/header/header.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
+import { AssetGraphComponent } from './components/asset-graph/asset-graph.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OverviewComponent,
+    HomeComponent,
+    HeaderComponent,
+    TimelineComponent,
+    AssetGraphComponent,
     MenuComponent,
     AttackGraphComponent,
     InstanceModelComponent,

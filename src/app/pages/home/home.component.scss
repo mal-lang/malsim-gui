@@ -1,3 +1,7 @@
-div {
-  height: 100vh;
+@import "../../../styles.scss";
+
+main {
+  height: calc(100vh - 128px - 60px);
+  display: flex;
+  flex-direction: row;
 }

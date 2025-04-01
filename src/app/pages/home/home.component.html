@@ -1,6 +1,8 @@
-<div>
-  <app-header></app-header>
+<ng-container>
+  <app-header />
   <main>
-    <app-timeline></app-timeline>
+    <app-suggested-actions #suggestedActions />
+    <app-asset-graph #assetGraph #graphContainer />
   </main>
-</div>
+  <app-timeline />
+</ng-container>

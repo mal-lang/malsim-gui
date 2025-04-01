@@ -1,4 +1,35 @@
+@import "../../../styles.scss";
+
+#suggested-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  background-color: $dark;
+  color: $white;
+
+  min-width: 360px;
+
+  > *:first-child {
+    height: 48px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid $border;
+  }
+}
 .actions-container {
-  height: calc(100vh - 225px);
-  overflow: scroll !important;
+  flex-grow: 1;
+  min-width: 100%;
+  overflow-y: scroll !important;
+}
+
+.empty-suggestions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }

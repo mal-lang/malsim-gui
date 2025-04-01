@@ -18,6 +18,14 @@ export class ApiService {
   apiUrl: string = 'http://localhost:8888/';
   chosenAlternative: number | null = null;
 
+  //TODO clean service function names
+  async getNetworkAttackGraph(): Promise<any> {
+    return this.http.get(this.apiUrl + 'attack_graph');
+  }
+  async getAssetModel(): Promise<any> {
+    return this.http.get(this.apiUrl + 'model');
+  }
+
   getAttackGraph(): Observable<any> {
     return this.http.get(this.apiUrl + 'attack_graph');
   }
