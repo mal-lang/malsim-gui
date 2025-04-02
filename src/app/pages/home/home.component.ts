@@ -15,6 +15,7 @@ import {
   TyrGraphClusterRule,
   TyrManager,
 } from 'tyr-js';
+import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ import {
 export class HomeComponent {
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
   @ViewChild('assetGraph') assetGraph!: AssetGraphComponent;
+  @ViewChild('timeline') timeline!: TimelineComponent;
 
   private apiService;
   private tyrManager: TyrManager;
@@ -151,9 +153,11 @@ export class HomeComponent {
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
     }).subscribe(({ latestAttackSteps }) => {
+      const alert = parseLatestAttackSteps(latestAttackSteps)[0];
       this.tyrManager.injestLatestAttackStep(
         parseLatestAttackSteps(latestAttackSteps)[0]
       );
+      this.timeline.addAlert(alert);
     });
   }
 }

@@ -64,7 +64,7 @@ export class AssetGraphComponent {
 
   private config: TyrGraphConfig;
 
-  public cursorStyle = 'default';
+  public cursorStyle = 'grab';
 
   constructor() {
     this.selectIcon = this.selectIcon.bind(this);
@@ -105,7 +105,7 @@ export class AssetGraphComponent {
           this.cursorStyle = 'pointer';
         },
         onPointerOut: () => {
-          this.cursorStyle = 'default';
+          this.cursorStyle = 'grab';
         },
       },
       edges: {

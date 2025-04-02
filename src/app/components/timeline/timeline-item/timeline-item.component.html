@@ -1,1 +1,7 @@
-<p>timeline-item works!</p>
+<div class="alert">
+  <img class="alert-image" [src]="this.alertImageURL" />
+  <div class="alert-content">
+    <p>{{ this.alert.node.name }}</p>
+    <p>{{ this.alert.timestamp }}</p>
+  </div>
+</div>

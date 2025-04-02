@@ -5,11 +5,13 @@ footer {
   height: 128px;
   background-color: $dark;
   color: $white;
-
-  h2 {
+  border-top: 1px solid $border;
+  > *:first-child {
+    height: 32px;
     width: 100%;
-    text-align: center;
-    border-top: 1px solid $border;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-bottom: 1px solid $border;
   }
 }
