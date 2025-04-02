@@ -70,8 +70,8 @@ export class AssetGraphComponent {
         (this.graphContainer.nativeElement as HTMLElement).offsetWidth / 2,
       centerY:
         (this.graphContainer.nativeElement as HTMLElement).offsetHeight / 2,
-      marginX: 2,
-      marginY: 2,
+      marginX: 0,
+      marginY: 0,
       graphWorldWidth: 2000,
       graphWorldHeight: 2000,
       backgroundColor: '#212529',
