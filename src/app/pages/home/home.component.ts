@@ -116,6 +116,12 @@ export class HomeComponent {
   }
 
   async ngAfterViewInit() {
+    await this.assetGraph.loadSprites().then(() => {
+      this.retrieveInitialData();
+    });
+  }
+
+  private async retrieveInitialData() {
     forkJoin({
       receivedModel: this.apiService.getModel(),
       attackGraph: this.apiService.getAttackGraph(),
@@ -126,7 +132,6 @@ export class HomeComponent {
         this.assetGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule, this.edgeRule2]
       );
-
       const graphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
 

@@ -34,6 +34,8 @@ export class AssetGraphComponent {
   private idSprite?: Texture;
   private vulnerabilitySprite?: Texture;
   private applicationSprite?: Texture;
+  private alertSprite?: Texture;
+  private controlledSprite?: Texture;
 
   private clusterRules: TyrGraphClusterRule[] = [
     {
@@ -64,7 +66,10 @@ export class AssetGraphComponent {
 
   public cursorStyle = 'default';
 
-  async ngOnInit(): Promise<void> {}
+  constructor() {
+    this.selectIcon = this.selectIcon.bind(this);
+    this.selectAlertIcon = this.selectAlertIcon.bind(this);
+  }
 
   ngAfterViewInit() {
     this.config = {
@@ -83,9 +88,7 @@ export class AssetGraphComponent {
           radiusX: 200,
           radiusY: 200,
         },
-        getNodeAlertIcon: (alert: TyrAlertStatus) => {
-          return this.applicationSprite!;
-        },
+        getNodeAlertIcon: this.selectAlertIcon,
         getNodeImage: this.selectIcon,
         imageMargin: 0.5,
         textInvisible: false,
@@ -114,7 +117,7 @@ export class AssetGraphComponent {
     };
   }
 
-  async loadSprites() {
+  public async loadSprites() {
     const assetUrls = {
       network: '/assets/icons/network.png',
       shield: '/assets/icons/shield.png',
@@ -122,6 +125,8 @@ export class AssetGraphComponent {
       id: '/assets/icons/id-card.png',
       vulnerability: '/assets/icons/icognito.png',
       application: '/assets/icons/app.png',
+      alert: '/assets/icons/alert.png',
+      controlled: '/assets/icons/controlled.png',
     };
 
     // Step 1: Add assets to the cache
@@ -132,6 +137,8 @@ export class AssetGraphComponent {
       { alias: 'id', src: assetUrls.id },
       { alias: 'vulnerability', src: assetUrls.vulnerability },
       { alias: 'application', src: assetUrls.application },
+      { alias: 'alert', src: assetUrls.alert },
+      { alias: 'controlled', src: assetUrls.controlled },
     ]);
 
     // Step 2: Load all assets in parallel
@@ -142,6 +149,8 @@ export class AssetGraphComponent {
       idSprite,
       vulnerabilitySprite,
       applicationSprite,
+      alertSprite,
+      controlledSprite,
     ] = await Promise.all([
       Assets.load('network'),
       Assets.load('shield'),
@@ -149,6 +158,8 @@ export class AssetGraphComponent {
       Assets.load('id'),
       Assets.load('vulnerability'),
       Assets.load('application'),
+      Assets.load('alert'),
+      Assets.load('controlled'),
     ]);
 
     // Step 3: Assign them to class properties
@@ -158,6 +169,8 @@ export class AssetGraphComponent {
     this.idSprite = idSprite;
     this.vulnerabilitySprite = vulnerabilitySprite;
     this.applicationSprite = applicationSprite;
+    this.alertSprite = alertSprite;
+    this.controlledSprite = controlledSprite;
 
     console.log('✅ All assets added & loaded successfully!');
   }
@@ -176,6 +189,17 @@ export class AssetGraphComponent {
         return this.vulnerabilitySprite!;
       default:
         return this.shieldSprite!;
+    }
+  }
+
+  public selectAlertIcon(alert: TyrAlertStatus): Texture {
+    switch (alert) {
+      case TyrAlertStatus.alert:
+        return this.alertSprite!;
+      case TyrAlertStatus.controlled:
+        return this.controlledSprite!;
+      default:
+        return this.alertSprite!;
     }
   }
 
