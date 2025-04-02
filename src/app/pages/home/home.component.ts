@@ -8,6 +8,7 @@ import {
   EdgeAffectedCondition,
   LayoutAlgorithm,
   NodeAffectedCondition,
+  parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
   SimulationConfig,
@@ -26,7 +27,8 @@ export class HomeComponent {
 
   private apiService;
   private tyrManager: TyrManager;
-  private cursorStyle;
+  private intervalId: any;
+  private intervalTime: number = 1000 * 10; // 10 seconds;
 
   private clusterRules: TyrGraphClusterRule[] = [
     {
@@ -106,6 +108,8 @@ export class HomeComponent {
     width: 2,
   };
 
+  public cursorStyle = 'default';
+
   constructor(apiService: ApiService) {
     this.apiService = apiService;
     this.cursorStyle = 'default';
@@ -134,7 +138,20 @@ export class HomeComponent {
         .then(async (app) => {
           graphContainer.appendChild(app.canvas);
           this.tyrManager.startLayoutSimulation();
+          this.intervalId = setInterval(() => {
+            this.retrieveAlerts();
+          }, this.intervalTime);
         });
+    });
+  }
+
+  async retrieveAlerts() {
+    forkJoin({
+      latestAttackSteps: this.apiService.getLatestAttackSteps(),
+    }).subscribe(({ latestAttackSteps }) => {
+      this.tyrManager.injestLatestAttackStep(
+        parseLatestAttackSteps(latestAttackSteps)[0]
+      );
     });
   }
 }

@@ -11,6 +11,8 @@ import {
   TextStyleAlign,
   TextStyleFontWeight,
   Texture,
+  TyrAlert,
+  TyrAlertStatus,
   TyrGraphClusterRule,
   TyrGraphConfig,
   TyrGraphNode,
@@ -80,6 +82,9 @@ export class AssetGraphComponent {
           type: AvailableInitialNodePositioning.random,
           radiusX: 200,
           radiusY: 200,
+        },
+        getNodeAlertIcon: (alert: TyrAlertStatus) => {
+          return this.applicationSprite!;
         },
         getNodeImage: this.selectIcon,
         imageMargin: 0.5,
