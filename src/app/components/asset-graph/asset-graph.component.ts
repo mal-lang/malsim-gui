@@ -60,6 +60,8 @@ export class AssetGraphComponent {
 
   private config: TyrGraphConfig;
 
+  public cursorStyle = 'default';
+
   async ngOnInit(): Promise<void> {}
 
   ngAfterViewInit() {
@@ -91,8 +93,12 @@ export class AssetGraphComponent {
           stroke: 'black',
         },
         hoverable: true,
-        onPointerOn: () => {},
-        onPointerOut: () => {},
+        onPointerOn: () => {
+          this.cursorStyle = 'pointer';
+        },
+        onPointerOut: () => {
+          this.cursorStyle = 'default';
+        },
       },
       edges: {
         animated: true,
