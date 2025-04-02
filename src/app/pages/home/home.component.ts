@@ -136,10 +136,7 @@ export class HomeComponent {
         this.assetGraph.getAssetGraphContainer().nativeElement;
 
       await this.tyrManager
-        .initializeRenderer(
-          graphContainer.offsetWidth,
-          graphContainer.offsetHeight
-        )
+        .initializeRenderer(graphContainer)
         .then(async (app) => {
           graphContainer.appendChild(app.canvas);
           this.tyrManager.startLayoutSimulation();
