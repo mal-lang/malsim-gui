@@ -4,12 +4,15 @@ import {
   Assets,
   AvailableInitialNodePositioning,
   FillInput,
+  LayoutAlgorithm,
   Model,
   parseAssetModel,
+  SimulationConfig,
   TextStyleAlign,
   TextStyleFontWeight,
   Texture,
   TyrGraphClusterRule,
+  TyrGraphConfig,
   TyrGraphNode,
   TyrManager,
 } from 'tyr-js';
@@ -20,28 +23,86 @@ import {
   styleUrl: './asset-graph.component.scss',
 })
 export class AssetGraphComponent {
-  @ViewChild('networkContainerNew') graphContainer!: ElementRef;
+  @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() attackStepMap: any;
 
-  private apiService: ApiService;
-  private tyrManager: TyrManager;
-  private assetModel: Model;
+  private networkSprite?: Texture;
+  private shieldSprite?: Texture;
+  private connectionRuleSprite?: Texture;
+  private idSprite?: Texture;
+  private vulnerabilitySprite?: Texture;
+  private applicationSprite?: Texture;
 
-  networkSprite?: Texture;
-  shieldSprite?: Texture;
-  connectionRuleSprite?: Texture;
-  idSprite?: Texture;
-  vulnerabilitySprite?: Texture;
-  applicationSprite?: Texture;
+  private clusterRules: TyrGraphClusterRule[] = [
+    {
+      type: 'Network',
+    },
+    {
+      type: 'Application',
+    },
+  ];
 
-  cursorStyle = 'default';
+  private layout: SimulationConfig = {
+    type: LayoutAlgorithm.kamada_kawai,
+    alpha: 1,
+    alphaDecay: 0.02,
+    velocityDecay: 0.03,
+    forces: {
+      collideRadius: 150,
+    },
+    kamadaKawaiConfig: {
+      L0: 500,
+      kFactor: 1,
+      repulsionFactor: 500,
+      maxForce: 200,
+    },
+  };
 
-  constructor(apiService: ApiService) {
-    this.apiService = apiService;
-  }
+  private config: TyrGraphConfig;
 
   async ngOnInit(): Promise<void> {
     await this.loadSprites();
+  }
+
+  ngAfterViewInit() {
+    this.config = {
+      centerX:
+        (this.graphContainer.nativeElement as HTMLElement).offsetWidth / 2,
+      centerY:
+        (this.graphContainer.nativeElement as HTMLElement).offsetHeight / 2,
+      marginX: 2,
+      marginY: 2,
+      graphWorldWidth: 2000,
+      graphWorldHeight: 2000,
+      backgroundColor: '#212529',
+      nodes: {
+        initialPositioning: {
+          type: AvailableInitialNodePositioning.random,
+          radiusX: 200,
+          radiusY: 200,
+        },
+        getNodeImage: this.selectIcon,
+        imageMargin: 0.5,
+        textInvisible: false,
+        textConfig: {
+          fontFamily: 'arial',
+          fontSize: 40,
+          fill: 0xffffff as FillInput,
+          align: 'left' as TextStyleAlign,
+          fontWeight: 'bold' as TextStyleFontWeight,
+          stroke: 'black',
+        },
+        hoverable: true,
+        onPointerOn: () => {},
+        onPointerOut: () => {},
+      },
+      edges: {
+        animated: true,
+        unidirectional: true,
+      },
+      clusterRules: this.clusterRules,
+      simulationConfig: this.layout,
+    };
   }
 
   async loadSprites() {
@@ -107,5 +168,9 @@ export class AssetGraphComponent {
       default:
         return this.shieldSprite!;
     }
+  }
+
+  public getConfig() {
+    return this.config;
   }
 }
