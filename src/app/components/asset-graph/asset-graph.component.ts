@@ -60,9 +60,7 @@ export class AssetGraphComponent {
 
   private config: TyrGraphConfig;
 
-  async ngOnInit(): Promise<void> {
-    await this.loadSprites();
-  }
+  async ngOnInit(): Promise<void> {}
 
   ngAfterViewInit() {
     this.config = {
@@ -172,5 +170,9 @@ export class AssetGraphComponent {
 
   public getConfig() {
     return this.config;
+  }
+
+  public getAssetGraphContainer() {
+    return this.graphContainer;
   }
 }

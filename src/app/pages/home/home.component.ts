@@ -111,18 +111,30 @@ export class HomeComponent {
     this.cursorStyle = 'default';
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     forkJoin({
       receivedModel: this.apiService.getModel(),
       attackGraph: this.apiService.getAttackGraph(),
-    }).subscribe(({ receivedModel, attackGraph }) => {
-      console.log(attackGraph);
+    }).subscribe(async ({ receivedModel, attackGraph }) => {
       this.tyrManager = new TyrManager(
         receivedModel,
         attackGraph.attack_steps,
         this.assetGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule, this.edgeRule2]
       );
+
+      const graphContainer =
+        this.assetGraph.getAssetGraphContainer().nativeElement;
+
+      await this.tyrManager
+        .initializeRenderer(
+          graphContainer.offsetWidth,
+          graphContainer.offsetHeight
+        )
+        .then(async (app) => {
+          graphContainer.appendChild(app.canvas);
+          this.tyrManager.startLayoutSimulation();
+        });
     });
   }
 }
