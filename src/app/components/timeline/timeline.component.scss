@@ -19,20 +19,27 @@ footer {
 }
 
 #timeline {
-  flex: 1;
+  height: 96px;
   overflow-x: scroll;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-y: hidden;
 }
 
 #timeline-item-list {
-  flex: 1;
-
   display: flex;
+
+  height: 56px;
   flex-direction: row;
   align-items: left;
   gap: 8px;
-  &:first-child {
-    margin-left: 24px;
-  }
+}
+
+#timeline-slidebar {
+  height: 24px;
+}
+
+#slidebar-draggable {
+  cursor: grab;
 }
