@@ -1,10 +1,11 @@
-<footer>
+<footer [ngClass]="getClass(0)">
   <h2>Activity Timeline</h2>
   <div id="timeline">
     <div id="timeline-item-list">
       <app-timeline-item
-        *ngFor="let alert of alerts"
+        *ngFor="let alert of alerts; let i = index"
         [alert]="alert"
+        [ngClass]="getClass(i)"
       ></app-timeline-item>
     </div>
     <div id="timeline-slidebar">

@@ -1,10 +1,18 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { TyrAlert } from 'tyr-js';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrl: './timeline.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
   public alerts: TyrAlert[];
@@ -14,8 +22,9 @@ export class TimelineComponent {
   private isMouseClicked: Boolean;
   private draggableLeftLimit: number;
   private draggableRightLimit: number;
+  private selectedAlert: number | null;
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this.alerts = [];
     this.isMouseClicked = false;
     this.draggableRightLimit = 0;
@@ -55,6 +64,8 @@ export class TimelineComponent {
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       this.isMouseClicked = false;
       const offsetX = event.clientX;
+      if (offsetX > this.draggableRightLimit) return;
+      if (offsetX <= this.draggableLeftLimit) return;
       const element = this.slideCircle.nativeElement;
       const position = this.calculateSelectedItem(offsetX);
       this.renderer.setStyle(
@@ -63,17 +74,22 @@ export class TimelineComponent {
         `translateX(${position}px)`
       );
       this.updateLineColor(position, element.getBoundingClientRect().width);
+      this.cdRef.detectChanges();
     });
   }
 
   calculateSelectedItem(position: number) {
-    if (position < 24) return 0;
-
-    let aux = 24;
-    for (let i = 0; aux < position; i++) {
-      aux += 136;
+    if (position < 24) {
+      this.selectedAlert = null;
+      return 0;
     }
 
+    let aux = 24;
+    let i;
+    for (i = 0; aux < position; i++) {
+      aux += 136;
+    }
+    this.selectedAlert = i;
     return aux - 88;
   }
   updateLineColor(position: number, width: number) {
@@ -93,11 +109,17 @@ export class TimelineComponent {
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
   }
 
+  getClass(index: number) {
+    if (this.selectedAlert) return index < this.selectedAlert ? 'active' : '';
+    return '';
+  }
+
   public addAlert(alert: TyrAlert) {
     if (this.alerts.length > 0)
       this.draggableRightLimit += 136; //128px of item width + 8px of gap +
     else this.draggableRightLimit += 80;
     this.alerts.push(alert);
+    this.cdRef.detectChanges();
     this.updateLineWidth();
   }
 

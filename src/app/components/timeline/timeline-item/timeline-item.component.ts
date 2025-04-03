@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TyrAlert, TyrAlertStatus } from 'tyr-js';
+import { TyrAlert } from 'tyr-js';
 
 @Component({
   selector: 'app-timeline-item',
