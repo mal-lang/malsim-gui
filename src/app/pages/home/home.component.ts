@@ -153,11 +153,11 @@ export class HomeComponent {
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
     }).subscribe(({ latestAttackSteps }) => {
-      const alert = parseLatestAttackSteps(latestAttackSteps)[0];
-      this.tyrManager.injestLatestAttackStep(
+      parseLatestAttackSteps(latestAttackSteps)[0];
+      const alert = this.tyrManager.injestLatestAttackStep(
         parseLatestAttackSteps(latestAttackSteps)[0]
       );
-      this.timeline.addAlert(alert);
+      if (alert) this.timeline.addAlert(alert);
     });
   }
 }

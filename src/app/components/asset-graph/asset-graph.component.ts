@@ -194,7 +194,7 @@ export class AssetGraphComponent {
 
   public selectAlertIcon(alert: TyrAlertStatus): Texture {
     switch (alert) {
-      case TyrAlertStatus.alert:
+      case TyrAlertStatus.alerted:
         return this.alertSprite!;
       case TyrAlertStatus.controlled:
         return this.controlledSprite!;

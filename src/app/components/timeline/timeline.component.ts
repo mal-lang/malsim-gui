@@ -7,27 +7,10 @@ import { TyrAlert } from 'tyr-js';
   styleUrl: './timeline.component.scss',
 })
 export class TimelineComponent {
-  private alerts: TyrAlert[];
+  public alerts: TyrAlert[];
 
   constructor() {
     this.alerts = [];
-  }
-
-  private selectAlertIcon(alert: TyrAlert) {
-    switch (alert.node.type) {
-      case 'Network':
-        return '/assets/icons/network.png';
-      case 'Application':
-        return '/assets/icons/app.png';
-      case 'ConnectionRule':
-        return '/assets/icons/networking.png';
-      case 'Identity':
-        return '/assets/icons/id-card.png';
-      case 'SoftwareVulnerability':
-        return '/assets/icons/icognito.png';
-      default:
-        return '/assets/icons/shield.png';
-    }
   }
 
   public addAlert(alert: TyrAlert) {

@@ -6,6 +6,8 @@ footer {
   background-color: $dark;
   color: $white;
   border-top: 1px solid $border;
+  display: flex;
+  flex-direction: column;
   > *:first-child {
     height: 32px;
     width: 100%;
@@ -13,5 +15,21 @@ footer {
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid $border;
+  }
+}
+
+#timeline {
+  flex: 1;
+  overflow-x: scroll;
+}
+
+#timeline-item-list {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  &:first-child {
+    margin-left: 24px;
   }
 }

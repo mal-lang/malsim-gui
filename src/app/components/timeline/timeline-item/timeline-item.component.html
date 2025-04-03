@@ -1,7 +1,7 @@
-<div class="alert">
-  <img class="alert-image" [src]="this.alertImageURL" />
-  <div class="alert-content">
-    <p>{{ this.alert.node.name }}</p>
-    <p>{{ this.alert.timestamp }}</p>
+<div class="timeline-item" [class]="alert.status">
+  <img class="timeline-item-image" [src]="this.alertImageURL" />
+  <div class="timeline-item-content">
+    <p class="timeline-item-name">{{ this.alert.node.name }}</p>
+    <p class="timeline-item-timestamp">{{ this.timestamp }}</p>
   </div>
 </div>
