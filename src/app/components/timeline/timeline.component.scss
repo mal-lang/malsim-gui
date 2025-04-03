@@ -21,6 +21,8 @@ footer {
 #timeline {
   flex: 1;
   overflow-x: scroll;
+  display: flex;
+  flex-direction: row;
 }
 
 #timeline-item-list {
@@ -29,6 +31,7 @@ footer {
   display: flex;
   flex-direction: row;
   align-items: left;
+  gap: 8px;
   &:first-child {
     margin-left: 24px;
   }

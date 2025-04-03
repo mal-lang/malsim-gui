@@ -1,8 +1,11 @@
 <footer>
   <h2>Activity Timeline</h2>
   <div id="timeline">
-    <div id="timeline-item-list" *ngFor="let alert of alerts">
-      <app-timeline-item [alert]="alert"></app-timeline-item>
+    <div id="timeline-item-list">
+      <app-timeline-item
+        *ngFor="let alert of alerts"
+        [alert]="alert"
+      ></app-timeline-item>
     </div>
   </div>
 </footer>
