@@ -12,6 +12,9 @@
   &.alerted {
     background-color: $alert;
   }
+  &.seen {
+    background-color: $alert-target;
+  }
   &.controlled {
     background-color: $controlled;
   }

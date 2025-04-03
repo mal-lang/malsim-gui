@@ -36,14 +36,14 @@ footer {
   gap: 8px;
 
   * {
-    margin-top: 8px;
+    margin-top: 4px;
     opacity: 0.6;
     transition: margin-top 0.2s ease-in-out;
   }
 
   .active {
     opacity: 1;
-    margin-top: 12px;
+    margin-top: 8px;
   }
 }
 
