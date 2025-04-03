@@ -1,7 +1,7 @@
 <footer>
   <h2>Activity Timeline</h2>
   <div id="timeline" #scrollContainer>
-    <div id="timeline-item-list">
+    <div id="timeline-item-list" #timelineList>
       <app-timeline-item
         *ngFor="let alert of alerts"
         [alert]="alert"

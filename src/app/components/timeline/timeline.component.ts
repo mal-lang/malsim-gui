@@ -10,16 +10,31 @@ export class TimelineComponent {
   public alerts: TyrAlert[];
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
+  @ViewChild('timelineList') private timelineList!: ElementRef;
 
   private isMouseClicked: Boolean;
+  private draggableLeftLimit: number;
+  private draggableRightLimit: number;
+  private hasBeenChecked: Boolean = false;
 
   constructor(private renderer: Renderer2) {
     this.alerts = [];
     this.isMouseClicked = false;
+    this.draggableRightLimit = 0;
+    this.draggableLeftLimit = 0;
   }
 
   ngAfterViewInit() {
     const element = this.slideCircle.nativeElement;
+
+    const startPosition = 0;
+    this.draggableLeftLimit = startPosition;
+    this.draggableRightLimit = startPosition;
+    this.renderer.setStyle(
+      this.slideCircle.nativeElement,
+      'transform',
+      `translateX(${startPosition}px)`
+    );
 
     this.renderer.listen(
       element,
@@ -29,6 +44,8 @@ export class TimelineComponent {
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
       const offsetX = event.clientX;
+      if (offsetX > this.draggableRightLimit) return;
+      if (offsetX <= this.draggableLeftLimit) return;
       this.renderer.setStyle(
         this.slideCircle.nativeElement,
         'transform',
@@ -43,9 +60,10 @@ export class TimelineComponent {
   }
 
   public addAlert(alert: TyrAlert) {
+    if (this.alerts.length > 0)
+      this.draggableRightLimit += 136; //128px of item width + 8px of gap
+    else this.draggableRightLimit += 72;
     this.alerts.push(alert);
-    const container = this.scrollContainer.nativeElement;
-    container.scrollLeft = container.scrollWidth;
   }
 
   public deleteAlert(alert: TyrAlert) {
