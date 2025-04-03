@@ -38,8 +38,21 @@ footer {
 
 #timeline-slidebar {
   height: 24px;
+  position: relative;
 }
 
 #slidebar-draggable {
+  position: absolute;
+  z-index: 2;
   cursor: grab;
+}
+
+.line {
+  position: absolute;
+  z-index: 1;
+  top: 7px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, $clementine 0%, $border 0%);
 }

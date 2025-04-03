@@ -1,7 +1,7 @@
 <footer>
   <h2>Activity Timeline</h2>
-  <div id="timeline" #scrollContainer>
-    <div id="timeline-item-list" #timelineList>
+  <div id="timeline">
+    <div id="timeline-item-list">
       <app-timeline-item
         *ngFor="let alert of alerts"
         [alert]="alert"
@@ -25,6 +25,7 @@
           cx="8"
         ></circle>
       </svg>
+      <div class="line" #slideLine></div>
     </div>
   </div>
 </footer>
