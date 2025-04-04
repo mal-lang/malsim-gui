@@ -10,13 +10,13 @@
   position: relative;
 
   &.alerted {
-    background-color: $alert;
+    background-color: $timeline-alert;
   }
   &.seen {
-    background-color: $alert;
+    background-color: $timeline-alert;
   }
   &.controlled {
-    background-color: $controlled;
+    background-color: $timeline-controlled;
   }
 }
 
