@@ -65,6 +65,7 @@ export class TimelineComponent {
       );
     });
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
+      if (!this.isMouseClicked) return;
       this.isMouseClicked = false;
       let offsetX = event.clientX;
       if (offsetX > this.draggableRightLimit)
