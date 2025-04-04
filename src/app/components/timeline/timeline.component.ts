@@ -87,6 +87,16 @@ export class TimelineComponent {
       position,
       this.slideCircle.nativeElement.getBoundingClientRect().width
     );
+
+    let alerts: TyrAlert[] = [];
+    if (position >= 24) {
+      const alertPosition = Math.trunc(position / 136);
+      alerts = this.alerts.slice(0, alertPosition + 1);
+    }
+
+    this.tyrManager.updateAlertVisibility(alerts);
+
+    //this.tyrManager.updateAlertVisibility();
     this.cdRef.detectChanges();
   }
 
