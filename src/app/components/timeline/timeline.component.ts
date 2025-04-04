@@ -3,10 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { TyrAlert } from 'tyr-js';
+import { TyrAlert, TyrManager } from 'tyr-js';
 
 @Component({
   selector: 'app-timeline',
@@ -15,7 +16,7 @@ import { TyrAlert } from 'tyr-js';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
-  public alerts: TyrAlert[];
+  @Input() tyrManager: TyrManager;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 
@@ -23,6 +24,8 @@ export class TimelineComponent {
   private draggableLeftLimit: number;
   private draggableRightLimit: number;
   private selectedAlert: number | null;
+
+  public alerts: TyrAlert[];
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this.alerts = [];
@@ -78,7 +81,7 @@ export class TimelineComponent {
     });
   }
 
-  calculateSelectedItem(position: number) {
+  private calculateSelectedItem(position: number) {
     if (position < 24) {
       this.selectedAlert = null;
       return 0;
@@ -92,7 +95,8 @@ export class TimelineComponent {
     this.selectedAlert = i;
     return aux - 88;
   }
-  updateLineColor(position: number, width: number) {
+
+  private updateLineColor(position: number, width: number) {
     const line = this.slideLine.nativeElement as HTMLElement;
 
     this.renderer.setStyle(
@@ -104,14 +108,19 @@ export class TimelineComponent {
     );
   }
 
-  updateLineWidth() {
+  private updateLineWidth() {
     const line = this.slideLine.nativeElement as HTMLElement;
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
   }
 
-  getClass(index: number) {
+  public getClass(index: number) {
     if (this.selectedAlert) return index < this.selectedAlert ? 'active' : '';
     return '';
+  }
+
+  public onTimelineItemClick(itemPosition: number) {
+    console.log(this.alerts[itemPosition]);
+    this.tyrManager.moveCameraToNode(this.alerts[itemPosition].node);
   }
 
   public addAlert(alert: TyrAlert) {

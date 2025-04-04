@@ -4,5 +4,5 @@
     <app-suggested-actions #suggestedActions />
     <app-asset-graph #assetGraph id="assetGraphContainer" />
   </main>
-  <app-timeline #timeline />
+  <app-timeline #timeline [tyrManager]="this.tyrManager" />
 </ng-container>

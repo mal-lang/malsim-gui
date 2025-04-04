@@ -5,6 +5,7 @@
       <app-timeline-item
         *ngFor="let alert of alerts; let i = index"
         [alert]="alert"
+        (click)="this.onTimelineItemClick(i)"
         [ngClass]="getClass(i)"
       ></app-timeline-item>
     </div>

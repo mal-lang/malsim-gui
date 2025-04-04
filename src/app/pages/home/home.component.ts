@@ -28,9 +28,10 @@ export class HomeComponent {
   @ViewChild('timeline') timeline!: TimelineComponent;
 
   private apiService;
-  private tyrManager: TyrManager;
   private intervalId: any;
   private intervalTime: number = 1000 * 10; // 10 seconds;
+
+  public tyrManager: TyrManager;
 
   private clusterRules: TyrGraphClusterRule[] = [
     {
