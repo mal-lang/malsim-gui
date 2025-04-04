@@ -26,12 +26,14 @@ export class TimelineComponent {
   private selectedAlert: number | null;
 
   public alerts: TyrAlert[];
+  public automaticUpdate: boolean;
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this.alerts = [];
     this.isMouseClicked = false;
     this.draggableRightLimit = 0;
     this.draggableLeftLimit = 0;
+    this.automaticUpdate = true;
   }
 
   ngAfterViewInit() {
@@ -155,9 +157,17 @@ export class TimelineComponent {
     this.alerts.push(alert);
     this.cdRef.detectChanges();
     this.updateLineWidth();
+
+    if (!this.automaticUpdate) return;
+    this.moveSlide(this.draggableRightLimit);
   }
 
   public deleteAlert(alert: TyrAlert) {
     this.alerts = this.alerts.filter((a) => a === alert);
+  }
+
+  public toggleAutomaticUpdate() {
+    this.automaticUpdate = !this.automaticUpdate;
+    if (this.automaticUpdate) this.moveSlide(this.draggableRightLimit);
   }
 }

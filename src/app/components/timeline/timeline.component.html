@@ -1,5 +1,15 @@
 <footer [ngClass]="getClass(0)">
   <h2>Activity Timeline</h2>
+  <div id="automatic-timeline-box">
+    <p>Automatic Update:</p>
+    <div
+      class="switch"
+      [class.on]="this.automaticUpdate"
+      (click)="this.toggleAutomaticUpdate()"
+    >
+      <div class="ball"></div>
+    </div>
+  </div>
   <div id="timeline">
     <div id="timeline-item-list">
       <app-timeline-item
