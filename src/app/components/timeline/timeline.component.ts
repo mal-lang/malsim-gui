@@ -64,6 +64,7 @@ export class TimelineComponent {
         `translateX(${offsetX}px)`
       );
     });
+
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
       this.isMouseClicked = false;
@@ -71,16 +72,22 @@ export class TimelineComponent {
       if (offsetX > this.draggableRightLimit)
         offsetX = this.draggableRightLimit;
       if (offsetX <= this.draggableLeftLimit) offsetX = 0;
-      const element = this.slideCircle.nativeElement;
-      const position = this.calculateSelectedItem(offsetX);
-      this.renderer.setStyle(
-        this.slideCircle.nativeElement,
-        'transform',
-        `translateX(${position}px)`
-      );
-      this.updateLineColor(position, element.getBoundingClientRect().width);
-      this.cdRef.detectChanges();
+      this.moveSlide(offsetX);
     });
+  }
+
+  private moveSlide(slidePosition: number) {
+    const position = this.calculateSelectedItem(slidePosition);
+    this.renderer.setStyle(
+      this.slideCircle.nativeElement,
+      'transform',
+      `translateX(${position}px)`
+    );
+    this.updateLineColor(
+      position,
+      this.slideCircle.nativeElement.getBoundingClientRect().width
+    );
+    this.cdRef.detectChanges();
   }
 
   private calculateSelectedItem(position: number) {
@@ -123,6 +130,12 @@ export class TimelineComponent {
 
   public onTimelineItemClick(itemPosition: number) {
     this.tyrManager.moveCameraToNode(this.alerts[itemPosition].node);
+    const element = this.slideCircle.nativeElement;
+    const position = 24 + 136 * itemPosition;
+
+    //Only move scroll if the clicked item is further in the timeline
+    if (position < element.getBoundingClientRect().left) return;
+    this.moveSlide(position);
   }
 
   public addAlert(alert: TyrAlert) {
