@@ -66,9 +66,10 @@ export class TimelineComponent {
     });
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       this.isMouseClicked = false;
-      const offsetX = event.clientX;
-      if (offsetX > this.draggableRightLimit) return;
-      if (offsetX <= this.draggableLeftLimit) return;
+      let offsetX = event.clientX;
+      if (offsetX > this.draggableRightLimit)
+        offsetX = this.draggableRightLimit;
+      if (offsetX <= this.draggableLeftLimit) offsetX = 0;
       const element = this.slideCircle.nativeElement;
       const position = this.calculateSelectedItem(offsetX);
       this.renderer.setStyle(
@@ -89,10 +90,11 @@ export class TimelineComponent {
 
     let aux = 24;
     let i;
-    for (i = 0; aux < position; i++) {
+    for (i = 0; aux <= position; i++) {
       aux += 136;
     }
     this.selectedAlert = i;
+
     return aux - 88;
   }
 
@@ -119,7 +121,6 @@ export class TimelineComponent {
   }
 
   public onTimelineItemClick(itemPosition: number) {
-    console.log(this.alerts[itemPosition]);
     this.tyrManager.moveCameraToNode(this.alerts[itemPosition].node);
   }
 
