@@ -1,5 +1,5 @@
 <ng-container>
-  <app-header />
+  <app-header [impact]="this.rewardValue.reward" />
   <main>
     <app-suggested-actions #suggestedActions />
     <app-asset-graph #assetGraph id="assetGraphContainer" />

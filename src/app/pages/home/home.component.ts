@@ -112,6 +112,10 @@ export class HomeComponent {
   };
 
   public cursorStyle = 'default';
+  public rewardValue: { reward: number; iteration: number } = {
+    reward: 0,
+    iteration: -1,
+  };
 
   constructor(apiService: ApiService) {
     this.apiService = apiService;
@@ -153,7 +157,12 @@ export class HomeComponent {
   async retrieveAlerts() {
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
-    }).subscribe(({ latestAttackSteps }) => {
+      rewardValue: this.apiService.getRewardValue(),
+    }).subscribe(({ latestAttackSteps, rewardValue }) => {
+      //Reward
+      this.rewardValue = rewardValue;
+
+      //Latest Attack Step
       parseLatestAttackSteps(latestAttackSteps)[0];
       const alert = this.tyrManager.injestLatestAttackStep(
         parseLatestAttackSteps(latestAttackSteps)[0],
