@@ -9,6 +9,11 @@ footer {
   border-top: 1px solid $border;
   display: flex;
   flex-direction: column;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
   > *:first-child {
     height: 32px;
     width: 100%;

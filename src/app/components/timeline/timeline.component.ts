@@ -75,6 +75,12 @@ export class TimelineComponent {
         offsetX = this.draggableRightLimit;
       if (offsetX <= this.draggableLeftLimit) offsetX = 0;
       this.moveSlide(offsetX);
+
+      if (
+        this.slideCircle.nativeElement.getBoundingClientRect().left <
+        this.draggableRightLimit
+      )
+        this.automaticUpdate = false;
     });
   }
 
