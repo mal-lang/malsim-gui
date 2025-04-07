@@ -4,7 +4,24 @@
     <p>INFORMATION</p>
     <p>SCORE</p>
   </div>
-  <div class="actions-container">
+  <div class="suggested-actions-list">
+    <div class="suggested-action">
+      <div class="suggested-action-information">
+        <div class="suggested-action-img">
+          <img src="assets/icons/alert.png" />
+        </div>
+
+        <div class="suggested-action-main">
+          <span>Agent 1</span>
+          <p>Shut off machine</p>
+          <p>System: <span>ksnksn</span></p>
+        </div>
+      </div>
+
+      <div class="suggested-action-reward">
+        <p>25</p>
+      </div>
+    </div>
     <button
       *ngFor="let action of suggestedActions"
       class="list-group-item list-group-item-action overflow-y"
