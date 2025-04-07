@@ -18,11 +18,20 @@ import {
 } from '@ngneat/helipopper';
 import { LogModalComponent } from './components/modals/log-modal/log-modal.component';
 import { provideHttpClient } from '@angular/common/http';
+import { HomeComponent } from './pages/home/home.component';
+import { HeaderComponent } from './components/header/header.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
+import { AssetGraphComponent } from './components/asset-graph/asset-graph.component';
+import { TimelineItemComponent } from './components/timeline/timeline-item/timeline-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OverviewComponent,
+    HomeComponent,
+    HeaderComponent,
+    TimelineComponent,
+    AssetGraphComponent,
     MenuComponent,
     AttackGraphComponent,
     InstanceModelComponent,
@@ -35,6 +44,7 @@ import { provideHttpClient } from '@angular/common/http';
     AppRoutingModule,
     NgxGraphModule,
     TippyDirective,
+    TimelineItemComponent,
   ],
   providers: [
     provideHttpClient(),

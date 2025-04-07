@@ -1,0 +1,43 @@
+<footer [ngClass]="getClass(0)">
+  <h2>Activity Timeline</h2>
+  <div id="automatic-timeline-box">
+    <p>Automatic Update:</p>
+    <div
+      class="switch"
+      [class.on]="this.automaticUpdate"
+      (click)="this.toggleAutomaticUpdate()"
+    >
+      <div class="ball"></div>
+    </div>
+  </div>
+  <div id="timeline">
+    <div id="timeline-item-list">
+      <app-timeline-item
+        *ngFor="let alert of alerts; let i = index"
+        [alert]="alert"
+        (click)="this.onTimelineItemClick(i)"
+        [ngClass]="getClass(i)"
+      ></app-timeline-item>
+    </div>
+    <div id="timeline-slidebar">
+      <svg
+        id="slidebar-draggable"
+        #slideCircle
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        height="16"
+        width="16"
+      >
+        <circle
+          stroke-width="2"
+          stroke="#ffa100"
+          fill="#00080d"
+          r="7"
+          cy="8"
+          cx="8"
+        ></circle>
+      </svg>
+      <div class="line" #slideLine></div>
+    </div>
+  </div>
+</footer>

@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+} from '@angular/core';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 
@@ -14,12 +19,16 @@ interface SuggestedAction {
   selector: 'app-suggested-actions',
   templateUrl: './suggested-actions.component.html',
   styleUrl: './suggested-actions.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SuggestedActionsComponent {
   suggestedActions: Array<SuggestedAction> = [];
   selectedAction: number | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
@@ -51,6 +60,7 @@ export class SuggestedActionsComponent {
     });
 
     this.suggestedActions = actions;
+    this.cdRef.detectChanges();
   }
 
   selectAction(id: number, iteration: number) {

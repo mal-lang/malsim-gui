@@ -1,0 +1,122 @@
+@import "../../../styles.scss";
+
+footer {
+  position: relative;
+  width: 100%;
+  height: 128px;
+  background-color: $dark;
+  color: $white;
+  border-top: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  > *:first-child {
+    height: 32px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid $border;
+  }
+}
+
+#timeline {
+  height: 96px;
+  overflow-x: scroll;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
+#timeline-item-list {
+  display: flex;
+  margin: 0px 24px;
+  height: 56px;
+  flex-direction: row;
+  align-items: left;
+  gap: 8px;
+
+  * {
+    margin-top: 4px;
+    opacity: 0.6;
+    transition: margin-top 0.2s ease-in-out;
+  }
+
+  .active {
+    opacity: 1;
+    margin-top: 8px;
+  }
+}
+
+#timeline-slidebar {
+  height: 24px;
+  position: relative;
+}
+
+#slidebar-draggable {
+  position: absolute;
+  z-index: 2;
+  cursor: grab;
+}
+
+.line {
+  position: absolute;
+  z-index: 1;
+  top: 7px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(to right, $clementine 0%, $border 0%);
+}
+
+#automatic-timeline-box {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  p {
+    font-size: 10px;
+    margin: 0px;
+  }
+}
+
+.switch {
+  width: 40px;
+  height: 20px;
+  background-color: $border;
+  border-radius: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.switch.on {
+  background-color: $clementine;
+}
+
+.ball {
+  width: 16px;
+  height: 16px;
+  background-color: $dark;
+  border: 2px solid $clementine;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch.on .ball {
+  left: 24px;
+  background-color: $white;
+}

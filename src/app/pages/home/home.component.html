@@ -1,0 +1,8 @@
+<ng-container>
+  <app-header [impact]="this.rewardValue.reward" />
+  <main>
+    <app-suggested-actions #suggestedActions />
+    <app-asset-graph #assetGraph id="assetGraphContainer" />
+  </main>
+  <app-timeline #timeline [tyrManager]="this.tyrManager" />
+</ng-container>

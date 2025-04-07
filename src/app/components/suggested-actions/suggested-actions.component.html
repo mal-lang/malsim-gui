@@ -1,42 +1,31 @@
-<div class="card bg-dark">
-  <div class="card-header text-center">Suggested Alternatives</div>
-  <div class="card-body">
-    <div class="actions-container">
-      <div class="list-group">
-        <button
-          *ngFor="let action of suggestedActions"
-          class="list-group-item list-group-item-action overflow-y"
-          [ngClass]="
-            selectedAction === action.stepId ? 'text-bg-primary' : null
-          "
-          [ngClass]="
-            selectedAction && selectedAction !== action.stepId
-              ? 'disabled'
-              : null
-          "
-          (click)="selectAction(action.stepId, action.iteration)"
-        >
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ action.description }}</h5>
-          </div>
-          <p class="mb-1">
-            System: <strong>{{ action.system }}</strong>
+<div id="suggested-actions">
+  <h2>Suggested Alternatives</h2>
+  <div class="actions-header">
+    <p>INFORMATION</p>
+    <p>SCORE</p>
+  </div>
+  <div class="suggested-actions-list">
+    <div class="suggested-action" *ngFor="let action of suggestedActions">
+      <div class="suggested-action-information">
+        <div class="suggested-action-img">
+          <img src="assets/icons/alert.png" />
+        </div>
+
+        <div class="suggested-action-main">
+          <span>{{ action.agents }}</span>
+          <p>{{ action.description }}</p>
+          <p>
+            System: <span>{{ action.system }}</span>
           </p>
-          <div class="hstack gap-3">
-            <span
-              *ngFor="let agent of action.agents"
-              class="badge text-bg-light"
-              >{{ agent }}</span
-            >
-          </div>
-        </button>
+        </div>
       </div>
-      <div
-        *ngIf="suggestedActions.length === 0"
-        class="h-75 d-flex align-items-center justify-content-center"
-      >
-        <h6>No alternatives suggested</h6>
+
+      <div class="suggested-action-reward">
+        <p>25</p>
       </div>
     </div>
   </div>
+  <h6 *ngIf="suggestedActions.length === 0" class="empty-suggestions">
+    No alternatives suggested
+  </h6>
 </div>

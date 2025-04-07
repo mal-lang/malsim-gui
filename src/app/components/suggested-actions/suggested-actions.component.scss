@@ -1,4 +1,157 @@
-.actions-container {
-  height: calc(100vh - 225px);
-  overflow: scroll !important;
+@import "../../../styles.scss";
+
+#suggested-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  background-color: $dark;
+  color: $white;
+
+  min-width: 360px;
+
+  h2 {
+    height: 32px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .actions-header {
+    width: calc(100% - 32px);
+    height: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 16px;
+
+    p {
+      flex: 3;
+      margin: 0px;
+      text-align: left;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    p:last-child {
+      flex: 1;
+      text-align: center;
+      font-weight: normal;
+      width: 80px;
+    }
+  }
+}
+
+.suggested-actions-list {
+  flex: 1;
+  min-width: 100%;
+  overflow-y: scroll !important;
+  border-top: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0px;
+  margin-bottom: auto;
+}
+
+.suggested-action {
+  cursor: pointer;
+  width: 100%;
+  padding: 16px 0px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $border;
+
+  * {
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  p {
+    width: 100%;
+    margin: 0px;
+    font-weight: bold;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    width: 32px;
+  }
+
+  .suggested-action-information {
+    flex: 3;
+  }
+
+  .suggested-action-reward {
+    flex: 1;
+    p {
+      color: $ice;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+
+  .suggested-action-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 16px;
+  }
+
+  .suggested-action-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+
+    span {
+      font-size: 10px;
+      font-weight: bold;
+      color: $dark;
+      border-radius: 20px;
+      background-color: $white;
+      padding: 4px 8px;
+      max-width: 100%;
+    }
+
+    p {
+      font-size: 14px;
+      margin: 0px;
+      color: $white;
+      text-align: left;
+    }
+
+    :last-child {
+      background-color: inherit;
+      color: inherit;
+      padding: inherit;
+      font-size: 12px;
+      font-weight: normal;
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.empty-suggestions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }

@@ -1,0 +1,56 @@
+@import "../../../../styles.scss";
+
+.timeline-item {
+  margin: auto;
+  height: 42px;
+  width: 128px;
+  padding: 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+
+  &.alerted {
+    background-color: $timeline-alert;
+  }
+  &.seen {
+    background-color: $timeline-alert;
+  }
+  &.controlled {
+    background-color: $timeline-controlled;
+  }
+}
+
+.timeline-item-image {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+}
+
+.timeline-item-content {
+  margin-left: 16px;
+  width: auto;
+  height: 100%;
+  font-size: 10px;
+  padding: 0px;
+  color: $dark;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+
+  p {
+    text-overflow: ellipsis;
+    margin: 0px;
+  }
+}
+
+.timeline-item-name {
+  font-weight: bold;
+}
+
+.timeline-item-timestamp {
+  font-size: 8px;
+  font-weight: normal;
+}
