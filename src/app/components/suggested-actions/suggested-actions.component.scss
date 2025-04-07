@@ -51,17 +51,26 @@
   min-width: 100%;
   overflow-y: scroll !important;
   border-top: 1px solid $border;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0px;
+  margin-bottom: auto;
 }
 
 .suggested-action {
   cursor: pointer;
-  height: 96px;
   width: 100%;
-
+  padding: 16px 0px;
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid $border;
+
+  * {
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
 
   img {
     width: 24px;
@@ -116,6 +125,7 @@
       border-radius: 20px;
       background-color: $white;
       padding: 4px 8px;
+      max-width: 100%;
     }
 
     p {

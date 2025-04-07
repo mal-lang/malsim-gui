@@ -117,6 +117,8 @@ export class HomeComponent {
     iteration: -1,
   };
 
+  public currentDefenderSuggestions: any = {};
+
   constructor(apiService: ApiService) {
     this.apiService = apiService;
     this.cursorStyle = 'default';
@@ -158,7 +160,8 @@ export class HomeComponent {
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
       rewardValue: this.apiService.getRewardValue(),
-    }).subscribe(({ latestAttackSteps, rewardValue }) => {
+      defenderSuggestions: this.apiService.getDefenderSuggestions(),
+    }).subscribe(({ latestAttackSteps, rewardValue, defenderSuggestions }) => {
       //Reward
       this.rewardValue = rewardValue;
 
@@ -169,6 +172,45 @@ export class HomeComponent {
         this.timeline.automaticUpdate
       );
       if (alert) this.timeline.addAlert(alert);
+
+      //Defender Suggestions
+      if (this.checkDefenderSuggestions(defenderSuggestions)) {
+        console.log(defenderSuggestions);
+        this.currentDefenderSuggestions = defenderSuggestions;
+        this.suggestedActions.updateSuggestedActions(defenderSuggestions);
+      }
     });
+  }
+
+  checkDefenderSuggestions(defenderSuggestions: any): boolean {
+    if (!defenderSuggestions) {
+      return false;
+    }
+
+    let newDefenderSuggestions: any = Object.keys(defenderSuggestions);
+    let oldDefenderSuggestions: any = Object.keys(
+      this.currentDefenderSuggestions
+    );
+
+    if (newDefenderSuggestions.length !== oldDefenderSuggestions.length) {
+      return true;
+    } else {
+      for (let agent of newDefenderSuggestions) {
+        for (let stepId of Object.keys(defenderSuggestions[agent])) {
+          if (
+            !this.currentDefenderSuggestions[agent] ||
+            !this.currentDefenderSuggestions[agent][stepId]
+          ) {
+            return true;
+          } else if (
+            defenderSuggestions[agent][stepId].iteration !==
+            this.currentDefenderSuggestions[agent][stepId].iteration
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }
