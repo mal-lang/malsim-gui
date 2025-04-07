@@ -175,7 +175,6 @@ export class HomeComponent {
 
       //Defender Suggestions
       if (this.checkDefenderSuggestions(defenderSuggestions)) {
-        console.log(defenderSuggestions);
         this.currentDefenderSuggestions = defenderSuggestions;
         this.suggestedActions.updateSuggestedActions(defenderSuggestions);
       }
