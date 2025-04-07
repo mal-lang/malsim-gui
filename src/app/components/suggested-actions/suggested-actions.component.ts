@@ -9,6 +9,7 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
 
 interface SuggestedAction {
   stepId: number;
+  weight: string;
   description: string;
   iteration: number;
   system: string;
@@ -49,6 +50,7 @@ export class SuggestedActionsComponent {
           ) {
             actions.push({
               stepId: Number(stepId),
+              weight: Number(defenderSuggestion.weight).toFixed(2),
               iteration: defenderSuggestion.iteration,
               description: defenderSuggestion.action.description,
               system: defenderSuggestion.action.system,
@@ -60,6 +62,7 @@ export class SuggestedActionsComponent {
     });
 
     this.suggestedActions = actions;
+    console.log(defenderSuggestions);
     this.cdRef.detectChanges();
   }
 
