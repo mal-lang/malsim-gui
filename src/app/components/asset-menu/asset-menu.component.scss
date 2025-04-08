@@ -1,0 +1,62 @@
+@import "../../../styles.scss";
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+
+  background-color: $dark;
+  color: $white;
+  width: 360px;
+
+  > * {
+    width: 100%;
+  }
+
+  h2 {
+    height: 32px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+  }
+
+  h6 {
+    font-family: 13px;
+  }
+
+  .menu-options {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid $border;
+    margin-right: 16px;
+
+    p {
+      margin: 0px;
+      flex: 1;
+      font-size: 10px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    p .selected {
+      font-weight: bold;
+    }
+  }
+}
+
+.menu-content {
+  overflow: hidden;
+  overflow-y: scroll !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

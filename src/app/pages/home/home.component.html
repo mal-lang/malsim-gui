@@ -3,6 +3,9 @@
   <main>
     <app-suggested-actions #suggestedActions />
     <app-asset-graph #assetGraph id="assetGraphContainer" />
+    <aside>
+      <app-asset-menu />
+    </aside>
   </main>
   <app-timeline #timeline [tyrManager]="this.tyrManager" />
 </ng-container>
