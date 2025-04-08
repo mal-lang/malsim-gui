@@ -1,6 +1,5 @@
-<section>
-  <app-cross />
-
+<section [ngClass]="{ visible: !closed }">
+  <app-cross (click)="this.close()" />
   <h2>fw1: application</h2>
   <div class="menu-options">
     <p

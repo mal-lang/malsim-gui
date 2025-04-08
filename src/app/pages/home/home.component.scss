@@ -9,6 +9,7 @@ main {
   height: calc(100vh - 128px - 60px);
   display: flex;
   flex-direction: row;
+  position: relative;
 
   #assetGraphContainer {
     width: 100%;

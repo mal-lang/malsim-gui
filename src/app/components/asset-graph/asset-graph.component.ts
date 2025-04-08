@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import {
   Assets,
@@ -107,6 +114,7 @@ export class AssetGraphComponent {
         onPointerOut: () => {
           this.cursorStyle = 'grab';
         },
+        onClick: () => {},
       },
       edges: {
         animated: true,

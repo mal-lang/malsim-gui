@@ -13,6 +13,7 @@ import {
   RendererRuleScope,
   SimulationConfig,
   TyrGraphClusterRule,
+  TyrGraphNode,
   TyrManager,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
@@ -212,4 +213,6 @@ export class HomeComponent {
     }
     return false;
   }
+
+  notifyClick(node: TyrGraphNode) {}
 }

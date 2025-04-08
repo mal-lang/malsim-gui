@@ -1,7 +1,10 @@
 @import "../../../styles.scss";
 
 section {
-  position: relative;
+  visibility: hidden;
+  position: absolute;
+  top: 0px;
+  right: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,6 +76,10 @@ section {
       border-bottom: 0px;
     }
   }
+}
+
+section.visible {
+  visibility: visible;
 }
 
 .menu-content {
