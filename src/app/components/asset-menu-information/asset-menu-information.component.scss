@@ -5,14 +5,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 20px 0px;
   gap: 36px;
   font-size: 12px;
+  margin: 0px 24px;
+  margin-top: 24px;
 
   img {
     width: 40px;
     height: 40px;
+    margin-bottom: 8px;
     filter: brightness(0) invert(1);
+  }
+
+  img:hover {
+    cursor: pointer;
   }
 
   h3 {
@@ -88,20 +94,46 @@
 }
 
 .related-assets-section {
-  margin: 20px 16px;
+  margin: 0px 24px;
+  margin-bottom: 24px;
   .related-asset {
-    border: 1px solid $border;
     display: flex;
-    flex-direction: column;
-    padding: 16px 32px;
-    p {
-      font-size: 12px;
-      margin: 0px;
-    }
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    border: 1px solid $border;
+    border-bottom: 0px;
 
-    :first-child {
-      font-size: 13px;
-      font-weight: bold;
+    img {
+      width: 24px;
+      height: 24px;
+      margin: 16px;
+      filter: brightness(100%) invert(1);
     }
+    div {
+      display: flex;
+      flex-direction: column;
+
+      p {
+        font-size: 12px;
+        margin: 0px;
+      }
+
+      :first-child {
+        font-size: 13px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .related-asset:last-child {
+    border-bottom: 1px solid $border;
+  }
+
+  .related-asset:hover {
+    cursor: pointer;
+    background-color: $dark-hover;
+    transition: ease-out 0.1s;
   }
 }
