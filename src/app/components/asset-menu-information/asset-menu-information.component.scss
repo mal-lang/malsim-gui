@@ -40,6 +40,10 @@
       p.active {
         color: $green;
       }
+
+      p.non-active {
+        color: $alert;
+      }
     }
 
     &.cia {

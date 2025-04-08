@@ -29,7 +29,7 @@ section {
   }
 
   .menu-options {
-    width: 100%;
+    width: calc(100% - 16px);
     height: 24px;
     display: flex;
     flex-direction: row;

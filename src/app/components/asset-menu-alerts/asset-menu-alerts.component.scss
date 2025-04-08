@@ -1,0 +1,45 @@
+@import "../../../styles.scss";
+.asset-menu-alert {
+  border-bottom: 1px solid $border;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+  padding: 24px;
+  gap: 16px;
+  position: relative;
+  cursor: pointer;
+
+  p {
+    margin: 0px;
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  div {
+    flex: 1;
+  }
+
+  .alert-info {
+    font-size: 12px;
+    :first-child {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .timestamp {
+    font-size: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 8px;
+    font-weight: bold;
+  }
+}
