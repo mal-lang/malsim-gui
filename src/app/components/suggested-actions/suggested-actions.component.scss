@@ -49,7 +49,7 @@
 .suggested-actions-list {
   flex: 1;
   min-width: 100%;
-  overflow-y: scroll !important;
+  overflow-y: auto !important;
   border-top: 1px solid $border;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,6 @@
 }
 
 .suggested-action {
-  cursor: pointer;
   width: 100%;
   padding: 16px 0px;
   display: flex;
@@ -147,6 +146,12 @@
       }
     }
   }
+}
+
+.suggested-action:hover {
+  background-color: $dark-hover;
+  cursor: pointer;
+  transition: ease-out 0.1s;
 }
 
 .empty-suggestions {

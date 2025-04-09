@@ -62,7 +62,6 @@ export class SuggestedActionsComponent {
     });
 
     this.suggestedActions = actions;
-    console.log(defenderSuggestions);
     this.cdRef.detectChanges();
   }
 

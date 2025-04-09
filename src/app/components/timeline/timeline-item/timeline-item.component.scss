@@ -12,6 +12,10 @@
   &.alerted {
     background-color: $timeline-alert;
   }
+  &.alerted:hover {
+    transition: ease-out 0.1s;
+    background-color: $alert;
+  }
   &.seen {
     background-color: $timeline-alert;
   }

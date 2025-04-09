@@ -1,0 +1,149 @@
+@import "../../../styles.scss";
+
+.general-info-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  font-size: 12px;
+  margin: 0px 24px;
+  margin-top: 24px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+  }
+
+  img {
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    filter: brightness(0) invert(1);
+  }
+
+  img:hover {
+    cursor: pointer;
+  }
+
+  h3 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 80px;
+
+    &.status {
+      row-gap: 4px;
+
+      :nth-child(-n + 2) {
+        font-weight: bold;
+      }
+
+      p {
+        margin: 0px;
+        text-align: center;
+      }
+
+      p.active {
+        color: $green;
+      }
+
+      p.alerted {
+        color: $warning;
+      }
+
+      p.non-active {
+        color: $alert;
+      }
+    }
+
+    &.cia {
+      grid-template-columns: repeat(2, max-content);
+      row-gap: 4px;
+      column-gap: 40px;
+
+      p {
+        margin: 0px;
+        text-align: left;
+        color: $white;
+      }
+
+      :nth-child(even) {
+        border-radius: 100%;
+        font-weight: bold;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .blue {
+        background-color: $turquoise;
+      }
+      .purple {
+        background-color: $purple;
+      }
+      .green {
+        background-color: $tall-grass;
+      }
+    }
+
+    .divider {
+      grid-column: 1 / -1;
+      height: 1px;
+      background: $border;
+    }
+  }
+}
+
+.related-assets-section {
+  padding: 40px 24px 24px 24px;
+  .related-asset {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    border: 1px solid $border;
+    border-bottom: 0px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin: 16px;
+      filter: brightness(100%) invert(1);
+    }
+    div {
+      display: flex;
+      flex-direction: column;
+
+      p {
+        font-size: 12px;
+        margin: 0px;
+      }
+
+      :first-child {
+        font-size: 13px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .related-asset:last-child {
+    border-bottom: 1px solid $border;
+  }
+
+  .related-asset:hover {
+    cursor: pointer;
+    background-color: $dark-hover;
+    transition: ease-out 0.1s;
+  }
+}

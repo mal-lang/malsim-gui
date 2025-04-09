@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import {
   Assets,
@@ -27,6 +34,7 @@ import {
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() attackStepMap: any;
+  @Input() onNodeClick: (node: TyrGraphNode) => void;
 
   private networkSprite?: Texture;
   private shieldSprite?: Texture;
@@ -106,6 +114,9 @@ export class AssetGraphComponent {
         },
         onPointerOut: () => {
           this.cursorStyle = 'grab';
+        },
+        onClick: (node: TyrGraphNode) => {
+          this.onNodeClick(node);
         },
       },
       edges: {

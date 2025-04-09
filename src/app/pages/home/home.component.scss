@@ -9,6 +9,8 @@ main {
   height: calc(100vh - 128px - 60px);
   display: flex;
   flex-direction: row;
+  position: relative;
+  overflow: hidden;
 
   #assetGraphContainer {
     width: 100%;

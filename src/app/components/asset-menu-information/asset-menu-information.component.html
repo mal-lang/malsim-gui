@@ -1,0 +1,38 @@
+<div class="general-info-section">
+  <div>
+    <img
+      src="{{ selectAssetImage(this.node) }}"
+      (click)="this.tyrManager.moveCameraToNode(this.node)"
+    />
+    <h3>{{ this.node.name }}</h3>
+  </div>
+  <div class="status grid">
+    <p>Type</p>
+    <p>Status</p>
+    <div class="divider"></div>
+    <p>{{ this.node.type }}</p>
+    <p [class]="this.status">{{ this.status }}</p>
+  </div>
+  <div class="cia grid">
+    <p>Confidentiality</p>
+    <p class="blue">10</p>
+    <p>Integrity</p>
+    <p class="purple">2</p>
+    <p>Availability</p>
+    <p class="green">6</p>
+  </div>
+</div>
+<div class="related-assets-section">
+  <h6>Related Assets:</h6>
+  <div
+    *ngFor="let relatedNode of this.relatedNodes"
+    class="related-asset"
+    (click)="this.tyrManager.moveCameraToNode(relatedNode)"
+  >
+    <img src="{{ selectAssetImage(relatedNode) }}" />
+    <div>
+      <p>{{ relatedNode.name }}</p>
+      <p>Type: {{ relatedNode.type }}</p>
+    </div>
+  </div>
+</div>

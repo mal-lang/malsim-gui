@@ -23,6 +23,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { AssetGraphComponent } from './components/asset-graph/asset-graph.component';
 import { TimelineItemComponent } from './components/timeline/timeline-item/timeline-item.component';
+import { AssetMenuComponent } from './components/asset-menu/asset-menu.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TimelineItemComponent } from './components/timeline/timeline-item/timel
     NgxGraphModule,
     TippyDirective,
     TimelineItemComponent,
+    AssetMenuComponent,
   ],
   providers: [
     provideHttpClient(),
