@@ -1,6 +1,6 @@
 <section [ngClass]="{ visible: !closed }">
   <app-cross (click)="this.close()" />
-  <h2>fw1: application</h2>
+  <h2>{{ node.name }}: {{ node.type }}</h2>
   <div class="menu-options">
     <p
       [ngClass]="{ selected: this.openedMenu == 'information' }"
@@ -16,7 +16,17 @@
     </p>
   </div>
   <div class="menu-content">
-    <app-asset-menu-information *ngIf="this.openedMenu == 'information'" />
-    <app-asset-menu-alerts *ngIf="this.openedMenu == 'alerts'" />
+    <app-asset-menu-information
+      *ngIf="this.openedMenu == 'information'"
+      [node]="this.node"
+      [tyrManager]="this.tyrManager"
+      [status]="this.status"
+      [selectAssetImage]="this.selectAssetImage"
+    />
+    <app-asset-menu-alerts
+      *ngIf="this.openedMenu == 'alerts'"
+      [alerts]="this.alerts"
+      [node]="this.node"
+    />
   </div>
 </section>

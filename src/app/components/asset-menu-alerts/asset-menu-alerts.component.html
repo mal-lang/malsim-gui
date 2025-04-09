@@ -1,8 +1,13 @@
-<div class="asset-menu-alert">
+<div *ngFor="let alert of this.alerts" class="asset-menu-alert">
   <img src="assets/icons/alert.png" />
   <div class="alert-info">
-    <p>ALERT</p>
-    <p>System: <span>fw1</span></p>
+    <p>{{ alert.alert.status }}</p>
+    <p>
+      System: <span>{{ this.node.name }}</span>
+    </p>
   </div>
-  <p class="timestamp">19/08/92</p>
+  <p class="timestamp">{{ this.timestampToLocale(alert.alert.timestamp) }}</p>
 </div>
+<h6 *ngIf="alerts.length === 0" class="empty-alerts">
+  This node has not been alerted.
+</h6>

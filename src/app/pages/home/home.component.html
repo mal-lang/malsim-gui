@@ -8,7 +8,7 @@
       [onNodeClick]="notifyClick"
     />
     <aside>
-      <app-asset-menu #assetMenu />
+      <app-asset-menu #assetMenu [tyrManager]="this.tyrManager" />
     </aside>
   </main>
   <app-timeline #timeline [tyrManager]="this.tyrManager" />
