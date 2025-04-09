@@ -1,19 +1,25 @@
 @import "../../../styles.scss";
 
 section {
-  visibility: hidden;
+  height: 100%;
+  width: 360px;
+
   position: absolute;
   top: 0px;
   right: 0px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100%;
 
   background-color: $dark;
   color: $white;
-  width: 360px;
+
+  transform: translateX(100%); /* start off-screen */
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s;
 
   h2 {
     height: 32px;
@@ -79,6 +85,8 @@ section {
 }
 
 section.visible {
+  transform: translateX(0);
+  opacity: 1;
   visibility: visible;
 }
 

@@ -17,6 +17,7 @@ import {
   TyrManager,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
+import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import { TimelineComponent } from 'src/app/components/timeline/timeline.componen
 export class HomeComponent {
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
   @ViewChild('assetGraph') assetGraph!: AssetGraphComponent;
+  @ViewChild('assetMenu') assetMenu!: AssetMenuComponent;
   @ViewChild('timeline') timeline!: TimelineComponent;
 
   private apiService;
@@ -120,12 +122,17 @@ export class HomeComponent {
 
   public currentDefenderSuggestions: any = {};
 
+  public notifyClick = (node: TyrGraphNode) => {};
+
   constructor(apiService: ApiService) {
     this.apiService = apiService;
     this.cursorStyle = 'default';
   }
 
   async ngAfterViewInit() {
+    this.notifyClick = (node: TyrGraphNode) => {
+      this.assetMenu.open();
+    };
     await this.assetGraph.loadSprites().then(() => {
       this.retrieveInitialData();
     });
@@ -213,6 +220,4 @@ export class HomeComponent {
     }
     return false;
   }
-
-  notifyClick(node: TyrGraphNode) {}
 }

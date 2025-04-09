@@ -34,6 +34,7 @@ import {
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() attackStepMap: any;
+  @Input() onNodeClick: (node: TyrGraphNode) => void;
 
   private networkSprite?: Texture;
   private shieldSprite?: Texture;
@@ -114,7 +115,9 @@ export class AssetGraphComponent {
         onPointerOut: () => {
           this.cursorStyle = 'grab';
         },
-        onClick: () => {},
+        onClick: (node: TyrGraphNode) => {
+          this.onNodeClick(node);
+        },
       },
       edges: {
         animated: true,
