@@ -73,6 +73,7 @@ export class AssetGraphComponent {
   private config: TyrGraphConfig;
 
   public cursorStyle = 'grab';
+  public simulationEnded = false;
 
   constructor() {
     this.selectIcon = this.selectIcon.bind(this);
@@ -117,6 +118,10 @@ export class AssetGraphComponent {
         },
         onClick: (node: TyrGraphNode) => {
           this.onNodeClick(node);
+        },
+        onFirstRendered: () => {
+          console.log('HEY');
+          this.simulationEnded = true;
         },
       },
       edges: {

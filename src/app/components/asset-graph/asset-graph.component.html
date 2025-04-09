@@ -1,5 +1,3 @@
-<div
-  #graphContainer
-  id="graphContainer"
-  [style.cursor]="this.cursorStyle"
-></div>
+<div #graphContainer id="graphContainer" [style.cursor]="this.cursorStyle">
+  <div *ngIf="!this.simulationEnded" class="loader"></div>
+</div>
