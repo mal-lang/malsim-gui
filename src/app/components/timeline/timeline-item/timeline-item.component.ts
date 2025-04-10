@@ -25,7 +25,7 @@ export class TimelineItemComponent {
       })
       .replace(',', '');
 
-    switch (this.alert.node.type) {
+    switch (this.alert.node.asset.type) {
       case 'Network':
         this.alertImageURL = '/assets/icons/network.png';
         break;

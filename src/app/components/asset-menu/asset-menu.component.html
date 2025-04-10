@@ -1,6 +1,6 @@
 <section [ngClass]="{ visible: !closed }">
   <app-cross (click)="this.close()" />
-  <h2>{{ node.name }}: {{ node.type }}</h2>
+  <h2>{{ node.asset.name }}: {{ node.asset.type }}</h2>
   <div class="menu-options">
     <p
       [ngClass]="{ selected: this.openedMenu == 'information' }"

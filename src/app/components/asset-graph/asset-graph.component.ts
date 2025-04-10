@@ -60,13 +60,9 @@ export class AssetGraphComponent {
     alphaDecay: 0.02,
     velocityDecay: 0.03,
     forces: {
-      collideRadius: 150,
-    },
-    kamadaKawaiConfig: {
-      L0: 500,
-      kFactor: 1,
-      repulsionFactor: 500,
-      maxForce: 200,
+      collideRadius: 200,
+      charge: -1000,
+      edgeDistance: 400,
     },
   };
 
@@ -88,14 +84,14 @@ export class AssetGraphComponent {
         (this.graphContainer.nativeElement as HTMLElement).offsetHeight / 2,
       marginX: 0,
       marginY: 0,
-      graphWorldWidth: 2000,
-      graphWorldHeight: 2000,
+      graphWorldWidth: 20000,
+      graphWorldHeight: 20000,
       backgroundColor: '#212529',
       nodes: {
         initialPositioning: {
           type: AvailableInitialNodePositioning.random,
-          radiusX: 200,
-          radiusY: 200,
+          radiusX: 20000,
+          radiusY: 20000,
         },
         getNodeAlertIcon: this.selectAlertIcon,
         getNodeImage: this.selectIcon,
@@ -120,7 +116,6 @@ export class AssetGraphComponent {
           this.onNodeClick(node);
         },
         onFirstRendered: () => {
-          console.log('HEY');
           this.simulationEnded = true;
         },
       },
@@ -192,7 +187,7 @@ export class AssetGraphComponent {
   }
 
   public selectIcon(node: TyrGraphNode): Texture {
-    switch (node.type) {
+    switch (node.asset.type) {
       case 'Network':
         return this.networkSprite!;
       case 'Application':

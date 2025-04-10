@@ -30,8 +30,12 @@ export class AssetMenuComponent {
     //Dummy node for init purposes
     this.node = {
       id: '',
-      name: '',
-      type: '',
+      asset: {
+        id: '',
+        name: '',
+        type: '',
+        associatedAssets: [],
+      },
       childrenIds: [],
       paths: [],
       x: 0,
@@ -63,7 +67,7 @@ export class AssetMenuComponent {
   }
 
   public selectAssetImage(node: TyrGraphNode) {
-    switch (node.type) {
+    switch (node.asset.type) {
       case 'Network':
         return '/assets/icons/network.png';
       case 'Application':
