@@ -156,12 +156,14 @@ export class HomeComponent {
       this.rewardValue = rewardValue;
 
       //Latest Attack Step
-      parseLatestAttackSteps(latestAttackSteps)[0];
-      const alert = this.tyrManager.injestLatestAttackStep(
-        parseLatestAttackSteps(latestAttackSteps)[0],
-        this.timeline.automaticUpdate
-      );
-      if (alert) this.timeline.addAlert(alert);
+      if (Object.keys(latestAttackSteps).length > 0) {
+        parseLatestAttackSteps(latestAttackSteps)[0];
+        const alert = this.tyrManager.injestLatestAttackStep(
+          parseLatestAttackSteps(latestAttackSteps)[0],
+          this.timeline.automaticUpdate
+        );
+        if (alert) this.timeline.addAlert(alert);
+      }
 
       //Defender Suggestions
       if (this.checkDefenderSuggestions(defenderSuggestions)) {
