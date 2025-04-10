@@ -6,6 +6,7 @@
       #assetGraph
       id="assetGraphContainer"
       [onNodeClick]="notifyClick"
+      (simulationStatusEmitter)="setAlertsInterval()"
     />
     <aside>
       <app-asset-menu #assetMenu [tyrManager]="this.tyrManager" />

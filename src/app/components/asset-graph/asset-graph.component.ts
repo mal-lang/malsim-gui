@@ -35,6 +35,7 @@ export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() attackStepMap: any;
   @Input() onNodeClick: (node: TyrGraphNode) => void;
+  @Output() simulationStatusEmitter = new EventEmitter<any>();
 
   private networkSprite?: Texture;
   private shieldSprite?: Texture;
@@ -117,6 +118,7 @@ export class AssetGraphComponent {
         },
         onFirstRendered: () => {
           this.simulationEnded = true;
+          this.simulationStatusEmitter.emit();
         },
       },
       edges: {
