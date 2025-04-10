@@ -36,27 +36,6 @@ export class HomeComponent {
 
   public tyrManager: TyrManager;
 
-  private clusterRules: TyrGraphClusterRule[] = [
-    {
-      type: 'Network',
-    },
-    {
-      type: 'Application',
-    },
-  ];
-
-  private layout: SimulationConfig = {
-    type: LayoutAlgorithm.force,
-    alpha: 1,
-    alphaDecay: 0.02,
-    velocityDecay: 0.03,
-    forces: {
-      charge: -500,
-      center: 1,
-      edgeDistance: 100,
-    },
-  };
-
   private condition: NodeAffectedCondition = {
     _: 'node',
     all: true,
@@ -157,11 +136,14 @@ export class HomeComponent {
         .then(async (app) => {
           graphContainer.appendChild(app.canvas);
           this.tyrManager.startLayoutSimulation();
-          this.intervalId = setInterval(() => {
-            this.retrieveAlerts();
-          }, this.intervalTime);
         });
     });
+  }
+
+  setAlertsInterval() {
+    this.intervalId = setInterval(() => {
+      this.retrieveAlerts();
+    }, this.intervalTime);
   }
 
   async retrieveAlerts() {
