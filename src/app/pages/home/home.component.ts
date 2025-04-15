@@ -151,9 +151,11 @@ export class HomeComponent {
     const tyrSuggestion: TyrSuggestion = {
       node: attackstep.asset,
       timestamp: Date.now(),
+      hidden: false,
       currentColor: 0x9fd4f2,
     };
 
+    this.tyrManager.injectPerformedSuggestion(tyrSuggestion);
     this.timeline.addPerformedSuggestion(tyrSuggestion);
   }
 

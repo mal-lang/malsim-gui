@@ -16,6 +16,8 @@
         *ngFor="let notification of notifications; let i = index"
         [notification]="notification"
         (click)="this.onTimelineItemClick(i)"
+        (mouseenter)="this.hoverItem(notification)"
+        (mouseleave)="this.unhoverItem()"
         [ngClass]="getClass(i)"
       ></app-timeline-item>
     </div>

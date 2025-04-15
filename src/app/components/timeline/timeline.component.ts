@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import {
   TyrAlert,
+  TyrGraphNode,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
@@ -23,6 +24,7 @@ import {
 })
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
+  @Input() openAssetMenu: (node: TyrGraphNode) => void;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 
@@ -156,6 +158,7 @@ export class TimelineComponent {
     this.tyrManager.moveCameraToNode(
       this.notifications[itemPosition].notification.node
     );
+    this.openAssetMenu(this.notifications[itemPosition].notification.node);
     const element = this.slideCircle.nativeElement;
     const position = 24 + 136 * itemPosition;
 
@@ -183,7 +186,6 @@ export class TimelineComponent {
   }
 
   public addPerformedSuggestion(suggestion: TyrSuggestion) {
-    console.log(suggestion);
     if (this.notifications.length > 0)
       this.draggableRightLimit += 136; //128px of item width + 8px of gap +
     else this.draggableRightLimit += 80;
@@ -210,5 +212,13 @@ export class TimelineComponent {
   public toggleAutomaticUpdate() {
     this.automaticUpdate = !this.automaticUpdate;
     if (this.automaticUpdate) this.moveSlide(this.draggableRightLimit);
+  }
+
+  public hoverItem(notification: TyrNotification) {
+    this.tyrManager.highlightNode(notification.notification.node);
+  }
+
+  public unhoverItem() {
+    this.tyrManager.unhighlightNodes();
   }
 }

@@ -14,7 +14,6 @@ export class TimelineItemComponent {
   timestamp: string;
 
   ngOnInit() {
-    console.log(this.notification.type);
     this.timestamp = new Date(this.notification.notification.timestamp)
       .toLocaleString('sv-SE', {
         year: 'numeric',

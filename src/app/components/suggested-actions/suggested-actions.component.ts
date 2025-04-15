@@ -76,9 +76,9 @@ export class SuggestedActionsComponent {
 
   async selectAction(id: number, iteration: number) {
     this.selectedActions.push({ id: id, iteration: iteration });
-    this.suggestedActions[id].weight = 'Sent';
+    this.suggestedActions[id].weight = 'SENT';
     await this.apiService.postDefenderAction(id, iteration).then(() => {
-      this.suggestedActions[id].weight = 'Performed';
+      this.suggestedActions[id].weight = 'DONE';
 
       this.onSuggestionSelected.emit(this.suggestedActions[id]);
     });

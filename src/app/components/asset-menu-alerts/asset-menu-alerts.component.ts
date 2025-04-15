@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { TyrAlertItem, TyrGraphNode } from 'tyr-js';
+import { TyrNotificationItem, TyrGraphNode, TyrNotificationType } from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-alerts',
@@ -11,7 +11,7 @@ import { TyrAlertItem, TyrGraphNode } from 'tyr-js';
 })
 export class AssetMenuAlertsComponent {
   @Input() node: TyrGraphNode;
-  @Input() alerts: TyrAlertItem[];
+  @Input() notifications: TyrNotificationItem[];
   public timestampToLocale(timestamp: number) {
     return new Date(timestamp)
       .toLocaleString('sv-SE', {
@@ -23,5 +23,27 @@ export class AssetMenuAlertsComponent {
         second: '2-digit',
       })
       .replace(',', '');
+  }
+
+  public getName(value: TyrNotificationType) {
+    switch (value) {
+      case TyrNotificationType.alert:
+        return 'Alert';
+      case TyrNotificationType.suggestion:
+        return 'Performed Suggestion';
+      default:
+        return '';
+    }
+  }
+
+  public getImage(value: TyrNotificationType) {
+    switch (value) {
+      case TyrNotificationType.alert:
+        return 'assets/icons/alert.png';
+      case TyrNotificationType.suggestion:
+        return 'assets/icons/suggestion.png';
+      default:
+        return '';
+    }
   }
 }

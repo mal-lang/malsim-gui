@@ -3,7 +3,12 @@ import { AssetMenuAlertsComponent } from '../asset-menu-alerts/asset-menu-alerts
 import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
 import { CrossComponent } from '../../utils/cross/cross.component';
-import { TyrAlertItem, TyrGraphNode, TyrManager } from 'tyr-js';
+import {
+  TyrNotificationItem,
+  TyrGraphNode,
+  TyrManager,
+  TyrNotificationType,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu',
@@ -21,7 +26,7 @@ import { TyrAlertItem, TyrGraphNode, TyrManager } from 'tyr-js';
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   public node: TyrGraphNode;
-  public alerts: TyrAlertItem[] = [];
+  public notifications: TyrNotificationItem[] = [];
   public status: string;
   public closed: boolean = true;
   public openedMenu: string = 'information';
@@ -40,7 +45,7 @@ export class AssetMenuComponent {
       paths: [],
       x: 0,
       y: 0,
-      alertList: [],
+      notificationList: [],
       nodeReward: 0,
       clusterReward: 0,
     };
@@ -52,11 +57,16 @@ export class AssetMenuComponent {
 
   public open(node: TyrGraphNode) {
     this.node = node;
-    this.alerts = this.node.alertList.filter(
-      (a) => a.alertedNode.id === this.node.id
+    this.notifications = this.node.notificationList.filter(
+      (a) => a.notifiedNode.id === this.node.id
     );
 
-    if (this.alerts.length > 0) this.status = 'alerted';
+    if (
+      this.notifications.some(
+        (n) => n.notification.type === TyrNotificationType.alert
+      )
+    )
+      this.status = 'alerted';
     else this.status = 'active';
 
     this.closed = false;

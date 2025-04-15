@@ -28,6 +28,8 @@
     *ngFor="let relatedNode of this.relatedNodes"
     class="related-asset"
     (click)="this.tyrManager.moveCameraToNode(relatedNode)"
+    (mouseenter)="this.hoverItem(relatedNode)"
+    (mouseleave)="this.unhoverItem()"
   >
     <img src="{{ selectAssetImage(relatedNode) }}" />
     <div>

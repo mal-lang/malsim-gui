@@ -15,5 +15,9 @@
       <app-asset-menu #assetMenu [tyrManager]="this.tyrManager" />
     </aside>
   </main>
-  <app-timeline #timeline [tyrManager]="this.tyrManager" />
+  <app-timeline
+    #timeline
+    [tyrManager]="this.tyrManager"
+    [openAssetMenu]="notifyClick"
+  />
 </ng-container>
