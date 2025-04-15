@@ -7,7 +7,14 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { TyrAlert, TyrManager } from 'tyr-js';
+import {
+  TyrAlert,
+  TyrGraphNode,
+  TyrManager,
+  TyrNotification,
+  TyrNotificationType,
+  TyrSuggestion,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-timeline',
@@ -17,6 +24,7 @@ import { TyrAlert, TyrManager } from 'tyr-js';
 })
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
+  @Input() openAssetMenu: (node: TyrGraphNode) => void;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 
@@ -25,11 +33,11 @@ export class TimelineComponent {
   private draggableRightLimit: number;
   private selectedAlert: number | null;
 
-  public alerts: TyrAlert[];
+  public notifications: TyrNotification[];
   public automaticUpdate: boolean;
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
-    this.alerts = [];
+    this.notifications = [];
     this.isMouseClicked = false;
     this.draggableRightLimit = 0;
     this.draggableLeftLimit = 0;
@@ -96,13 +104,13 @@ export class TimelineComponent {
       this.slideCircle.nativeElement.getBoundingClientRect().width
     );
 
-    let alerts: TyrAlert[] = [];
+    let notifications: TyrNotification[] = [];
     if (position >= 24) {
       const alertPosition = Math.trunc(position / 136);
-      alerts = this.alerts.slice(0, alertPosition + 1);
+      notifications = this.notifications.slice(0, alertPosition + 1);
     }
 
-    this.tyrManager.updateAlertVisibility(alerts);
+    this.tyrManager.updateAlertVisibility(notifications);
 
     //this.tyrManager.updateAlertVisibility();
     this.cdRef.detectChanges();
@@ -147,7 +155,10 @@ export class TimelineComponent {
   }
 
   public onTimelineItemClick(itemPosition: number) {
-    this.tyrManager.moveCameraToNode(this.alerts[itemPosition].node);
+    this.tyrManager.moveCameraToNode(
+      this.notifications[itemPosition].notification.node
+    );
+    this.openAssetMenu(this.notifications[itemPosition].notification.node);
     const element = this.slideCircle.nativeElement;
     const position = 24 + 136 * itemPosition;
 
@@ -157,10 +168,34 @@ export class TimelineComponent {
   }
 
   public addAlert(alert: TyrAlert) {
-    if (this.alerts.length > 0)
+    if (this.notifications.length > 0)
       this.draggableRightLimit += 136; //128px of item width + 8px of gap +
     else this.draggableRightLimit += 80;
-    this.alerts.push(alert);
+
+    const item: TyrNotification = {
+      type: TyrNotificationType.alert,
+      notification: alert,
+    };
+
+    this.notifications.push(item);
+    this.cdRef.detectChanges();
+    this.updateLineWidth();
+
+    if (!this.automaticUpdate) return;
+    this.moveSlide(this.draggableRightLimit);
+  }
+
+  public addPerformedSuggestion(suggestion: TyrSuggestion) {
+    if (this.notifications.length > 0)
+      this.draggableRightLimit += 136; //128px of item width + 8px of gap +
+    else this.draggableRightLimit += 80;
+
+    const item: TyrNotification = {
+      type: TyrNotificationType.suggestion,
+      notification: suggestion,
+    };
+
+    this.notifications.push(item);
     this.cdRef.detectChanges();
     this.updateLineWidth();
 
@@ -169,11 +204,21 @@ export class TimelineComponent {
   }
 
   public deleteAlert(alert: TyrAlert) {
-    this.alerts = this.alerts.filter((a) => a === alert);
+    this.notifications = this.notifications.filter(
+      (a) => a.notification === alert
+    );
   }
 
   public toggleAutomaticUpdate() {
     this.automaticUpdate = !this.automaticUpdate;
     if (this.automaticUpdate) this.moveSlide(this.draggableRightLimit);
+  }
+
+  public hoverItem(notification: TyrNotification) {
+    this.tyrManager.highlightNode(notification.notification.node);
+  }
+
+  public unhoverItem() {
+    this.tyrManager.unhighlightNodes();
   }
 }

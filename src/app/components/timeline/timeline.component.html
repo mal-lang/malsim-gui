@@ -13,9 +13,11 @@
   <div id="timeline">
     <div id="timeline-item-list">
       <app-timeline-item
-        *ngFor="let alert of alerts; let i = index"
-        [alert]="alert"
+        *ngFor="let notification of notifications; let i = index"
+        [notification]="notification"
         (click)="this.onTimelineItemClick(i)"
+        (mouseenter)="this.hoverItem(notification)"
+        (mouseleave)="this.unhoverItem()"
         [ngClass]="getClass(i)"
       ></app-timeline-item>
     </div>

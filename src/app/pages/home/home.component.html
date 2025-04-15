@@ -1,7 +1,10 @@
 <ng-container>
   <app-header [impact]="this.rewardValue.reward" />
   <main>
-    <app-suggested-actions #suggestedActions />
+    <app-suggested-actions
+      #suggestedActions
+      (onSuggestionSelected)="this.addExecutedSuggestionToTimeline($event)"
+    />
     <app-asset-graph
       #assetGraph
       id="assetGraphContainer"
@@ -12,5 +15,9 @@
       <app-asset-menu #assetMenu [tyrManager]="this.tyrManager" />
     </aside>
   </main>
-  <app-timeline #timeline [tyrManager]="this.tyrManager" />
+  <app-timeline
+    #timeline
+    [tyrManager]="this.tyrManager"
+    [openAssetMenu]="notifyClick"
+  />
 </ng-container>

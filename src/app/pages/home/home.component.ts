@@ -6,15 +6,14 @@ import { forkJoin } from 'rxjs';
 
 import {
   EdgeAffectedCondition,
-  LayoutAlgorithm,
   NodeAffectedCondition,
   parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
-  SimulationConfig,
-  TyrGraphClusterRule,
+  TyrAlert,
   TyrGraphNode,
   TyrManager,
+  TyrSuggestion,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -144,6 +143,20 @@ export class HomeComponent {
     this.intervalId = setInterval(() => {
       this.retrieveAlerts();
     }, this.intervalTime);
+  }
+
+  addExecutedSuggestionToTimeline(suggestion: any) {
+    const attackstep = this.tyrManager.findNodeAttackStepId(suggestion.stepId);
+    if (!attackstep) throw new Error('TODO');
+    const tyrSuggestion: TyrSuggestion = {
+      node: attackstep.asset,
+      timestamp: Date.now(),
+      hidden: false,
+      currentColor: 0x9fd4f2,
+    };
+
+    this.tyrManager.injectPerformedSuggestion(tyrSuggestion);
+    this.timeline.addPerformedSuggestion(tyrSuggestion);
   }
 
   async retrieveAlerts() {

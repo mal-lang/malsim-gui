@@ -5,10 +5,17 @@
     <p>SCORE</p>
   </div>
   <div class="suggested-actions-list">
-    <div class="suggested-action" *ngFor="let action of suggestedActions">
+    <div
+      class="suggested-action"
+      *ngFor="let action of suggestedActions; let i = index"
+      [ngClass]="{
+        selected: this.isSelected(i, action.iteration)
+      }"
+      (click)="this.selectAction(i, action.iteration)"
+    >
       <div class="suggested-action-information">
         <div class="suggested-action-img">
-          <img src="assets/icons/alert.png" />
+          <img src="assets/icons/suggestion.png" />
         </div>
 
         <div class="suggested-action-main">

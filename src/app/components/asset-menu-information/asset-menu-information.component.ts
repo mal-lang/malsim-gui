@@ -24,4 +24,12 @@ export class AssetMenuInformationComponent {
         .map((p) => p.destiny);
     }
   }
+
+  public hoverItem(node: TyrGraphNode) {
+    this.tyrManager.highlightNode(node);
+  }
+
+  public unhoverItem() {
+    this.tyrManager.unhighlightNodes();
+  }
 }

@@ -2,10 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
 } from '@angular/core';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
+import { TyrSuggestion } from 'tyr-js';
 
 interface SuggestedAction {
   stepId: number;
@@ -16,6 +19,11 @@ interface SuggestedAction {
   agents: Array<string>;
 }
 
+interface SelectedAction {
+  id: number;
+  iteration: number;
+}
+
 @Component({
   selector: 'app-suggested-actions',
   templateUrl: './suggested-actions.component.html',
@@ -24,7 +32,8 @@ interface SuggestedAction {
 })
 export class SuggestedActionsComponent {
   suggestedActions: Array<SuggestedAction> = [];
-  selectedAction: number | null = null;
+  selectedActions: SelectedAction[];
+  @Output() onSuggestionSelected = new EventEmitter<any>();
 
   constructor(
     private apiService: ApiService,
@@ -33,7 +42,7 @@ export class SuggestedActionsComponent {
 
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
-    this.selectedAction = null;
+    this.selectedActions = [];
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
         let index = actions.findIndex(
@@ -65,8 +74,19 @@ export class SuggestedActionsComponent {
     this.cdRef.detectChanges();
   }
 
-  selectAction(id: number, iteration: number) {
-    this.selectedAction = id;
-    this.apiService.postDefenderAction(id, iteration).subscribe(() => {});
+  async selectAction(id: number, iteration: number) {
+    this.selectedActions.push({ id: id, iteration: iteration });
+    this.suggestedActions[id].weight = 'SENT';
+    await this.apiService.postDefenderAction(id, iteration).then(() => {
+      this.suggestedActions[id].weight = 'DONE';
+
+      this.onSuggestionSelected.emit(this.suggestedActions[id]);
+    });
+  }
+
+  isSelected(id: number, iteration: number) {
+    return this.selectedActions.some(
+      (a) => a.id === id && a.iteration === iteration
+    );
   }
 }
