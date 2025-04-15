@@ -56,12 +56,19 @@ export class ApiService {
     return this.http.get(this.apiUrl + 'enabled_defense_steps');
   }
 
-  postDefenderAction(stepId: number, iteration: number) {
+  async postDefenderAction(stepId: number, iteration: number) {
     this.chosenAlternative = stepId;
 
-    return this.http.post(this.apiUrl + 'defender_action', {
-      iteration: iteration,
-      node_id: stepId,
+    return await fetch(this.apiUrl + 'defender_action', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Or 'application/x-www-form-urlencoded', etc.
+        // Add any other headers as needed (e.g., Authorization)
+      },
+      body: JSON.stringify({
+        iteration: iteration,
+        node_id: stepId,
+      }), // Convert JavaScript object to JSON string
     });
   }
 

@@ -1,7 +1,15 @@
-<div class="timeline-item" [class]="alert.status">
+<div
+  class="timeline-item"
+  [class]="{
+    alert: this.notification.type === 0,
+    suggestion: this.notification.type === 1,
+  }"
+>
   <img class="timeline-item-image" [src]="this.alertImageURL" />
   <div class="timeline-item-content">
-    <p class="timeline-item-name">{{ this.alert.node.asset.name }}</p>
+    <p class="timeline-item-name">
+      {{ this.notification.notification.node.asset.name }}
+    </p>
     <p class="timeline-item-timestamp">{{ this.timestamp }}</p>
   </div>
 </div>

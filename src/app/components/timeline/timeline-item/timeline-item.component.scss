@@ -9,18 +9,22 @@
   cursor: pointer;
   position: relative;
 
-  &.alerted {
+  &.alert {
     background-color: $timeline-alert;
   }
-  &.alerted:hover {
+  &.alert:hover {
     transition: ease-out 0.1s;
     background-color: $alert;
   }
+  &.suggestion {
+    background-color: $suggestion;
+  }
+  &.suggestion:hover {
+    transition: ease-out 0.1s;
+    background-color: $timeline-suggestion;
+  }
   &.seen {
     background-color: $timeline-alert;
-  }
-  &.controlled {
-    background-color: $timeline-controlled;
   }
 }
 
