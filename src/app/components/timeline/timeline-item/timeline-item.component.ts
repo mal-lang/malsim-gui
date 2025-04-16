@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TyrAlert, TyrNotification } from 'tyr-js';
+import { TyrNotification } from 'tyr-js';
 
 @Component({
   selector: 'app-timeline-item',
@@ -14,7 +14,7 @@ export class TimelineItemComponent {
   timestamp: string;
 
   ngOnInit() {
-    this.timestamp = new Date(this.notification.notification.timestamp)
+    this.timestamp = new Date(this.notification.timestamp)
       .toLocaleString('sv-SE', {
         year: 'numeric',
         month: '2-digit',
@@ -25,7 +25,7 @@ export class TimelineItemComponent {
       })
       .replace(',', '');
 
-    switch (this.notification.notification.node.asset.type) {
+    switch (this.notification.node.asset.type) {
       case 'Network':
         this.alertImageURL = '/assets/icons/network.png';
         break;

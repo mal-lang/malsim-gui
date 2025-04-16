@@ -8,12 +8,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  TyrAlert,
   TyrGraphNode,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
-  TyrSuggestion,
 } from 'tyr-js';
 
 @Component({
@@ -155,10 +153,8 @@ export class TimelineComponent {
   }
 
   public onTimelineItemClick(itemPosition: number) {
-    this.tyrManager.moveCameraToNode(
-      this.notifications[itemPosition].notification.node
-    );
-    this.openAssetMenu(this.notifications[itemPosition].notification.node);
+    this.tyrManager.moveCameraToNode(this.notifications[itemPosition].node);
+    this.openAssetMenu(this.notifications[itemPosition].node);
     const element = this.slideCircle.nativeElement;
     const position = 24 + 136 * itemPosition;
 
@@ -167,17 +163,12 @@ export class TimelineComponent {
     this.moveSlide(position);
   }
 
-  public addAlert(alert: TyrAlert) {
+  public addAlert(alert: TyrNotification) {
     if (this.notifications.length > 0)
       this.draggableRightLimit += 136; //128px of item width + 8px of gap +
     else this.draggableRightLimit += 80;
 
-    const item: TyrNotification = {
-      type: TyrNotificationType.alert,
-      notification: alert,
-    };
-
-    this.notifications.push(item);
+    this.notifications.push(alert);
     this.cdRef.detectChanges();
     this.updateLineWidth();
 
@@ -185,17 +176,12 @@ export class TimelineComponent {
     this.moveSlide(this.draggableRightLimit);
   }
 
-  public addPerformedSuggestion(suggestion: TyrSuggestion) {
+  public addPerformedSuggestion(suggestion: TyrNotification) {
     if (this.notifications.length > 0)
       this.draggableRightLimit += 136; //128px of item width + 8px of gap +
     else this.draggableRightLimit += 80;
 
-    const item: TyrNotification = {
-      type: TyrNotificationType.suggestion,
-      notification: suggestion,
-    };
-
-    this.notifications.push(item);
+    this.notifications.push(suggestion);
     this.cdRef.detectChanges();
     this.updateLineWidth();
 
@@ -203,10 +189,8 @@ export class TimelineComponent {
     this.moveSlide(this.draggableRightLimit);
   }
 
-  public deleteAlert(alert: TyrAlert) {
-    this.notifications = this.notifications.filter(
-      (a) => a.notification === alert
-    );
+  public deleteAlert(alert: TyrNotification) {
+    this.notifications = this.notifications.filter((a) => a === alert);
   }
 
   public toggleAutomaticUpdate() {
@@ -215,7 +199,7 @@ export class TimelineComponent {
   }
 
   public hoverItem(notification: TyrNotification) {
-    this.tyrManager.highlightNode(notification.notification.node);
+    this.tyrManager.highlightNode(notification.node);
   }
 
   public unhoverItem() {
