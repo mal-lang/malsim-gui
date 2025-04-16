@@ -1,6 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { TyrNotificationItem, TyrGraphNode, TyrNotificationType } from 'tyr-js';
+import {
+  TyrNotificationItem,
+  TyrGraphNode,
+  TyrNotificationType,
+  TyrNotification,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-alerts',
@@ -36,12 +41,22 @@ export class AssetMenuAlertsComponent {
     }
   }
 
-  public getImage(value: TyrNotificationType) {
-    switch (value) {
+  public getImage(notification: TyrNotification) {
+    switch (notification.type) {
       case TyrNotificationType.alert:
         return 'assets/icons/alert.png';
       case TyrNotificationType.suggestion:
-        return 'assets/icons/suggestion.png';
+        return this.getSuggestionImage(notification);
+      default:
+        return '';
+    }
+  }
+
+  private getSuggestionImage(suggestion: TyrNotification) {
+    switch (suggestion.description) {
+      //TODO
+      case 'Shutdown machine':
+        return 'assets/icons/suggestions/suggestion-turnoff.png';
       default:
         return '';
     }

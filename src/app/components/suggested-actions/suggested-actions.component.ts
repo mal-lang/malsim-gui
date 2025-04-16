@@ -3,12 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
   Output,
 } from '@angular/core';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
-import { TyrSuggestion } from 'tyr-js';
 
 interface SuggestedAction {
   stepId: number;
@@ -17,6 +15,7 @@ interface SuggestedAction {
   iteration: number;
   system: string;
   agents: Array<string>;
+  image: string;
 }
 
 interface SelectedAction {
@@ -64,6 +63,7 @@ export class SuggestedActionsComponent {
               description: defenderSuggestion.action.description,
               system: defenderSuggestion.action.system,
               agents: [agent],
+              image: this.selectActionImage(defenderSuggestion),
             });
           }
         }
@@ -88,5 +88,16 @@ export class SuggestedActionsComponent {
     return this.selectedActions.some(
       (a) => a.id === id && a.iteration === iteration
     );
+  }
+
+  selectActionImage(suggestion: any): string {
+    console.log(suggestion.description);
+    switch (suggestion.action.description) {
+      //TODO
+      case 'Shutdown machine':
+        return 'assets/icons/suggestions/turnoff.png';
+      default:
+        return '';
+    }
   }
 }

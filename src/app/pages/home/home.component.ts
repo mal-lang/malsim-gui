@@ -10,10 +10,10 @@ import {
   parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
-  TyrAlert,
   TyrGraphNode,
   TyrManager,
-  TyrSuggestion,
+  TyrNotification,
+  TyrNotificationType,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -148,11 +148,14 @@ export class HomeComponent {
   addExecutedSuggestionToTimeline(suggestion: any) {
     const attackstep = this.tyrManager.findNodeAttackStepId(suggestion.stepId);
     if (!attackstep) throw new Error('TODO');
-    const tyrSuggestion: TyrSuggestion = {
+
+    const tyrSuggestion: TyrNotification = {
       node: attackstep.asset,
+      type: TyrNotificationType.suggestion,
       timestamp: Date.now(),
       hidden: false,
       currentColor: 0x9fd4f2,
+      description: suggestion.description,
     };
 
     this.tyrManager.injectPerformedSuggestion(tyrSuggestion);

@@ -6,24 +6,19 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { ApiService } from 'src/app/services/api-service/api-service.service';
 import {
   Assets,
   AvailableInitialNodePositioning,
   FillInput,
   LayoutAlgorithm,
-  Model,
-  parseAssetModel,
   SimulationConfig,
   TextStyleAlign,
   TextStyleFontWeight,
   Texture,
-  TyrAlert,
   TyrAlertStatus,
   TyrGraphClusterRule,
   TyrGraphConfig,
   TyrGraphNode,
-  TyrManager,
 } from 'tyr-js';
 
 @Component({
