@@ -74,6 +74,7 @@ export class AssetMenuComponent {
 
   public close() {
     this.closed = true;
+    this.tyrManager.unhighlightNodeBorders();
   }
 
   public selectAssetImage(node: TyrGraphNode) {

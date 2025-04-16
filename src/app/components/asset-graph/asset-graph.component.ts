@@ -93,6 +93,7 @@ export class AssetGraphComponent {
         getNodeImage: this.selectIcon,
         imageMargin: 0.5,
         textInvisible: false,
+        highlightColor: 0xffa100,
         textConfig: {
           fontFamily: 'arial',
           fontSize: 40,
