@@ -19,6 +19,7 @@ import {
   TyrGraphClusterRule,
   TyrGraphConfig,
   TyrGraphNode,
+  TyrGraphNodeStatus,
 } from 'tyr-js';
 
 @Component({
@@ -40,6 +41,9 @@ export class AssetGraphComponent {
   private applicationSprite?: Texture;
   private alertSprite?: Texture;
   private controlledSprite?: Texture;
+  private inactiveSprite?: Texture;
+  private disconnectedSprite?: Texture;
+  private userOffSprite?: Texture;
 
   private clusterRules: TyrGraphClusterRule[] = [
     {
@@ -69,6 +73,7 @@ export class AssetGraphComponent {
 
   constructor() {
     this.selectIcon = this.selectIcon.bind(this);
+    this.getNodeStatusIcon = this.getNodeStatusIcon.bind(this);
     this.selectAlertIcon = this.selectAlertIcon.bind(this);
   }
 
@@ -90,6 +95,7 @@ export class AssetGraphComponent {
           radiusY: 20000,
         },
         getNodeAlertIcon: this.selectAlertIcon,
+        getNodeStatusIcon: this.getNodeStatusIcon,
         getNodeImage: this.selectIcon,
         imageMargin: 0.5,
         textInvisible: false,
@@ -136,6 +142,9 @@ export class AssetGraphComponent {
       application: '/assets/icons/app.png',
       alert: '/assets/icons/alert.png',
       controlled: '/assets/icons/controlled.png',
+      disconnected: '/assets/icons/suggestions/suggestion-disconnect.png',
+      turnoff: '/assets/icons/suggestions/suggestion-turnoff.png',
+      user: '/assets/icons/suggestions/suggestion-user.png',
     };
 
     // Step 1: Add assets to the cache
@@ -148,6 +157,9 @@ export class AssetGraphComponent {
       { alias: 'application', src: assetUrls.application },
       { alias: 'alert', src: assetUrls.alert },
       { alias: 'controlled', src: assetUrls.controlled },
+      { alias: 'disconnected', src: assetUrls.disconnected },
+      { alias: 'turnoff', src: assetUrls.turnoff },
+      { alias: 'user', src: assetUrls.user },
     ]);
 
     // Step 2: Load all assets in parallel
@@ -160,6 +172,9 @@ export class AssetGraphComponent {
       applicationSprite,
       alertSprite,
       controlledSprite,
+      disconnectedSprite,
+      turnoffSprite,
+      userSprite,
     ] = await Promise.all([
       Assets.load('network'),
       Assets.load('shield'),
@@ -169,6 +184,9 @@ export class AssetGraphComponent {
       Assets.load('application'),
       Assets.load('alert'),
       Assets.load('controlled'),
+      Assets.load('disconnected'),
+      Assets.load('turnoff'),
+      Assets.load('user'),
     ]);
 
     // Step 3: Assign them to class properties
@@ -180,7 +198,11 @@ export class AssetGraphComponent {
     this.applicationSprite = applicationSprite;
     this.alertSprite = alertSprite;
     this.controlledSprite = controlledSprite;
+    this.disconnectedSprite = disconnectedSprite;
+    this.inactiveSprite = turnoffSprite;
+    this.userOffSprite = userSprite;
 
+    console.log(this.inactiveSprite);
     console.log('✅ All assets added & loaded successfully!');
   }
 
@@ -207,6 +229,17 @@ export class AssetGraphComponent {
         return this.alertSprite!;
       case TyrAlertStatus.controlled:
         return this.controlledSprite!;
+      default:
+        return this.alertSprite!;
+    }
+  }
+
+  public getNodeStatusIcon(status: TyrGraphNodeStatus): Texture {
+    switch (status) {
+      case TyrGraphNodeStatus.inactive:
+        return this.inactiveSprite!;
+      case TyrGraphNodeStatus.disconnected:
+        return this.disconnectedSprite!;
       default:
         return this.alertSprite!;
     }

@@ -11,6 +11,7 @@ import {
   RendererRule,
   RendererRuleScope,
   TyrGraphNode,
+  TyrGraphNodeStatus,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
@@ -85,13 +86,6 @@ export class HomeComponent {
     targetType: 'Network',
   };
 
-  private edgeRule2: RendererRule = {
-    scope: RendererRuleScope.edge,
-    affectedCondition: this.condition3,
-    color: 'orange',
-    width: 2,
-  };
-
   public cursorStyle = 'default';
   public rewardValue: { reward: number; iteration: number } = {
     reward: 0,
@@ -125,7 +119,7 @@ export class HomeComponent {
         receivedModel,
         attackGraph.attack_steps,
         this.assetGraph.getConfig(),
-        [this.nodeRule, this.nodeRule2, this.edgeRule, this.edgeRule2]
+        [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
       const graphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
@@ -158,6 +152,16 @@ export class HomeComponent {
       description: suggestion.description,
     };
 
+    //TODO: Expand
+    switch (suggestion.description) {
+      case 'Shutdown machine':
+        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        break;
+      default:
+        break;
+    }
+
+    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
     this.tyrManager.injectPerformedSuggestion(tyrSuggestion);
     this.timeline.addPerformedSuggestion(tyrSuggestion);
   }

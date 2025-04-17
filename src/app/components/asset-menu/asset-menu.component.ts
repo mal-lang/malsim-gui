@@ -8,6 +8,10 @@ import {
   TyrGraphNode,
   TyrManager,
   TyrNotificationType,
+  TyrGraphNodeStatus,
+  getEmptyNodeStyle,
+  getEmptyNodeConnectionInfo,
+  getEmptyNodeCluster,
 } from 'tyr-js';
 
 @Component({
@@ -35,19 +39,22 @@ export class AssetMenuComponent {
     //Dummy node for init purposes
     this.node = {
       id: '',
+      status: TyrGraphNodeStatus.active,
       asset: {
         id: '',
         name: '',
         type: '',
         associatedAssets: [],
       },
-      childrenIds: [],
-      paths: [],
       x: 0,
       y: 0,
+      originalX: 0,
+      originalY: 0,
       notificationList: [],
       nodeReward: 0,
-      clusterReward: 0,
+      style: getEmptyNodeStyle(),
+      connections: getEmptyNodeConnectionInfo(),
+      cluster: getEmptyNodeCluster(),
     };
   }
 
@@ -57,24 +64,15 @@ export class AssetMenuComponent {
 
   public open(node: TyrGraphNode) {
     this.node = node;
-    this.notifications = this.node.notificationList.filter(
-      (a) => a.notifiedNode.id === this.node.id
-    );
-
-    if (
-      this.notifications.some(
-        (n) => n.notification.type === TyrNotificationType.alert
-      )
-    )
-      this.status = 'alerted';
-    else this.status = 'active';
+    this.status = TyrGraphNodeStatus[node.status];
 
     this.closed = false;
   }
 
   public close() {
     this.closed = true;
-    this.tyrManager.unhighlightNodeBorders();
+    this.node.style.selected = false;
+    this.tyrManager.updateNodesStatusStyle([this.node]);
   }
 
   public selectAssetImage(node: TyrGraphNode) {
