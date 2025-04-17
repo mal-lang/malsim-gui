@@ -64,7 +64,7 @@ export class AssetMenuComponent {
 
   public open(node: TyrGraphNode) {
     this.node = node;
-    this.status = TyrGraphNodeStatus[node.status];
+    this.status = TyrGraphNodeStatus[node.style.timelineStatus];
 
     this.closed = false;
   }

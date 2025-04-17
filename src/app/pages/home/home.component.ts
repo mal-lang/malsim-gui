@@ -155,6 +155,7 @@ export class HomeComponent {
     //TODO: Expand
     switch (suggestion.description) {
       case 'Shutdown machine':
+        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
         break;
       default:
@@ -162,7 +163,10 @@ export class HomeComponent {
     }
 
     this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
-    this.tyrManager.injectPerformedSuggestion(tyrSuggestion);
+    this.tyrManager.injectPerformedSuggestion(
+      tyrSuggestion,
+      this.timeline.automaticUpdate
+    );
     this.timeline.addPerformedSuggestion(tyrSuggestion);
   }
 
