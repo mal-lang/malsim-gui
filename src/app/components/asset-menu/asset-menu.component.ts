@@ -4,14 +4,13 @@ import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
 import { CrossComponent } from '../../utils/cross/cross.component';
 import {
-  TyrNotificationItem,
   TyrGraphNode,
   TyrManager,
-  TyrNotificationType,
   TyrGraphNodeStatus,
   getEmptyNodeStyle,
   getEmptyNodeConnectionInfo,
   getEmptyNodeCluster,
+  TyrNotification,
 } from 'tyr-js';
 
 @Component({
@@ -30,7 +29,7 @@ import {
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   public node: TyrGraphNode;
-  public notifications: TyrNotificationItem[] = [];
+  public notifications: TyrNotification[] = [];
   public status: string;
   public closed: boolean = true;
   public openedMenu: string = 'information';

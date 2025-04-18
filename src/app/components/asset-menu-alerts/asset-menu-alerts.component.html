@@ -1,16 +1,16 @@
 <div *ngFor="let n of this.notifications" class="asset-menu-alert">
-  <img src="{{ this.getImage(n.notification) }}" />
+  <img src="{{ this.getImage(n) }}" />
   <div class="alert-info">
-    <p>{{ this.getName(n.notification.type) }}</p>
-    <p *ngIf="n.notification.type === 1">
-      {{ n.notification.description }}
+    <p>{{ this.getName(n.type) }}</p>
+    <p *ngIf="n.type === 1">
+      {{ n.description }}
     </p>
     <p>
       System: <span>{{ this.node.asset.name }}</span>
     </p>
   </div>
   <p class="timestamp">
-    {{ this.timestampToLocale(n.notification.timestamp) }}
+    {{ this.timestampToLocale(n.timestamp) }}
   </p>
 </div>
 <h6 *ngIf="notifications.length === 0" class="empty-alerts">
