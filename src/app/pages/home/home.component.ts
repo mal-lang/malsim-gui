@@ -150,6 +150,7 @@ export class HomeComponent {
       hidden: false,
       currentColor: 0x9fd4f2,
       description: suggestion.description,
+      otherAffectedNodes: [],
     };
 
     //TODO: Expand
@@ -157,6 +158,9 @@ export class HomeComponent {
       case 'Shutdown machine':
         tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
+          tyrSuggestion.node
+        );
         break;
       default:
         break;
@@ -168,6 +172,19 @@ export class HomeComponent {
       this.timeline.automaticUpdate
     );
     this.timeline.addPerformedSuggestion(tyrSuggestion);
+  }
+
+  private getApplicationNodeChildren(node: TyrGraphNode) {
+    let list = node.connections.childrenIds;
+    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+
+    //Also add identity children nodes (This is a workaround, wont work for all nodes)
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].asset.type == 'Identity') {
+        list.push(...nodes[i].connections.childrenIds);
+      }
+    }
+    return list;
   }
 
   async retrieveAlerts() {
