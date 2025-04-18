@@ -30,7 +30,6 @@ export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   public node: TyrGraphNode;
   public notifications: TyrNotification[] = [];
-  public status: string;
   public closed: boolean = true;
   public openedMenu: string = 'information';
 
@@ -63,8 +62,6 @@ export class AssetMenuComponent {
 
   public open(node: TyrGraphNode) {
     this.node = node;
-    this.status = TyrGraphNodeStatus[node.style.timelineStatus];
-
     this.closed = false;
   }
 

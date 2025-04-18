@@ -11,7 +11,6 @@ import { TyrGraphNode, TyrNotificationType, TyrNotification } from 'tyr-js';
 })
 export class AssetMenuAlertsComponent {
   @Input() node: TyrGraphNode;
-  @Input() notifications: TyrNotification[];
   public timestampToLocale(timestamp: number) {
     return new Date(timestamp)
       .toLocaleString('sv-SE', {

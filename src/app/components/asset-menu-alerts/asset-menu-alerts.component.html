@@ -1,4 +1,4 @@
-<div *ngFor="let n of this.notifications" class="asset-menu-alert">
+<div *ngFor="let n of this.node.notificationList" class="asset-menu-alert">
   <img src="{{ this.getImage(n) }}" />
   <div class="alert-info">
     <p>{{ this.getName(n.type) }}</p>
@@ -13,6 +13,6 @@
     {{ this.timestampToLocale(n.timestamp) }}
   </p>
 </div>
-<h6 *ngIf="notifications.length === 0" class="empty-alerts">
+<h6 *ngIf="this.node.notificationList.length === 0" class="empty-alerts">
   This node has not been alerted.
 </h6>

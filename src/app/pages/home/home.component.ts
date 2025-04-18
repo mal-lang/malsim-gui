@@ -162,6 +162,13 @@ export class HomeComponent {
           tyrSuggestion.node
         );
         break;
+      case 'Lockout user':
+        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
+          tyrSuggestion.node
+        );
+        break;
       default:
         break;
     }
@@ -172,6 +179,19 @@ export class HomeComponent {
       this.timeline.automaticUpdate
     );
     this.timeline.addPerformedSuggestion(tyrSuggestion);
+  }
+
+  private getIdentityNodeChildren(node: TyrGraphNode) {
+    let list = node.connections.childrenIds;
+    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+
+    //Also add identity children nodes (This is a workaround, wont work for all nodes)
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].asset.type != 'Application') {
+        list.push(...nodes[i].connections.childrenIds);
+      }
+    }
+    return list;
   }
 
   private getApplicationNodeChildren(node: TyrGraphNode) {
