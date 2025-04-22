@@ -16,10 +16,11 @@ import {
   TextStyleFontWeight,
   Texture,
   TyrAlertStatus,
-  TyrGraphClusterRule,
+  TyrAssetGraphNode,
+  TyrAssetGraphClusterRule,
   TyrGraphConfig,
   TyrGraphNode,
-  TyrGraphNodeStatus,
+  TyrAssetGraphNodeStatus,
 } from 'tyr-js';
 
 @Component({
@@ -30,7 +31,7 @@ import {
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() attackStepMap: any;
-  @Input() onNodeClick: (node: TyrGraphNode) => void;
+  @Input() onNodeClick: (node: TyrAssetGraphNode) => void;
   @Output() simulationStatusEmitter = new EventEmitter<any>();
 
   private networkSprite?: Texture;
@@ -45,7 +46,7 @@ export class AssetGraphComponent {
   private disconnectedSprite?: Texture;
   private userOffSprite?: Texture;
 
-  private clusterRules: TyrGraphClusterRule[] = [
+  private clusterRules: TyrAssetGraphClusterRule[] = [
     {
       type: 'Network',
     },
@@ -115,7 +116,7 @@ export class AssetGraphComponent {
         onPointerOut: () => {
           this.cursorStyle = 'grab';
         },
-        onClick: (node: TyrGraphNode) => {
+        onClick: (node: TyrAssetGraphNode) => {
           this.onNodeClick(node);
         },
         onFirstRendered: () => {
@@ -206,7 +207,7 @@ export class AssetGraphComponent {
     console.log('✅ All assets added & loaded successfully!');
   }
 
-  public selectIcon(node: TyrGraphNode): Texture {
+  public selectIcon(node: TyrAssetGraphNode): Texture {
     switch (node.asset.type) {
       case 'Network':
         return this.networkSprite!;
@@ -234,11 +235,11 @@ export class AssetGraphComponent {
     }
   }
 
-  public getNodeStatusIcon(status: TyrGraphNodeStatus): Texture {
+  public getNodeStatusIcon(status: TyrAssetGraphNodeStatus): Texture {
     switch (status) {
-      case TyrGraphNodeStatus.inactive:
+      case TyrAssetGraphNodeStatus.inactive:
         return this.inactiveSprite!;
-      case TyrGraphNodeStatus.disconnected:
+      case TyrAssetGraphNodeStatus.disconnected:
         return this.disconnectedSprite!;
       default:
         return this.alertSprite!;

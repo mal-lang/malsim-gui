@@ -10,8 +10,9 @@ import {
   parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
+  TyrAssetGraphNode,
+  TyrAssetGraphNodeStatus,
   TyrGraphNode,
-  TyrGraphNodeStatus,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
@@ -94,7 +95,7 @@ export class HomeComponent {
 
   public currentDefenderSuggestions: any = {};
 
-  public notifyClick = (node: TyrGraphNode) => {};
+  public notifyClick = (node: TyrAssetGraphNode) => {};
 
   constructor(apiService: ApiService) {
     this.apiService = apiService;
@@ -102,7 +103,7 @@ export class HomeComponent {
   }
 
   async ngAfterViewInit() {
-    this.notifyClick = (node: TyrGraphNode) => {
+    this.notifyClick = (node: TyrAssetGraphNode) => {
       this.assetMenu.open(node);
     };
     await this.assetGraph.loadSprites().then(() => {
@@ -156,15 +157,15 @@ export class HomeComponent {
     //TODO: Expand
     switch (suggestion.description) {
       case 'Shutdown machine':
-        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
           tyrSuggestion.node
         );
         break;
       case 'Lockout user':
-        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
           tyrSuggestion.node
         );
@@ -184,7 +185,7 @@ export class HomeComponent {
     this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
   }
 
-  private getIdentityNodeChildren(node: TyrGraphNode) {
+  private getIdentityNodeChildren(node: TyrAssetGraphNode) {
     let list = node.connections.childrenIds;
     const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
 
@@ -197,7 +198,7 @@ export class HomeComponent {
     return list;
   }
 
-  private getApplicationNodeChildren(node: TyrGraphNode) {
+  private getApplicationNodeChildren(node: TyrAssetGraphNode) {
     let list = node.connections.childrenIds;
     const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
 

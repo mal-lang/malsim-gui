@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  TyrAssetGraphNode,
   TyrGraphNode,
   TyrManager,
   TyrNotification,
@@ -22,7 +23,7 @@ import {
 })
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
-  @Input() openAssetMenu: (node: TyrGraphNode) => void;
+  @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 

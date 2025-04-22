@@ -1,6 +1,10 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { TyrGraphNode, TyrNotificationType, TyrNotification } from 'tyr-js';
+import {
+  TyrNotificationType,
+  TyrNotification,
+  TyrAssetGraphNode,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-alerts',
@@ -10,7 +14,7 @@ import { TyrGraphNode, TyrNotificationType, TyrNotification } from 'tyr-js';
   styleUrl: './asset-menu-alerts.component.scss',
 })
 export class AssetMenuAlertsComponent {
-  @Input() node: TyrGraphNode;
+  @Input() node: TyrAssetGraphNode;
   public timestampToLocale(timestamp: number) {
     return new Date(timestamp)
       .toLocaleString('sv-SE', {
