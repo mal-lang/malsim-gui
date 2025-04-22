@@ -173,12 +173,15 @@ export class HomeComponent {
         break;
     }
 
-    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
     this.tyrManager.injectPerformedSuggestion(
       tyrSuggestion,
       this.timeline.automaticUpdate
     );
     this.timeline.addPerformedSuggestion(tyrSuggestion);
+
+    if (this.timeline.automaticUpdate)
+      tyrSuggestion.node.style.timelineStatus = tyrSuggestion.node.status;
+    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
   }
 
   private getIdentityNodeChildren(node: TyrGraphNode) {
