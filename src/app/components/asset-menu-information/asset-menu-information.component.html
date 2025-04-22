@@ -11,7 +11,7 @@
     <p>Status</p>
     <div class="divider"></div>
     <p>{{ this.node.asset.type }}</p>
-    <p [class]="this.status">{{ this.status }}</p>
+    <p [class]="this.getStatus()">{{ this.getStatus() }}</p>
   </div>
   <div class="cia grid">
     <p>Confidentiality</p>

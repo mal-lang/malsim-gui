@@ -1,6 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { TyrGraphNode, TyrManager } from 'tyr-js';
+import {
+  TyrGraphNode,
+  TyrGraphNodeStatus,
+  TyrManager,
+  TyrNotificationType,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-information',
@@ -11,18 +16,23 @@ import { TyrGraphNode, TyrManager } from 'tyr-js';
 })
 export class AssetMenuInformationComponent {
   @Input() node: TyrGraphNode;
-  @Input() status: string;
+
   @Input() tyrManager: TyrManager;
   @Input() selectAssetImage: (node: TyrGraphNode) => void;
   public relatedNodes: TyrGraphNode[];
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['node']) {
-      const ids = this.node.childrenIds;
-      this.relatedNodes = this.node.paths
+      if (!this.node) return;
+      const ids = this.node.connections.childrenIds;
+      this.relatedNodes = this.node.connections.paths
         .filter((p) => ids.includes(p.destiny.id))
         .map((p) => p.destiny);
     }
+  }
+
+  public getStatus() {
+    return TyrGraphNodeStatus[this.node.status];
   }
 
   public hoverItem(node: TyrGraphNode) {

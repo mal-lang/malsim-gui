@@ -4,10 +4,13 @@ import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
 import { CrossComponent } from '../../utils/cross/cross.component';
 import {
-  TyrNotificationItem,
   TyrGraphNode,
   TyrManager,
-  TyrNotificationType,
+  TyrGraphNodeStatus,
+  getEmptyNodeStyle,
+  getEmptyNodeConnectionInfo,
+  getEmptyNodeCluster,
+  TyrNotification,
 } from 'tyr-js';
 
 @Component({
@@ -26,8 +29,7 @@ import {
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   public node: TyrGraphNode;
-  public notifications: TyrNotificationItem[] = [];
-  public status: string;
+  public notifications: TyrNotification[] = [];
   public closed: boolean = true;
   public openedMenu: string = 'information';
 
@@ -35,19 +37,22 @@ export class AssetMenuComponent {
     //Dummy node for init purposes
     this.node = {
       id: '',
+      status: TyrGraphNodeStatus.active,
       asset: {
         id: '',
         name: '',
         type: '',
         associatedAssets: [],
       },
-      childrenIds: [],
-      paths: [],
       x: 0,
       y: 0,
+      originalX: 0,
+      originalY: 0,
       notificationList: [],
       nodeReward: 0,
-      clusterReward: 0,
+      style: getEmptyNodeStyle(),
+      connections: getEmptyNodeConnectionInfo(),
+      cluster: getEmptyNodeCluster(),
     };
   }
 
@@ -57,23 +62,13 @@ export class AssetMenuComponent {
 
   public open(node: TyrGraphNode) {
     this.node = node;
-    this.notifications = this.node.notificationList.filter(
-      (a) => a.notifiedNode.id === this.node.id
-    );
-
-    if (
-      this.notifications.some(
-        (n) => n.notification.type === TyrNotificationType.alert
-      )
-    )
-      this.status = 'alerted';
-    else this.status = 'active';
-
     this.closed = false;
   }
 
   public close() {
     this.closed = true;
+    this.node.style.selected = false;
+    this.tyrManager.updateNodesStatusStyle([this.node]);
   }
 
   public selectAssetImage(node: TyrGraphNode) {

@@ -54,6 +54,10 @@
         color: $green;
       }
 
+      p.inactive {
+        color: $alert;
+      }
+
       p.alerted {
         color: $warning;
       }

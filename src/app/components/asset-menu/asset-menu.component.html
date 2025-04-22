@@ -1,6 +1,6 @@
 <section [ngClass]="{ visible: !closed }">
   <app-cross (click)="this.close()" />
-  <h2>{{ node.asset.name }}: {{ node.asset.type }}</h2>
+  <h2>{{ node!.asset.name }}: {{ node.asset.type }}</h2>
   <div class="menu-options">
     <p
       [ngClass]="{ selected: this.openedMenu == 'information' }"
@@ -20,12 +20,10 @@
       *ngIf="this.openedMenu == 'information'"
       [node]="this.node"
       [tyrManager]="this.tyrManager"
-      [status]="this.status"
       [selectAssetImage]="this.selectAssetImage"
     />
     <app-asset-menu-alerts
       *ngIf="this.openedMenu == 'alerts'"
-      [notifications]="this.notifications"
       [node]="this.node"
     />
   </div>

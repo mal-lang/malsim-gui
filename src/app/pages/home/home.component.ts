@@ -11,6 +11,7 @@ import {
   RendererRule,
   RendererRuleScope,
   TyrGraphNode,
+  TyrGraphNodeStatus,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
@@ -85,13 +86,6 @@ export class HomeComponent {
     targetType: 'Network',
   };
 
-  private edgeRule2: RendererRule = {
-    scope: RendererRuleScope.edge,
-    affectedCondition: this.condition3,
-    color: 'orange',
-    width: 2,
-  };
-
   public cursorStyle = 'default';
   public rewardValue: { reward: number; iteration: number } = {
     reward: 0,
@@ -125,7 +119,7 @@ export class HomeComponent {
         receivedModel,
         attackGraph.attack_steps,
         this.assetGraph.getConfig(),
-        [this.nodeRule, this.nodeRule2, this.edgeRule, this.edgeRule2]
+        [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
       const graphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
@@ -156,10 +150,64 @@ export class HomeComponent {
       hidden: false,
       currentColor: 0x9fd4f2,
       description: suggestion.description,
+      otherAffectedNodes: [],
     };
 
-    this.tyrManager.injectPerformedSuggestion(tyrSuggestion);
+    //TODO: Expand
+    switch (suggestion.description) {
+      case 'Shutdown machine':
+        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
+          tyrSuggestion.node
+        );
+        break;
+      case 'Lockout user':
+        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
+          tyrSuggestion.node
+        );
+        break;
+      default:
+        break;
+    }
+
+    this.tyrManager.injectPerformedSuggestion(
+      tyrSuggestion,
+      this.timeline.automaticUpdate
+    );
     this.timeline.addPerformedSuggestion(tyrSuggestion);
+
+    if (this.timeline.automaticUpdate)
+      tyrSuggestion.node.style.timelineStatus = tyrSuggestion.node.status;
+    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
+  }
+
+  private getIdentityNodeChildren(node: TyrGraphNode) {
+    let list = node.connections.childrenIds;
+    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+
+    //Also add identity children nodes (This is a workaround, wont work for all nodes)
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].asset.type != 'Application') {
+        list.push(...nodes[i].connections.childrenIds);
+      }
+    }
+    return list;
+  }
+
+  private getApplicationNodeChildren(node: TyrGraphNode) {
+    let list = node.connections.childrenIds;
+    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+
+    //Also add identity children nodes (This is a workaround, wont work for all nodes)
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].asset.type == 'Identity') {
+        list.push(...nodes[i].connections.childrenIds);
+      }
+    }
+    return list;
   }
 
   async retrieveAlerts() {
