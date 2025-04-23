@@ -68,7 +68,7 @@ export class AssetMenuComponent {
   public close() {
     this.closed = true;
     this.node.style.selected = false;
-    this.tyrManager.updateNodesStatusStyle([this.node]);
+    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
   }
 
   public selectAssetImage(node: TyrAssetGraphNode) {

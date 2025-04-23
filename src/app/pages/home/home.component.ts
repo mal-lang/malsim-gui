@@ -125,12 +125,10 @@ export class HomeComponent {
       const graphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
 
-      await this.tyrManager
-        .initializeRenderer(graphContainer)
-        .then(async (app) => {
-          graphContainer.appendChild(app.canvas);
-          this.tyrManager.startLayoutSimulation();
-        });
+      this.tyrManager.assetGraphRenderer.init(
+        this.assetGraph.getConfig(),
+        graphContainer
+      );
     });
   }
 
@@ -182,7 +180,9 @@ export class HomeComponent {
 
     if (this.timeline.automaticUpdate)
       tyrSuggestion.node.style.timelineStatus = tyrSuggestion.node.status;
-    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
+    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(
+      tyrSuggestion.node
+    );
   }
 
   private getIdentityNodeChildren(node: TyrAssetGraphNode) {

@@ -2,7 +2,7 @@
   <div>
     <img
       src="{{ selectAssetImage(this.node) }}"
-      (click)="this.tyrManager.moveCameraToNode(this.node)"
+      (click)="this.tyrManager.assetGraphRenderer.moveCameraToNode(this.node)"
     />
     <h3>{{ this.node.asset.name }}</h3>
   </div>
@@ -27,7 +27,7 @@
   <div
     *ngFor="let relatedNode of this.relatedNodes"
     class="related-asset"
-    (click)="this.tyrManager.moveCameraToNode(relatedNode)"
+    (click)="this.tyrManager.assetGraphRenderer.moveCameraToNode(relatedNode)"
     (mouseenter)="this.hoverItem(relatedNode)"
     (mouseleave)="this.unhoverItem()"
   >

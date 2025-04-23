@@ -111,7 +111,6 @@ export class TimelineComponent {
 
     this.tyrManager.updateAlertVisibility(notifications);
 
-    //this.tyrManager.updateAlertVisibility();
     this.cdRef.detectChanges();
   }
 
@@ -154,7 +153,9 @@ export class TimelineComponent {
   }
 
   public onTimelineItemClick(itemPosition: number) {
-    this.tyrManager.moveCameraToNode(this.notifications[itemPosition].node);
+    this.tyrManager.assetGraphRenderer.moveCameraToNode(
+      this.notifications[itemPosition].node
+    );
     this.openAssetMenu(this.notifications[itemPosition].node);
     const element = this.slideCircle.nativeElement;
     const position = 24 + 136 * itemPosition;
@@ -200,10 +201,12 @@ export class TimelineComponent {
   }
 
   public hoverItem(notification: TyrNotification) {
-    this.tyrManager.highlightNode(notification.node);
+    this.tyrManager.assetGraphRenderer.highlightContainer(
+      notification.node.style.container!
+    );
   }
 
   public unhoverItem() {
-    this.tyrManager.unhighlightNodes();
+    this.tyrManager.assetGraphRenderer.unhighlightContainers();
   }
 }

@@ -36,10 +36,12 @@ export class AssetMenuInformationComponent {
   }
 
   public hoverItem(node: TyrAssetGraphNode) {
-    this.tyrManager.highlightNode(node);
+    this.tyrManager.assetGraphRenderer.highlightContainer(
+      node.style.container!
+    );
   }
 
   public unhoverItem() {
-    this.tyrManager.unhighlightNodes();
+    this.tyrManager.assetGraphRenderer.unhighlightContainers();
   }
 }
