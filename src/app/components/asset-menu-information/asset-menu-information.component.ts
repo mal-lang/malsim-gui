@@ -1,6 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
+import {
+  TyrAssetGraphNode,
+  TyrAssetGraphNodeStatus,
+  TyrGraphNode,
+  TyrManager,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-information',
@@ -22,7 +27,7 @@ export class AssetMenuInformationComponent {
       const ids = this.node.connections.childrenIds;
       this.relatedNodes = this.node.connections.paths
         .filter((p) => ids.includes(p.destiny.id))
-        .map((p) => p.destiny);
+        .map((p) => p.destiny as TyrAssetGraphNode);
     }
   }
 
