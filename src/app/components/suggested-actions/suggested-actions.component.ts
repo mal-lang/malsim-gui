@@ -91,7 +91,6 @@ export class SuggestedActionsComponent {
   }
 
   selectActionImage(suggestion: any): string {
-    console.log(suggestion.description);
     switch (suggestion.action.description) {
       //TODO
       case 'Shutdown machine':
