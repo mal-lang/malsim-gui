@@ -1,16 +1,11 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import {
-  TyrAssetGraphNode,
-  TyrAssetGraphNodeStatus,
-  TyrGraphNode,
-  TyrManager,
-} from 'tyr-js';
+import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-information',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgFor],
   templateUrl: './asset-menu-information.component.html',
   styleUrl: './asset-menu-information.component.scss',
 })

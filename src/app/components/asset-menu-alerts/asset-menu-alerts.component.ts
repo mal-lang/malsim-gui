@@ -4,6 +4,7 @@ import {
   TyrNotificationType,
   TyrNotification,
   TyrAssetGraphNode,
+  TyrAttackStep,
 } from 'tyr-js';
 
 @Component({
@@ -15,6 +16,7 @@ import {
 })
 export class AssetMenuAlertsComponent {
   @Input() node: TyrAssetGraphNode;
+  @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
   public timestampToLocale(timestamp: number) {
     return new Date(timestamp)
       .toLocaleString('sv-SE', {

@@ -1,5 +1,7 @@
-.attack-graph-container {
-  height: calc(100vh - 225px);
-  width: 100%;
-  border: 1px #68686e solid;
+@import "../../../styles.scss";
+section {
+  width: calc(calc(100vw - 360px) / 2);
+  height: 100%;
+  background-color: $dark;
+  border: 2px solid $border;
 }

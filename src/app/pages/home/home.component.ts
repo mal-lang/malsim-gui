@@ -12,6 +12,7 @@ import {
   RendererRuleScope,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
+  TyrAttackStep,
   TyrGraphNode,
   TyrManager,
   TyrNotification,
@@ -19,6 +20,7 @@ import {
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
+import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +30,7 @@ import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.com
 export class HomeComponent {
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
   @ViewChild('assetGraph') assetGraph!: AssetGraphComponent;
+  @ViewChild('attackGraph') attackGraph!: AttackGraphComponent;
   @ViewChild('assetMenu') assetMenu!: AssetMenuComponent;
   @ViewChild('timeline') timeline!: TimelineComponent;
 
@@ -224,7 +227,7 @@ export class HomeComponent {
       if (Object.keys(latestAttackSteps).length > 0) {
         parseLatestAttackSteps(latestAttackSteps)[0];
         const alert = this.tyrManager.injestLatestAttackStep(
-          parseLatestAttackSteps(latestAttackSteps)[0],
+          parseLatestAttackSteps(latestAttackSteps)[0].id,
           this.timeline.automaticUpdate
         );
         if (alert) this.timeline.addAlert(alert);
@@ -269,4 +272,10 @@ export class HomeComponent {
     }
     return false;
   }
+
+  openAttackGraph = (attackStep: TyrAttackStep) => {
+    console.log('jndj');
+    this.tyrManager.assetGraphRenderer.resizeViewport();
+    this.attackGraph.openAttackGraph(attackStep);
+  };
 }

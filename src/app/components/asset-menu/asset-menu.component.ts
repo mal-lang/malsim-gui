@@ -11,6 +11,7 @@ import {
   TyrNotification,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
+  TyrAttackStep,
 } from 'tyr-js';
 
 @Component({
@@ -28,6 +29,7 @@ import {
 })
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
+  @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
   public node: TyrAssetGraphNode;
   public notifications: TyrNotification[] = [];
   public closed: boolean = true;
@@ -54,6 +56,7 @@ export class AssetMenuComponent {
       connections: getEmptyNodeConnectionInfo(),
       cluster: getEmptyNodeCluster(),
     };
+    this.close = this.close.bind(this);
   }
 
   public openMenu(menu: string) {
@@ -87,4 +90,9 @@ export class AssetMenuComponent {
         return '/assets/icons/shield.png';
     }
   }
+
+  openAttackGraphWindow = (attackStep: TyrAttackStep) => {
+    this.openAttackGraph(attackStep);
+    this.close();
+  };
 }

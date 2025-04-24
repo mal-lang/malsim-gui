@@ -203,7 +203,6 @@ export class AssetGraphComponent {
     this.inactiveSprite = turnoffSprite;
     this.userOffSprite = userSprite;
 
-    console.log(this.inactiveSprite);
     console.log('✅ All assets added & loaded successfully!');
   }
 
