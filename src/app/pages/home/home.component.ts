@@ -159,14 +159,14 @@ export class HomeComponent {
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
           tyrSuggestion.node
-        );
+        ) as TyrAssetGraphNode[];
         break;
       case 'Lockout user':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
           tyrSuggestion.node
-        );
+        ) as TyrAssetGraphNode[];
         break;
       default:
         break;
@@ -186,26 +186,26 @@ export class HomeComponent {
   }
 
   private getIdentityNodeChildren(node: TyrAssetGraphNode) {
-    let list = node.connections.childrenIds;
-    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+    let list = node.connections.children;
+    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].asset.type != 'Application') {
-        list.push(...nodes[i].connections.childrenIds);
+        list.push(...nodes[i].connections.children);
       }
     }
     return list;
   }
 
   private getApplicationNodeChildren(node: TyrAssetGraphNode) {
-    let list = node.connections.childrenIds;
-    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+    let list = node.connections.children;
+    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].asset.type == 'Identity') {
-        list.push(...nodes[i].connections.childrenIds);
+        list.push(...nodes[i].connections.children);
       }
     }
     return list;

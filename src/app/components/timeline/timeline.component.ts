@@ -201,12 +201,10 @@ export class TimelineComponent {
   }
 
   public hoverItem(notification: TyrNotification) {
-    this.tyrManager.assetGraphRenderer.highlightContainer(
-      notification.node.style.container!
-    );
+    this.tyrManager.assetGraphRenderer.highlightNode(notification.node);
   }
 
   public unhoverItem() {
-    this.tyrManager.assetGraphRenderer.unhighlightContainers();
+    this.tyrManager.assetGraphRenderer.unhighlightNodes();
   }
 }

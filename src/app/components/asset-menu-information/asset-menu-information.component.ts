@@ -24,10 +24,7 @@ export class AssetMenuInformationComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['node']) {
       if (!this.node) return;
-      const ids = this.node.connections.childrenIds;
-      this.relatedNodes = this.node.connections.paths
-        .filter((p) => ids.includes(p.destiny.id))
-        .map((p) => p.destiny as TyrAssetGraphNode);
+      this.relatedNodes = this.node.connections.children as TyrAssetGraphNode[];
     }
   }
 
@@ -36,12 +33,10 @@ export class AssetMenuInformationComponent {
   }
 
   public hoverItem(node: TyrAssetGraphNode) {
-    this.tyrManager.assetGraphRenderer.highlightContainer(
-      node.style.container!
-    );
+    this.tyrManager.assetGraphRenderer.highlightNode(node);
   }
 
   public unhoverItem() {
-    this.tyrManager.assetGraphRenderer.unhighlightContainers();
+    this.tyrManager.assetGraphRenderer.unhighlightNodes();
   }
 }
