@@ -1,1 +1,5 @@
-<section *ngIf="this.isVisible"></section>
+<section
+  #graphContainer
+  id="graphContainer"
+  [ngClass]="{ visible: this.isVisible }"
+></section>

@@ -1,7 +1,11 @@
 @import "../../../styles.scss";
 section {
-  width: calc(calc(100vw - 360px) / 2);
+  width: 0px;
   height: 100%;
   background-color: $dark;
   border: 2px solid $border;
+}
+
+section.visible {
+  width: calc(calc(100vw - 360px) / 2);
 }

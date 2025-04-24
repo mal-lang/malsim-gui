@@ -117,20 +117,28 @@ export class HomeComponent {
   private async retrieveInitialData() {
     forkJoin({
       receivedModel: this.apiService.getModel(),
-      attackGraph: this.apiService.getAttackGraph(),
-    }).subscribe(async ({ receivedModel, attackGraph }) => {
+      receivedAttackGraph: this.apiService.getAttackGraph(),
+    }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
       this.tyrManager = new TyrManager(
         receivedModel,
-        attackGraph.attack_steps,
+        receivedAttackGraph.attack_steps,
         this.assetGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
-      const graphContainer =
+      const assetGraphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
-
+      console.log(this.assetGraph.getAssetGraphContainer());
+      console.log(this.attackGraph.getAttackGraphContainer());
+      const attackGraphContainer =
+        this.attackGraph.getAttackGraphContainer().nativeElement;
       this.tyrManager.assetGraphRenderer.init(
         this.assetGraph.getConfig(),
-        graphContainer
+        assetGraphContainer
+      );
+
+      this.tyrManager.attackGraphRenderer.init(
+        this.assetGraph.getConfig(),
+        attackGraphContainer
       );
     });
   }
@@ -274,8 +282,9 @@ export class HomeComponent {
   }
 
   openAttackGraph = (attackStep: TyrAttackStep) => {
-    console.log('jndj');
     this.tyrManager.assetGraphRenderer.resizeViewport();
     this.attackGraph.openAttackGraph(attackStep);
+    this.tyrManager.attackGraphRenderer.resizeViewport();
+    this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);
   };
 }
