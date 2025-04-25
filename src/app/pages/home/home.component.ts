@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs';
 
 import {
   EdgeAffectedCondition,
+  LayoutAlgorithm,
   NodeAffectedCondition,
   parseLatestAttackSteps,
   RendererRule,
@@ -125,19 +126,18 @@ export class HomeComponent {
         this.assetGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
+
       const assetGraphContainer =
         this.assetGraph.getAssetGraphContainer().nativeElement;
-      console.log(this.assetGraph.getAssetGraphContainer());
-      console.log(this.attackGraph.getAttackGraphContainer());
       const attackGraphContainer =
         this.attackGraph.getAttackGraphContainer().nativeElement;
+
       this.tyrManager.assetGraphRenderer.init(
         this.assetGraph.getConfig(),
         assetGraphContainer
       );
-
       this.tyrManager.attackGraphRenderer.init(
-        this.assetGraph.getConfig(),
+        this.attackGraph.getConfig(),
         attackGraphContainer
       );
     });
@@ -284,7 +284,8 @@ export class HomeComponent {
   openAttackGraph = (attackStep: TyrAttackStep) => {
     this.tyrManager.assetGraphRenderer.resizeViewport();
     this.attackGraph.openAttackGraph(attackStep);
-    this.tyrManager.attackGraphRenderer.resizeViewport();
+
     this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);
+    this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 }

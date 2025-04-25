@@ -1,6 +1,18 @@
 import { NgClass } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { TyrAttackStep } from 'tyr-js';
+import {
+  AvailableInitialNodePositioning,
+  FillInput,
+  LayoutAlgorithm,
+  TextStyleAlign,
+  TextStyleFontWeight,
+  Texture,
+  TyrAlertStatus,
+  TyrAssetGraphNode,
+  TyrAssetGraphNodeStatus,
+  TyrAttackStep,
+  TyrGraphConfig,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-attack-graph',
@@ -12,6 +24,61 @@ import { TyrAttackStep } from 'tyr-js';
 export class AttackGraphComponent {
   public isVisible: boolean;
   @ViewChild('graphContainer') graphContainer!: ElementRef;
+
+  private config: TyrGraphConfig;
+
+  ngAfterViewInit() {
+    this.config = {
+      centerX:
+        (this.graphContainer.nativeElement as HTMLElement).offsetWidth / 2,
+      centerY:
+        (this.graphContainer.nativeElement as HTMLElement).offsetHeight / 2,
+      marginX: 0,
+      marginY: 0,
+      graphWorldWidth: 20000,
+      graphWorldHeight: 20000,
+      backgroundColor: '#212529',
+      nodes: {
+        initialPositioning: {
+          type: AvailableInitialNodePositioning.random,
+          radiusX: 20000,
+          radiusY: 20000,
+        },
+        getNodeAlertIcon: (alert: TyrAlertStatus) => {
+          return new Texture();
+        },
+        getNodeStatusIcon: (alert: TyrAssetGraphNodeStatus) => {
+          return new Texture();
+        },
+        getNodeImage: (node: TyrAssetGraphNode) => {
+          return new Texture();
+        },
+        imageMargin: 0.5,
+        textInvisible: false,
+        highlightColor: 0xffa100,
+        textConfig: {
+          fontFamily: 'arial',
+          fontSize: 40,
+          fill: 0xffffff as FillInput,
+          align: 'left' as TextStyleAlign,
+          fontWeight: 'bold' as TextStyleFontWeight,
+          stroke: 'black',
+        },
+        hoverable: true,
+        onPointerOn: () => {},
+        onPointerOut: () => {},
+        onClick: () => {},
+        onFirstRendered: () => {},
+      },
+      edges: {
+        animated: true,
+        unidirectional: true,
+      },
+      clusterRules: [],
+      simulationConfig: { type: LayoutAlgorithm.sugiyama },
+    };
+  }
+
   constructor() {
     this.isVisible = false;
   }
@@ -26,5 +93,9 @@ export class AttackGraphComponent {
 
   public getAttackGraphContainer() {
     return this.graphContainer;
+  }
+
+  public getConfig() {
+    return this.config;
   }
 }
