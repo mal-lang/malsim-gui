@@ -92,7 +92,7 @@ export class AssetMenuComponent {
   }
 
   openAttackGraphWindow = (attackStep: TyrAttackStep) => {
-    this.openAttackGraph(attackStep);
     this.close();
+    this.openAttackGraph(attackStep);
   };
 }
