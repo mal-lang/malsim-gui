@@ -153,7 +153,7 @@ export class TimelineComponent {
   }
 
   public onTimelineItemClick(itemPosition: number) {
-    this.tyrManager.assetGraphRenderer.moveCameraToNode(
+    this.tyrManager.assetGraphRenderer.moveAndZoomCameraToNode(
       this.notifications[itemPosition].node
     );
     this.openAssetMenu(this.notifications[itemPosition].node);

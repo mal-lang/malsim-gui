@@ -108,7 +108,8 @@ export class HomeComponent {
 
   async ngAfterViewInit() {
     this.notifyClick = (node: TyrAssetGraphNode) => {
-      this.assetMenu.open(node);
+      if (!this.tyrManager.attackGraphRenderer.getIsVisible())
+        this.assetMenu.open(node);
     };
     await this.assetGraph.loadSprites().then(() => {
       this.retrieveInitialData();

@@ -58,7 +58,7 @@ export class AttackGraphComponent {
         highlightColor: 0xffa100,
         textConfig: {
           fontFamily: 'arial',
-          fontSize: 40,
+          fontSize: 64,
           fill: 0xffffff as FillInput,
           align: 'left' as TextStyleAlign,
           fontWeight: 'bold' as TextStyleFontWeight,
