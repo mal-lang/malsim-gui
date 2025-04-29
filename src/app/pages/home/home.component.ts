@@ -78,10 +78,10 @@ export class HomeComponent {
   private edgeRule: RendererRule = {
     scope: RendererRuleScope.edge,
     affectedCondition: this.condition2,
-    color: 'white',
-    width: 1,
-    edgeCurveX: 20,
-    edgeCurveY: 20,
+    color: 0xafafaf,
+    width: 5,
+    edgeCurveX: 0,
+    edgeCurveY: 0,
   };
 
   private condition3: EdgeAffectedCondition = {
