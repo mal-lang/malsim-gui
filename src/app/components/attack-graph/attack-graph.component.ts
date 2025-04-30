@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import {
   AvailableInitialNodePositioning,
   FillInput,
@@ -12,6 +12,7 @@ import {
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
   TyrGraphConfig,
+  TyrManager,
 } from 'tyr-js';
 
 @Component({
@@ -23,6 +24,7 @@ import {
 })
 export class AttackGraphComponent {
   public isVisible: boolean;
+  @Input() tyrManager: TyrManager;
   @ViewChild('graphContainer') graphContainer!: ElementRef;
 
   private config: TyrGraphConfig;
@@ -89,6 +91,8 @@ export class AttackGraphComponent {
 
   public closeAttackGraph() {
     this.isVisible = false;
+    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
+    this.tyrManager.attackGraphRenderer.setIsVisible(false);
   }
 
   public getAttackGraphContainer() {

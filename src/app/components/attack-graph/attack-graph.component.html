@@ -3,8 +3,15 @@
   id="graphContainer"
   [ngClass]="{ visible: this.isVisible }"
 >
-  <div class="viewname">
+  <div class="viewname" [ngClass]="{ visible: this.isVisible }">
     <img src="/assets/icons/network.png" />
     <p>Attack Graph</p>
+  </div>
+  <div
+    class="exit"
+    [ngClass]="{ visible: this.isVisible }"
+    (click)="this.closeAttackGraph()"
+  >
+    <img src="/assets/icons/exit.png" />
   </div>
 </section>

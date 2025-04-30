@@ -11,7 +11,10 @@
       [onNodeClick]="notifyClick"
       (simulationStatusEmitter)="setAlertsInterval()"
     />
-    <app-attack-graph #attackGraph></app-attack-graph>
+    <app-attack-graph
+      #attackGraph
+      [tyrManager]="this.tyrManager"
+    ></app-attack-graph>
     <aside>
       <app-asset-menu
         #assetMenu
