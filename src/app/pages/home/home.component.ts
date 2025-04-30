@@ -108,8 +108,9 @@ export class HomeComponent {
 
   async ngAfterViewInit() {
     this.notifyClick = (node: TyrAssetGraphNode) => {
-      if (!this.tyrManager.attackGraphRenderer.getIsVisible())
+      if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
         this.assetMenu.open(node);
+      }
     };
     await this.assetGraph.loadSprites().then(() => {
       this.retrieveInitialData();
@@ -283,7 +284,8 @@ export class HomeComponent {
   }
 
   openAttackGraph = (attackStep: TyrAttackStep) => {
-    this.tyrManager.assetGraphRenderer.resizeViewport();
+    this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
+
     this.attackGraph.openAttackGraph(attackStep);
 
     this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);

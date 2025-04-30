@@ -35,3 +35,42 @@
     transform: rotate(360deg);
   }
 }
+
+.viewname {
+  height: 32px;
+  width: 192px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  top: 16px;
+  left: 32px;
+  gap: 16px;
+  margin: auto;
+
+  background-color: $dark;
+  border: 2px solid #d9d9d9;
+  border-radius: 20px;
+
+  cursor: auto;
+
+  * {
+    user-select: none;
+  }
+
+  img {
+    height: 16px;
+    width: 16px;
+    filter: brightness(100) invert(1);
+  }
+
+  p {
+    font-family: "Inter";
+    font-size: 13px;
+    color: $white;
+    margin: 0px;
+  }
+}
