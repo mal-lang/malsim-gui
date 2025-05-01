@@ -1,4 +1,4 @@
-<footer [ngClass]="getClass(0)">
+<footer [ngClass]="getClass(0) && { 'attack-graph': this.attackGraphMode }">
   <h2>Activity Timeline</h2>
   <div id="automatic-timeline-box">
     <p>Automatic Update:</p>
@@ -32,7 +32,7 @@
       >
         <circle
           stroke-width="2"
-          stroke="#ffa100"
+          [attr.stroke]="getColor()"
           fill="#00080d"
           r="7"
           cy="8"

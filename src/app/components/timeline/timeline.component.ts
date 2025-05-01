@@ -5,6 +5,7 @@ import {
   ElementRef,
   Input,
   Renderer2,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -24,6 +25,7 @@ import {
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
+  @Input() attackGraphMode: boolean;
   @ViewChild('slideCircle') private slideCircle!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 
@@ -41,6 +43,14 @@ export class TimelineComponent {
     this.draggableRightLimit = 0;
     this.draggableLeftLimit = 0;
     this.automaticUpdate = true;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['attackGraphMode']) {
+      //Update color
+      const circle = this.slideCircle.nativeElement as HTMLElement;
+      this.moveSlide(circle.getBoundingClientRect().left);
+    }
   }
 
   ngAfterViewInit() {
@@ -136,9 +146,9 @@ export class TimelineComponent {
     this.renderer.setStyle(
       line,
       'background',
-      `linear-gradient(to right, #ffa100 ${position + width / 2}px, #343a3e ${
+      `linear-gradient(to right, ${this.getColor()} ${
         position + width / 2
-      }px)`
+      }px, #343a3e ${position + width / 2}px)`
     );
   }
 
@@ -150,6 +160,11 @@ export class TimelineComponent {
   public getClass(index: number) {
     if (this.selectedAlert) return index < this.selectedAlert ? 'active' : '';
     return '';
+  }
+
+  public getColor() {
+    if (this.attackGraphMode) return '#00e6ff';
+    return '#ffa100';
   }
 
   public onTimelineItemClick(itemPosition: number) {

@@ -283,6 +283,10 @@ export class HomeComponent {
     return false;
   }
 
+  isAttackGraphMode() {
+    return this.tyrManager?.attackGraphRenderer?.getIsVisible?.();
+  }
+
   openAttackGraph = (attackStep: TyrAttackStep) => {
     this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
 

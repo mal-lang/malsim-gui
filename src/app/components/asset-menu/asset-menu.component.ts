@@ -66,7 +66,6 @@ export class AssetMenuComponent {
   public open(node: TyrAssetGraphNode) {
     this.node = node;
     this.closed = false;
-    console.log('open');
   }
 
   public close() {
