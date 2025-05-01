@@ -74,10 +74,14 @@ footer {
   position: relative;
 }
 
-#slidebar-draggable {
+.slidebar-draggable {
   position: absolute;
   z-index: 2;
   cursor: grab;
+
+  &.hidden {
+    display: none;
+  }
 }
 
 .line {

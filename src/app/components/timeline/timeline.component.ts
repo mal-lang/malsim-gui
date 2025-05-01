@@ -26,13 +26,17 @@ export class TimelineComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
   @Input() attackGraphMode: boolean;
-  @ViewChild('slideCircle') private slideCircle!: ElementRef;
+  @ViewChild('slideCircleLeft') private slideCircleLeft!: ElementRef;
+  @ViewChild('slideCircleRight') private slideCircleRight!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
 
   private isMouseClicked: Boolean;
   private draggableLeftLimit: number;
   private draggableRightLimit: number;
+  private clickedCircleDraggableLeftLimit: number;
+  private clickedCircleDraggableRightLimit: number;
   private selectedAlert: number | null;
+  private clickedCircle: HTMLElement | null;
 
   public notifications: TyrNotification[];
   public automaticUpdate: boolean;
@@ -42,43 +46,84 @@ export class TimelineComponent {
     this.isMouseClicked = false;
     this.draggableRightLimit = 0;
     this.draggableLeftLimit = 0;
+    this.clickedCircleDraggableRightLimit = 0;
+    this.clickedCircleDraggableLeftLimit = 0;
     this.automaticUpdate = true;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['attackGraphMode']) {
       //Update color
-      const circle = this.slideCircle.nativeElement as HTMLElement;
-      this.moveSlide(circle.getBoundingClientRect().left);
+      if (!this.slideCircleRight) return;
+      if (this.attackGraphMode)
+        this.slideCircleLeft.nativeElement.style.left = this.draggableLeftLimit;
+      const circle = this.slideCircleRight.nativeElement as HTMLElement;
+      this.moveSlide(
+        circle.getBoundingClientRect().left,
+        this.slideCircleRight.nativeElement
+      );
     }
   }
 
   ngAfterViewInit() {
-    const element = this.slideCircle.nativeElement;
-
     const startPosition = 0;
     this.draggableLeftLimit = startPosition;
     this.draggableRightLimit = startPosition;
     this.renderer.setStyle(
-      this.slideCircle.nativeElement,
+      this.slideCircleRight.nativeElement,
       'transform',
       `translateX(${startPosition}px)`
     );
-    this.updateLineColor(startPosition, element.getBoundingClientRect().width);
+    this.updateLineColor();
 
     this.renderer.listen(
-      element,
+      this.slideCircleLeft.nativeElement,
       'mousedown',
-      () => (this.isMouseClicked = true)
+      () => {
+        this.isMouseClicked = true;
+        this.clickedCircle = this.slideCircleLeft.nativeElement;
+      }
     );
+    this.renderer.listen(
+      this.slideCircleRight.nativeElement,
+      'mousedown',
+      () => {
+        this.isMouseClicked = true;
+        this.clickedCircle = this.slideCircleRight.nativeElement;
+      }
+    );
+
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
       const offsetX = event.clientX;
-      if (offsetX > this.draggableRightLimit) return;
-      if (offsetX <= this.draggableLeftLimit) return;
-      this.updateLineColor(offsetX, element.getBoundingClientRect().width);
+
+      //Get limits depending on moving circle
+      this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
+      this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
+      if (this.clickedCircle === this.slideCircleLeft.nativeElement) {
+        this.clickedCircleDraggableRightLimit =
+          this.slideCircleRight.nativeElement.getBoundingClientRect().right -
+          88;
+        this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
+      } else {
+        if (this.attackGraphMode)
+          this.clickedCircleDraggableLeftLimit =
+            this.slideCircleLeft.nativeElement.getBoundingClientRect().right +
+            88;
+        else this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
+        this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
+      }
+
+      console.log(
+        offsetX,
+        this.clickedCircleDraggableLeftLimit,
+        this.clickedCircleDraggableRightLimit
+      );
+      if (offsetX > this.clickedCircleDraggableRightLimit) return;
+      if (offsetX <= this.clickedCircleDraggableLeftLimit) return;
+      this.updateLineColor();
       this.renderer.setStyle(
-        this.slideCircle.nativeElement,
+        this.clickedCircle!,
         'transform',
         `translateX(${offsetX}px)`
       );
@@ -88,30 +133,29 @@ export class TimelineComponent {
       if (!this.isMouseClicked) return;
       this.isMouseClicked = false;
       let offsetX = event.clientX;
-      if (offsetX > this.draggableRightLimit)
-        offsetX = this.draggableRightLimit;
-      if (offsetX <= this.draggableLeftLimit) offsetX = 0;
-      this.moveSlide(offsetX);
+      if (offsetX > this.clickedCircleDraggableRightLimit)
+        offsetX = this.clickedCircleDraggableRightLimit;
+      if (offsetX <= this.clickedCircleDraggableLeftLimit)
+        offsetX = this.clickedCircleDraggableLeftLimit;
+      console.log(
+        offsetX,
+        this.clickedCircleDraggableLeftLimit,
+        this.clickedCircleDraggableRightLimit
+      );
+      this.moveSlide(offsetX, this.clickedCircle!);
 
       if (
-        this.slideCircle.nativeElement.getBoundingClientRect().left <
-        this.draggableRightLimit
+        this.slideCircleRight.nativeElement.getBoundingClientRect().left <
+        this.clickedCircleDraggableRightLimit
       )
         this.automaticUpdate = false;
     });
   }
 
-  private moveSlide(slidePosition: number) {
+  private moveSlide(slidePosition: number, circle: HTMLElement) {
     const position = this.calculateSelectedItem(slidePosition);
-    this.renderer.setStyle(
-      this.slideCircle.nativeElement,
-      'transform',
-      `translateX(${position}px)`
-    );
-    this.updateLineColor(
-      position,
-      this.slideCircle.nativeElement.getBoundingClientRect().width
-    );
+    this.renderer.setStyle(circle, 'transform', `translateX(${position}px)`);
+    this.updateLineColor();
 
     let notifications: TyrNotification[] = [];
     if (position >= 24) {
@@ -140,15 +184,27 @@ export class TimelineComponent {
     return aux - 88;
   }
 
-  private updateLineColor(position: number, width: number) {
+  private updateLineColor() {
     const line = this.slideLine.nativeElement as HTMLElement;
+    const leftRect = this.slideCircleLeft.nativeElement.getBoundingClientRect();
+    const rightRect =
+      this.slideCircleRight.nativeElement.getBoundingClientRect();
 
+    const leftCenter = leftRect.left + leftRect.width / 2;
+    const rightCenter = rightRect.left + rightRect.width / 2;
+
+    this.renderer.setStyle(line, 'left', `0px`);
+    this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
     this.renderer.setStyle(
       line,
       'background',
-      `linear-gradient(to right, ${this.getColor()} ${
-        position + width / 2
-      }px, #343a3e ${position + width / 2}px)`
+      `linear-gradient(to right,
+      #343a3e 0px,
+      #343a3e ${leftCenter}px,
+      ${this.getColor()} ${leftCenter}px,
+      ${this.getColor()} ${rightCenter}px,
+      #343a3e ${rightCenter}px,
+      #343a3e 100%)`
     );
   }
 
@@ -172,12 +228,12 @@ export class TimelineComponent {
       this.notifications[itemPosition].node
     );
     this.openAssetMenu(this.notifications[itemPosition].node);
-    const element = this.slideCircle.nativeElement;
+    const element = this.slideCircleRight.nativeElement;
     const position = 24 + 136 * itemPosition;
 
     //Only move scroll if the clicked item is further in the timeline
     if (position < element.getBoundingClientRect().left) return;
-    this.moveSlide(position);
+    this.moveSlide(position, this.slideCircleRight.nativeElement);
   }
 
   public addAlert(alert: TyrNotification) {
@@ -190,7 +246,10 @@ export class TimelineComponent {
     this.updateLineWidth();
 
     if (!this.automaticUpdate) return;
-    this.moveSlide(this.draggableRightLimit);
+    this.moveSlide(
+      this.draggableRightLimit,
+      this.slideCircleRight.nativeElement
+    );
   }
 
   public addPerformedSuggestion(suggestion: TyrNotification) {
@@ -203,7 +262,10 @@ export class TimelineComponent {
     this.updateLineWidth();
 
     if (!this.automaticUpdate) return;
-    this.moveSlide(this.draggableRightLimit);
+    this.moveSlide(
+      this.draggableRightLimit,
+      this.slideCircleRight.nativeElement
+    );
   }
 
   public deleteAlert(alert: TyrNotification) {
@@ -212,7 +274,11 @@ export class TimelineComponent {
 
   public toggleAutomaticUpdate() {
     this.automaticUpdate = !this.automaticUpdate;
-    if (this.automaticUpdate) this.moveSlide(this.draggableRightLimit);
+    if (this.automaticUpdate)
+      this.moveSlide(
+        this.draggableRightLimit,
+        this.slideCircleRight.nativeElement
+      );
   }
 
   public hoverItem(notification: TyrNotification) {
