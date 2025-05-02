@@ -84,7 +84,6 @@ export class TimelineComponent {
       () => {
         this.isMouseClicked = true;
         this.clickedCircle = this.slideCircleLeft.nativeElement;
-        console.log('ITS ME!');
       }
     );
     this.renderer.listen(
@@ -209,7 +208,6 @@ export class TimelineComponent {
     const leftCenter =
       leftRect.left == 0 ? 0 : leftRect.left + leftRect.width / 2;
     const rightCenter = rightRect.left + rightRect.width / 2;
-    console.log(leftCenter);
     this.renderer.setStyle(line, 'left', `0px`);
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
     this.renderer.setStyle(
