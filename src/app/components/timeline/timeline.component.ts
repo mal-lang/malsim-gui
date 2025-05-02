@@ -28,6 +28,7 @@ export class TimelineComponent {
   @ViewChild('timelineWindow') private timelineWindow!: ElementRef;
 
   private isMouseClicked = false;
+  private isWindowClicked = false;
   private draggableLeftLimit = 0;
   private draggableRightLimit = 0;
   private clickedCircleDraggableLeftLimit = 0;
@@ -38,6 +39,7 @@ export class TimelineComponent {
   private itemWidth: number = 128;
   private gap: number = 8;
   private halfDistance: number = 68;
+  private windowDifference: number = 0;
 
   public notifications: TyrNotification[] = [];
   public selectedNotifications: TyrNotification[] = [];
@@ -55,7 +57,7 @@ export class TimelineComponent {
 
     if (!this.attackGraphMode) {
       leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
-      this.renderer.setStyle(window, 'width', `0px`);
+      this.renderer.setStyle(this.timelineWindow.nativeElement, 'width', `0px`);
     } else {
       if (leftEl.getBoundingClientRect().left - container.scrollLeft == 0) {
         leftEl.style.transform = `translateX(${
@@ -113,89 +115,186 @@ export class TimelineComponent {
       }
     );
 
+    this.renderer.listen(
+      this.timelineWindow.nativeElement,
+      'mousedown',
+      (event: MouseEvent) => {
+        this.isMouseClicked = true;
+        this.isWindowClicked = true;
+        this.windowDifference =
+          event.clientX -
+          this.slideCircleLeft.nativeElement.getBoundingClientRect().left;
+      }
+    );
+
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
-
       const container = this.timeline.nativeElement as HTMLElement;
+      const slideLeftEl = this.slideCircleLeft.nativeElement as HTMLElement;
+      const slideRightEl = this.slideCircleRight.nativeElement as HTMLElement;
+      const windowEl = this.timelineWindow.nativeElement as HTMLElement;
+
+      const posLeft = slideLeftEl.getBoundingClientRect().left;
+      const posRight = slideRightEl.getBoundingClientRect().left;
+      const windowWidth = windowEl.getBoundingClientRect().width;
+
       let offsetX = event.clientX + container.scrollLeft;
+      const diff = event.clientX - posLeft;
 
-      const leftEl = this.slideCircleLeft.nativeElement;
-      const rightEl = this.slideCircleRight.nativeElement;
+      if (this.isWindowClicked) {
+        // Always subtract current difference to get base offset
+        offsetX -= this.windowDifference;
 
-      if (this.clickedCircle === leftEl) {
-        this.clickedCircleDraggableRightLimit =
-          rightEl.getBoundingClientRect().left - this.halfDistance;
-        this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
-      } else {
-        this.clickedCircleDraggableLeftLimit = this.attackGraphMode
-          ? leftEl.getBoundingClientRect().left + this.halfDistance
-          : this.draggableLeftLimit;
-        this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
+        // Update difference only when moving into limit zones
+        if (
+          posLeft <= this.draggableLeftLimit + this.gap &&
+          diff > this.windowDifference
+        ) {
+          this.windowDifference = diff;
+        }
+
+        if (
+          posRight >= this.draggableRightLimit &&
+          diff < this.windowDifference
+        ) {
+          this.windowDifference = diff > 0 ? diff : 0;
+        }
+
+        const minOffset =
+          this.draggableLeftLimit +
+          this.gap +
+          slideLeftEl.getBoundingClientRect().width / 2;
+        const maxOffset = this.draggableRightLimit - windowWidth;
+
+        offsetX = Math.max(offsetX, minOffset);
+        offsetX = Math.min(offsetX, maxOffset);
+
+        this.renderer.setStyle(
+          slideLeftEl,
+          'transform',
+          `translateX(${offsetX}px)`
+        );
+        this.renderer.setStyle(
+          slideRightEl,
+          'transform',
+          `translateX(${offsetX + windowWidth}px)`
+        );
+
+        this.updateLineColor();
       }
 
-      this.updateLineColor();
+      if (this.clickedCircle) {
+        const leftEl = this.slideCircleLeft.nativeElement;
+        const rightEl = this.slideCircleRight.nativeElement;
 
-      if (offsetX > this.clickedCircleDraggableRightLimit)
-        offsetX = this.clickedCircleDraggableRightLimit;
+        if (this.clickedCircle === leftEl) {
+          this.clickedCircleDraggableRightLimit =
+            rightEl.getBoundingClientRect().left - this.halfDistance;
+          this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
+        } else {
+          this.clickedCircleDraggableLeftLimit = this.attackGraphMode
+            ? leftEl.getBoundingClientRect().left + this.halfDistance
+            : this.draggableLeftLimit;
+          this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
+        }
 
-      if (offsetX <= this.clickedCircleDraggableLeftLimit)
-        offsetX = this.clickedCircleDraggableLeftLimit;
+        this.updateLineColor();
 
-      this.renderer.setStyle(
-        this.clickedCircle!,
-        'transform',
-        `translateX(${offsetX}px)`
-      );
+        if (offsetX > this.clickedCircleDraggableRightLimit)
+          offsetX = this.clickedCircleDraggableRightLimit;
+
+        if (offsetX <= this.clickedCircleDraggableLeftLimit)
+          offsetX = this.clickedCircleDraggableLeftLimit;
+
+        this.renderer.setStyle(
+          this.clickedCircle!,
+          'transform',
+          `translateX(${offsetX}px)`
+        );
+      }
     });
 
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
 
-      this.isMouseClicked = false;
-      const container = this.timeline.nativeElement as HTMLElement;
-      let offsetX = event.clientX + container.scrollLeft;
+      if (this.isWindowClicked) {
+        this.isWindowClicked = false;
+        const slideLeftEl = this.slideCircleLeft.nativeElement as HTMLElement;
+        const windowEl = this.timelineWindow.nativeElement as HTMLElement;
 
-      offsetX = Math.max(this.clickedCircleDraggableLeftLimit, offsetX);
-      offsetX = Math.min(this.clickedCircleDraggableRightLimit, offsetX);
+        const posLeft = slideLeftEl.getBoundingClientRect().left;
+        const windowWidth = windowEl.getBoundingClientRect().width;
+        let offsetX = posLeft;
 
-      this.moveSlide(
-        offsetX -
-          this.slideCircleRight.nativeElement.getBoundingClientRect().width,
-        this.clickedCircle!
-      );
+        this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
+        this.clickedCircleDraggableRightLimit =
+          this.draggableRightLimit - windowWidth;
+        this.moveSlide(offsetX, this.slideCircleLeft.nativeElement);
 
-      if (
-        this.slideCircleRight.nativeElement.getBoundingClientRect().left <
-          this.clickedCircleDraggableRightLimit &&
-        !this.attackGraphMode
-      ) {
-        this.automaticUpdate = false;
+        this.clickedCircleDraggableLeftLimit =
+          this.draggableLeftLimit + windowWidth;
+        this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
+        this.moveSlide(
+          slideLeftEl.getBoundingClientRect().left + windowWidth,
+          this.slideCircleRight.nativeElement
+        );
+        this.isWindowClicked = false;
+        this.windowDifference = 0;
+      }
+
+      if (this.clickedCircle) {
+        this.isMouseClicked = false;
+        const container = this.timeline.nativeElement as HTMLElement;
+        let offsetX = event.clientX + container.scrollLeft;
+
+        offsetX = Math.max(this.clickedCircleDraggableLeftLimit, offsetX);
+        offsetX = Math.min(this.clickedCircleDraggableRightLimit, offsetX);
+
+        this.moveSlide(
+          offsetX -
+            this.slideCircleRight.nativeElement.getBoundingClientRect().width,
+          this.clickedCircle!
+        );
+
+        if (
+          this.slideCircleRight.nativeElement.getBoundingClientRect().left <
+            this.clickedCircleDraggableRightLimit &&
+          !this.attackGraphMode
+        ) {
+          this.automaticUpdate = false;
+        }
+        this.clickedCircle = null;
       }
     });
   }
 
   private moveSlide(position: number, circle: HTMLElement) {
     let translatedX = this.calculateSelectedItem(position);
-    if (
-      circle == this.slideCircleRight.nativeElement &&
-      this.attackGraphMode &&
-      circle.getBoundingClientRect().left > this.clickedCircleDraggableLeftLimit
-    )
-      translatedX =
-        translatedX + this.itemWidth > this.draggableRightLimit
-          ? this.draggableRightLimit
-          : translatedX + this.itemWidth;
-
-    if (
-      circle == this.slideCircleRight.nativeElement &&
-      this.attackGraphMode &&
-      circle.getBoundingClientRect().left <=
+    if (circle == this.slideCircleRight.nativeElement && this.attackGraphMode) {
+      if (
+        circle.getBoundingClientRect().left >
         this.clickedCircleDraggableLeftLimit
-    )
-      translatedX =
-        this.slideCircleLeft.nativeElement.getBoundingClientRect().left +
-        this.itemWidth +
-        this.gap;
+      )
+        translatedX =
+          translatedX + this.itemWidth > this.draggableRightLimit
+            ? this.draggableRightLimit
+            : translatedX + this.itemWidth;
+      if (
+        circle.getBoundingClientRect().left <=
+        this.clickedCircleDraggableLeftLimit
+      )
+        translatedX =
+          this.slideCircleLeft.nativeElement.getBoundingClientRect().left +
+          this.itemWidth +
+          this.gap;
+    }
+
+    if (this.isWindowClicked) {
+      if (circle == this.slideCircleLeft.nativeElement) {
+      } else {
+      }
+    }
+
     this.renderer.setStyle(circle, 'transform', `translateX(${translatedX}px)`);
     this.updateLineColor();
     this.updateSelectedNotifications();
