@@ -113,11 +113,11 @@ export class TimelineComponent {
 
       if (this.clickedCircle === leftEl) {
         this.clickedCircleDraggableRightLimit =
-          rightEl.getBoundingClientRect().left - 136;
+          rightEl.getBoundingClientRect().left - 88;
         this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
       } else {
         this.clickedCircleDraggableLeftLimit = this.attackGraphMode
-          ? leftEl.getBoundingClientRect().left + 136
+          ? leftEl.getBoundingClientRect().left + 88
           : this.draggableLeftLimit;
         this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
       }
@@ -156,7 +156,20 @@ export class TimelineComponent {
   }
 
   private moveSlide(position: number, circle: HTMLElement) {
-    const translatedX = this.calculateSelectedItem(position);
+    let translatedX = this.calculateSelectedItem(position);
+    console.log(
+      circle.getBoundingClientRect().left,
+      this.clickedCircleDraggableLeftLimit
+    );
+    if (
+      circle == this.slideCircleRight.nativeElement &&
+      this.attackGraphMode &&
+      circle.getBoundingClientRect().left > this.clickedCircleDraggableLeftLimit
+    )
+      translatedX =
+        translatedX + 136 > this.draggableRightLimit
+          ? this.draggableRightLimit
+          : translatedX + 136;
 
     this.renderer.setStyle(circle, 'transform', `translateX(${translatedX}px)`);
     this.updateLineColor();
