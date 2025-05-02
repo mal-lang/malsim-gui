@@ -183,9 +183,6 @@ export class TimelineComponent {
       this.selectedNotifications = attackGraphAlerts;
     } else this.selectedNotifications = notifications;
 
-    console.log('Notifications: ', notifications);
-    console.log('Attacks: ', attackGraphAlerts);
-
     this.tyrManager.updateAlertVisibility(notifications);
 
     this.cdRef.detectChanges();
