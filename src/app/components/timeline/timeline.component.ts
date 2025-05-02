@@ -63,7 +63,10 @@ export class TimelineComponent {
     }
 
     if (this.draggableRightLimit > 0)
-      this.draggableRightLimit += this.attackGraphMode ? 88 : -88;
+      this.draggableRightLimit +=
+        88 * (this.attackGraphMode ? 1 : -1) -
+        rightEl.getBoundingClientRect().width *
+          (this.attackGraphMode ? 1.5 : -1.5);
 
     this.updateLineWidth();
     this.updateLineColor();
@@ -148,7 +151,8 @@ export class TimelineComponent {
 
       if (
         this.slideCircleRight.nativeElement.getBoundingClientRect().left <
-        this.clickedCircleDraggableRightLimit
+          this.clickedCircleDraggableRightLimit &&
+        !this.attackGraphMode
       ) {
         this.automaticUpdate = false;
       }
