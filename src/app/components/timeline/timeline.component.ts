@@ -109,7 +109,7 @@ export class TimelineComponent {
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
 
-      const offsetX = event.clientX;
+      let offsetX = event.clientX;
 
       const leftEl = this.slideCircleLeft.nativeElement;
       const rightEl = this.slideCircleRight.nativeElement;
@@ -124,13 +124,15 @@ export class TimelineComponent {
           : this.draggableLeftLimit;
         this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
       }
-      if (
-        offsetX > this.clickedCircleDraggableRightLimit ||
-        offsetX <= this.clickedCircleDraggableLeftLimit
-      )
-        return;
 
       this.updateLineColor();
+
+      if (offsetX > this.clickedCircleDraggableRightLimit)
+        offsetX = this.clickedCircleDraggableRightLimit;
+
+      if (offsetX <= this.clickedCircleDraggableLeftLimit)
+        offsetX = this.clickedCircleDraggableRightLimit;
+
       this.renderer.setStyle(
         this.clickedCircle!,
         'transform',
