@@ -37,6 +37,11 @@ footer {
     .ball {
       border: 2px solid $ice;
     }
+    #timeline-window {
+      position: absolute;
+      cursor: move;
+      height: 24px;
+    }
   }
 }
 
@@ -72,6 +77,8 @@ footer {
 #timeline-slidebar {
   height: 24px;
   position: relative;
+  cursor: default;
+  z-index: 1;
 }
 
 .slidebar-draggable {
@@ -91,6 +98,7 @@ footer {
   left: 0;
   width: 0%;
   height: 2px;
+  z-index: 0;
 }
 
 #automatic-timeline-box {

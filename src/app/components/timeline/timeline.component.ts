@@ -25,6 +25,7 @@ export class TimelineComponent {
   @ViewChild('slideCircleRight') private slideCircleRight!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
   @ViewChild('timeline') private timeline!: ElementRef;
+  @ViewChild('timelineWindow') private timelineWindow!: ElementRef;
 
   private isMouseClicked = false;
   private draggableLeftLimit = 0;
@@ -54,6 +55,7 @@ export class TimelineComponent {
 
     if (!this.attackGraphMode) {
       leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
+      this.renderer.setStyle(window, 'width', `0px`);
     } else {
       if (leftEl.getBoundingClientRect().left - container.scrollLeft == 0) {
         leftEl.style.transform = `translateX(${
@@ -271,6 +273,14 @@ export class TimelineComponent {
         #343a3e ${rightCenter + container.scrollLeft}px,
         #343a3e ${this.draggableRightLimit}px)`
     );
+
+    const window = this.timelineWindow.nativeElement as HTMLElement;
+    this.renderer.setStyle(
+      window,
+      'left',
+      `${leftCenter + container.scrollLeft}px`
+    );
+    this.renderer.setStyle(window, 'width', `${rightCenter - leftCenter}px`);
   }
 
   private updateLineWidth() {

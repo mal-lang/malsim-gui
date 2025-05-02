@@ -28,6 +28,8 @@
       ></app-timeline-item>
     </div>
     <div id="timeline-slidebar">
+      <div class="line" #slideLine></div>
+      <div id="timeline-window" #timelineWindow></div>
       <svg
         [ngClass]="{ hidden: !this.attackGraphMode }"
         class="slidebar-draggable"
@@ -63,7 +65,6 @@
           cx="8"
         ></circle>
       </svg>
-      <div class="line" #slideLine></div>
     </div>
   </div>
 </footer>
