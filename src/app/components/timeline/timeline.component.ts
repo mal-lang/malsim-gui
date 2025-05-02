@@ -55,8 +55,11 @@ export class TimelineComponent {
     if (changes['attackGraphMode']) {
       //Update color
       if (!this.slideCircleRight) return;
-      if (this.attackGraphMode)
-        this.slideCircleLeft.nativeElement.style.left = this.draggableLeftLimit;
+      if (!this.attackGraphMode) {
+        console.log('Reset to: ' + this.draggableLeftLimit);
+        this.slideCircleLeft.nativeElement.style.left = `${this.draggableLeftLimit}px`;
+        this.updateLineColor();
+      }
       const circle = this.slideCircleRight.nativeElement as HTMLElement;
       this.moveSlide(
         circle.getBoundingClientRect().left,
@@ -113,12 +116,6 @@ export class TimelineComponent {
         else this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
         this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
       }
-
-      console.log(
-        offsetX,
-        this.clickedCircleDraggableLeftLimit,
-        this.clickedCircleDraggableRightLimit
-      );
       if (offsetX > this.clickedCircleDraggableRightLimit) return;
       if (offsetX <= this.clickedCircleDraggableLeftLimit) return;
       this.updateLineColor();
@@ -137,11 +134,6 @@ export class TimelineComponent {
         offsetX = this.clickedCircleDraggableRightLimit;
       if (offsetX <= this.clickedCircleDraggableLeftLimit)
         offsetX = this.clickedCircleDraggableLeftLimit;
-      console.log(
-        offsetX,
-        this.clickedCircleDraggableLeftLimit,
-        this.clickedCircleDraggableRightLimit
-      );
       this.moveSlide(offsetX, this.clickedCircle!);
 
       if (
@@ -190,7 +182,8 @@ export class TimelineComponent {
     const rightRect =
       this.slideCircleRight.nativeElement.getBoundingClientRect();
 
-    const leftCenter = leftRect.left + leftRect.width / 2;
+    const leftCenter =
+      leftRect.left == 0 ? 0 : leftRect.left + leftRect.width / 2;
     const rightCenter = rightRect.left + rightRect.width / 2;
 
     this.renderer.setStyle(line, 'left', `0px`);
