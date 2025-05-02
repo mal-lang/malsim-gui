@@ -24,6 +24,7 @@ export class TimelineComponent {
   @ViewChild('slideCircleLeft') private slideCircleLeft!: ElementRef;
   @ViewChild('slideCircleRight') private slideCircleRight!: ElementRef;
   @ViewChild('slideLine') private slideLine!: ElementRef;
+  @ViewChild('timeline') private timeline!: ElementRef;
 
   private isMouseClicked = false;
   private draggableLeftLimit = 0;
@@ -31,6 +32,11 @@ export class TimelineComponent {
   private clickedCircleDraggableLeftLimit = 0;
   private clickedCircleDraggableRightLimit = 0;
   private clickedCircle: HTMLElement | null = null;
+
+  private marginLeft: number = 24;
+  private itemWidth: number = 128;
+  private gap: number = 8;
+  private halfDistance: number = 68;
 
   public notifications: TyrNotification[] = [];
   public selectedNotifications: TyrNotification[] = [];
@@ -44,19 +50,23 @@ export class TimelineComponent {
 
     const leftEl = this.slideCircleLeft.nativeElement;
     const rightEl = this.slideCircleRight.nativeElement;
+    const container = this.timeline.nativeElement as HTMLElement;
 
     if (!this.attackGraphMode) {
-      leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
+      leftEl.style.transform = `translateX(${
+        this.draggableLeftLimit - container.scrollLeft
+      }px)`;
     } else {
-      if (leftEl.getBoundingClientRect().left == 0) {
+      if (leftEl.getBoundingClientRect().left - container.scrollLeft == 0) {
         leftEl.style.transform = `translateX(${
-          24 - rightEl.getBoundingClientRect().width / 2
+          this.marginLeft - rightEl.getBoundingClientRect().width / 2
         }px)`;
       }
       if (rightEl.getBoundingClientRect().left > 0) {
         rightEl.style.transform = `translateX(${
           rightEl.getBoundingClientRect().left +
-          88 -
+          container.scrollLeft +
+          this.halfDistance -
           rightEl.getBoundingClientRect().width / 2
         }px)`;
       }
@@ -64,9 +74,7 @@ export class TimelineComponent {
 
     if (this.draggableRightLimit > 0)
       this.draggableRightLimit +=
-        88 * (this.attackGraphMode ? 1 : -1) -
-        rightEl.getBoundingClientRect().width *
-          (this.attackGraphMode ? 1.5 : -1.5);
+        this.halfDistance * (this.attackGraphMode ? 1 : -1);
 
     this.updateLineWidth();
     this.updateLineColor();
@@ -109,18 +117,19 @@ export class TimelineComponent {
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
 
-      let offsetX = event.clientX;
+      const container = this.timeline.nativeElement as HTMLElement;
+      let offsetX = event.clientX + container.scrollLeft;
 
       const leftEl = this.slideCircleLeft.nativeElement;
       const rightEl = this.slideCircleRight.nativeElement;
 
       if (this.clickedCircle === leftEl) {
         this.clickedCircleDraggableRightLimit =
-          rightEl.getBoundingClientRect().left - 88;
+          rightEl.getBoundingClientRect().left - this.halfDistance;
         this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
       } else {
         this.clickedCircleDraggableLeftLimit = this.attackGraphMode
-          ? leftEl.getBoundingClientRect().left + 88
+          ? leftEl.getBoundingClientRect().left + this.halfDistance
           : this.draggableLeftLimit;
         this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
       }
@@ -131,7 +140,7 @@ export class TimelineComponent {
         offsetX = this.clickedCircleDraggableRightLimit;
 
       if (offsetX <= this.clickedCircleDraggableLeftLimit)
-        offsetX = this.clickedCircleDraggableRightLimit;
+        offsetX = this.clickedCircleDraggableLeftLimit;
 
       this.renderer.setStyle(
         this.clickedCircle!,
@@ -144,12 +153,17 @@ export class TimelineComponent {
       if (!this.isMouseClicked) return;
 
       this.isMouseClicked = false;
-      let offsetX = event.clientX;
+      const container = this.timeline.nativeElement as HTMLElement;
+      let offsetX = event.clientX + container.scrollLeft;
 
       offsetX = Math.max(this.clickedCircleDraggableLeftLimit, offsetX);
       offsetX = Math.min(this.clickedCircleDraggableRightLimit, offsetX);
 
-      this.moveSlide(offsetX, this.clickedCircle!);
+      this.moveSlide(
+        offsetX -
+          this.slideCircleRight.nativeElement.getBoundingClientRect().width,
+        this.clickedCircle!
+      );
 
       if (
         this.slideCircleRight.nativeElement.getBoundingClientRect().left <
@@ -163,41 +177,49 @@ export class TimelineComponent {
 
   private moveSlide(position: number, circle: HTMLElement) {
     let translatedX = this.calculateSelectedItem(position);
-    console.log(
-      circle.getBoundingClientRect().left,
-      this.clickedCircleDraggableLeftLimit
-    );
     if (
       circle == this.slideCircleRight.nativeElement &&
       this.attackGraphMode &&
       circle.getBoundingClientRect().left > this.clickedCircleDraggableLeftLimit
     )
       translatedX =
-        translatedX + 136 > this.draggableRightLimit
+        translatedX + this.itemWidth > this.draggableRightLimit
           ? this.draggableRightLimit
-          : translatedX + 136;
+          : translatedX + this.itemWidth;
 
+    if (
+      circle == this.slideCircleRight.nativeElement &&
+      this.attackGraphMode &&
+      circle.getBoundingClientRect().left <=
+        this.clickedCircleDraggableLeftLimit
+    )
+      translatedX =
+        this.slideCircleLeft.nativeElement.getBoundingClientRect().left +
+        this.itemWidth +
+        this.gap;
     this.renderer.setStyle(circle, 'transform', `translateX(${translatedX}px)`);
     this.updateLineColor();
     this.updateSelectedNotifications();
   }
 
   private updateSelectedNotifications() {
+    const container = this.timeline.nativeElement as HTMLElement;
     const rightRect =
       this.slideCircleRight.nativeElement.getBoundingClientRect();
-    const rightCenter = rightRect.left + rightRect.width / 2;
+    const rightCenter = rightRect.left + container.scrollLeft;
     const rightPosition = this.calculateSelectedItem(rightCenter);
     const rightIndex =
-      Math.trunc(rightPosition / 136) + (rightPosition === 0 ? 0 : 1);
+      Math.trunc(rightPosition / (this.itemWidth + this.gap)) +
+      (this.attackGraphMode ? 2 : 1);
 
     const all = this.notifications.slice(0, rightIndex);
 
     if (this.attackGraphMode) {
       const leftRect =
         this.slideCircleLeft.nativeElement.getBoundingClientRect();
-      const leftCenter = leftRect.left + leftRect.width / 2;
+      const leftCenter = leftRect.left + container.scrollLeft;
       const leftPosition = this.calculateSelectedItem(leftCenter);
-      const leftIndex = Math.trunc(leftPosition / 136);
+      const leftIndex = Math.trunc(leftPosition / (this.itemWidth + this.gap));
 
       this.selectedNotifications = this.notifications.slice(
         leftIndex,
@@ -206,27 +228,31 @@ export class TimelineComponent {
     } else {
       this.selectedNotifications = all;
     }
-
     this.tyrManager.updateAlertVisibility(all);
     this.cdRef.detectChanges();
   }
 
   private calculateSelectedItem(position: number): number {
     const base =
-      24 -
-      (this.attackGraphMode
-        ? this.slideCircleLeft.nativeElement.getBoundingClientRect().width / 2
-        : 0);
+      this.marginLeft -
+      this.slideCircleLeft.nativeElement.getBoundingClientRect().width / 2;
 
-    if (position < base) return this.attackGraphMode ? base : 0;
+    if (position < base) return this.attackGraphMode ? 0 : 0;
 
     let total = base;
-    while (total <= position) total += 136;
+    while (total <= position) total += this.itemWidth + this.gap;
 
-    return total - (this.attackGraphMode ? 136 : 88);
+    return (
+      total -
+      (this.attackGraphMode
+        ? this.itemWidth + this.gap
+        : this.halfDistance +
+          this.slideCircleRight.nativeElement.getBoundingClientRect().width)
+    );
   }
 
   private updateLineColor() {
+    const container = this.timeline.nativeElement as HTMLElement;
     const line = this.slideLine.nativeElement as HTMLElement;
     const leftRect = this.slideCircleLeft.nativeElement.getBoundingClientRect();
     const rightRect =
@@ -242,11 +268,11 @@ export class TimelineComponent {
       'background',
       `linear-gradient(to right,
         #343a3e 0px,
-        #343a3e ${leftCenter}px,
-        ${this.getColor()} ${leftCenter}px,
-        ${this.getColor()} ${rightCenter}px,
-        #343a3e ${rightCenter}px,
-        #343a3e 100%)`
+        #343a3e ${leftCenter + container.scrollLeft}px,
+        ${this.getColor()} ${leftCenter + container.scrollLeft}px,
+        ${this.getColor()} ${rightCenter + container.scrollLeft}px,
+        #343a3e ${rightCenter + container.scrollLeft}px,
+        #343a3e ${this.draggableRightLimit}px)`
     );
   }
 
@@ -269,7 +295,7 @@ export class TimelineComponent {
     );
     this.openAssetMenu(notification.node);
 
-    const position = 24 + 136 * index;
+    const position = this.marginLeft + (this.itemWidth + this.gap) * index;
     const current =
       this.slideCircleRight.nativeElement.getBoundingClientRect().left;
     if (position < current) return;
@@ -278,7 +304,11 @@ export class TimelineComponent {
   }
 
   public addAlert(alert: TyrNotification) {
-    this.draggableRightLimit += this.notifications.length > 0 ? 136 : 80;
+    const container = this.timeline.nativeElement as HTMLElement;
+    this.draggableRightLimit +=
+      container.scrollLeft + this.notifications.length > 0
+        ? this.itemWidth + this.gap
+        : this.itemWidth / 2 + this.marginLeft;
     this.notifications.push(alert);
     this.cdRef.detectChanges();
     this.updateLineWidth();
@@ -291,7 +321,11 @@ export class TimelineComponent {
   }
 
   public addPerformedSuggestion(suggestion: TyrNotification) {
-    this.draggableRightLimit += this.notifications.length > 0 ? 136 : 80;
+    const container = this.timeline.nativeElement as HTMLElement;
+    this.draggableRightLimit +=
+      container.scrollLeft + this.notifications.length > 0
+        ? this.itemWidth + this.gap
+        : this.itemWidth / 2 + this.marginLeft;
     this.notifications.push(suggestion);
     this.cdRef.detectChanges();
     this.updateLineWidth();
