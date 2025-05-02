@@ -56,8 +56,7 @@ export class TimelineComponent {
       //Update color
       if (!this.slideCircleRight) return;
       if (!this.attackGraphMode) {
-        console.log('Reset to: ' + this.draggableLeftLimit);
-        this.slideCircleLeft.nativeElement.style.left = `${this.draggableLeftLimit}px`;
+        this.slideCircleLeft.nativeElement.style.transform = `translateX(${this.draggableLeftLimit}px)`;
         this.updateLineColor();
       }
       const circle = this.slideCircleRight.nativeElement as HTMLElement;
@@ -210,7 +209,7 @@ export class TimelineComponent {
     const leftCenter =
       leftRect.left == 0 ? 0 : leftRect.left + leftRect.width / 2;
     const rightCenter = rightRect.left + rightRect.width / 2;
-
+    console.log(leftCenter);
     this.renderer.setStyle(line, 'left', `0px`);
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
     this.renderer.setStyle(
