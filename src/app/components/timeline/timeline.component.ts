@@ -53,9 +53,7 @@ export class TimelineComponent {
     const container = this.timeline.nativeElement as HTMLElement;
 
     if (!this.attackGraphMode) {
-      leftEl.style.transform = `translateX(${
-        this.draggableLeftLimit - container.scrollLeft
-      }px)`;
+      leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
     } else {
       if (leftEl.getBoundingClientRect().left - container.scrollLeft == 0) {
         leftEl.style.transform = `translateX(${
@@ -65,7 +63,6 @@ export class TimelineComponent {
       if (rightEl.getBoundingClientRect().left > 0) {
         rightEl.style.transform = `translateX(${
           rightEl.getBoundingClientRect().left +
-          container.scrollLeft +
           this.halfDistance -
           rightEl.getBoundingClientRect().width / 2
         }px)`;
