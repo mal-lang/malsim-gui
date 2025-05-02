@@ -35,10 +35,10 @@ export class TimelineComponent {
   private draggableRightLimit: number;
   private clickedCircleDraggableLeftLimit: number;
   private clickedCircleDraggableRightLimit: number;
-  private selectedAlert: number | null;
   private clickedCircle: HTMLElement | null;
 
   public notifications: TyrNotification[];
+  public selectedNotifications: TyrNotification[];
   public automaticUpdate: boolean;
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
@@ -85,6 +85,7 @@ export class TimelineComponent {
       () => {
         this.isMouseClicked = true;
         this.clickedCircle = this.slideCircleLeft.nativeElement;
+        console.log('ITS ME!');
       }
     );
     this.renderer.listen(
@@ -148,12 +149,42 @@ export class TimelineComponent {
     const position = this.calculateSelectedItem(slidePosition);
     this.renderer.setStyle(circle, 'transform', `translateX(${position}px)`);
     this.updateLineColor();
+    this.updateSelectedNotifications();
+  }
 
+  private updateSelectedNotifications() {
     let notifications: TyrNotification[] = [];
-    if (position >= 24) {
-      const alertPosition = Math.trunc(position / 136);
-      notifications = this.notifications.slice(0, alertPosition + 1);
-    }
+    let attackGraphAlerts: TyrNotification[] = [];
+
+    const rightRect =
+      this.slideCircleRight.nativeElement.getBoundingClientRect();
+    const rightCenter =
+      rightRect.left == 0 ? 0 : rightRect.left + rightRect.width / 2;
+    const rightPosition = this.calculateSelectedItem(rightCenter);
+    const rightAlertPosition =
+      Math.trunc(rightPosition / 136) + (rightPosition == 0 ? 0 : 1);
+
+    notifications = this.notifications.slice(0, rightAlertPosition);
+
+    if (this.attackGraphMode) {
+      const leftRect =
+        this.slideCircleLeft.nativeElement.getBoundingClientRect();
+      const leftCenter =
+        leftRect.left == 0 ? 0 : leftRect.left + leftRect.width / 2;
+      const leftPosition = this.calculateSelectedItem(leftCenter);
+      const leftAlertPosition =
+        Math.trunc(leftPosition / 136) + (leftPosition == 0 ? 0 : 1);
+
+      attackGraphAlerts = this.notifications.slice(
+        leftAlertPosition,
+        rightAlertPosition
+      );
+
+      this.selectedNotifications = attackGraphAlerts;
+    } else this.selectedNotifications = notifications;
+
+    console.log('Notifications: ', notifications);
+    console.log('Attacks: ', attackGraphAlerts);
 
     this.tyrManager.updateAlertVisibility(notifications);
 
@@ -162,16 +193,13 @@ export class TimelineComponent {
 
   private calculateSelectedItem(position: number) {
     if (position < 24) {
-      this.selectedAlert = null;
       return 0;
     }
 
     let aux = 24;
-    let i;
-    for (i = 0; aux <= position; i++) {
+    for (let i = 0; aux <= position; i++) {
       aux += 136;
     }
-    this.selectedAlert = i;
 
     return aux - 88;
   }
@@ -204,11 +232,6 @@ export class TimelineComponent {
   private updateLineWidth() {
     const line = this.slideLine.nativeElement as HTMLElement;
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
-  }
-
-  public getClass(index: number) {
-    if (this.selectedAlert) return index < this.selectedAlert ? 'active' : '';
-    return '';
   }
 
   public getColor() {

@@ -1,4 +1,8 @@
-<footer [ngClass]="getClass(0) && { 'attack-graph': this.attackGraphMode }">
+<footer
+  [ngClass]="{
+    'attack-graph': this.attackGraphMode
+  }"
+>
   <h2>Activity Timeline</h2>
   <div id="automatic-timeline-box">
     <p>Automatic Update:</p>
@@ -18,7 +22,9 @@
         (click)="this.onTimelineItemClick(i)"
         (mouseenter)="this.hoverItem(notification)"
         (mouseleave)="this.unhoverItem()"
-        [ngClass]="getClass(i)"
+        [ngClass]="{
+          active: this.selectedNotifications.includes(notification)
+        }"
       ></app-timeline-item>
     </div>
     <div id="timeline-slidebar">
