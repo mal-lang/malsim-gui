@@ -8,7 +8,12 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { TyrAssetGraphNode, TyrManager, TyrNotification } from 'tyr-js';
+import {
+  TyrAssetGraphNode,
+  TyrAttackStep,
+  TyrManager,
+  TyrNotification,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-timeline',
@@ -55,30 +60,42 @@ export class TimelineComponent {
     const rightEl = this.slideCircleRight.nativeElement;
     const container = this.timeline.nativeElement as HTMLElement;
 
+    let leftPos = leftEl.getBoundingClientRect().left;
+    let rightPos = rightEl.getBoundingClientRect().left;
+
     if (!this.attackGraphMode) {
+      //Set automatic update to true when jumping back to asset graph mode
+      this.automaticUpdate = true;
+      //Move slide left to the left of the slide when in asset graph mode
       leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
       this.renderer.setStyle(this.timelineWindow.nativeElement, 'width', `0px`);
     } else {
-      if (leftEl.getBoundingClientRect().left - container.scrollLeft == 0) {
-        leftEl.style.transform = `translateX(${
-          this.marginLeft - rightEl.getBoundingClientRect().width / 2
-        }px)`;
+      this.automaticUpdate = false;
+
+      //Move the right slide half an item width to the right, since the braking point now is at the end of the item and not the middle
+      if (rightPos > 0) {
+        rightPos +=
+          this.halfDistance - rightEl.getBoundingClientRect().width / 2;
+        rightEl.style.transform = `translateX(${rightPos}px)`;
       }
-      if (rightEl.getBoundingClientRect().left > 0) {
-        rightEl.style.transform = `translateX(${
-          rightEl.getBoundingClientRect().left +
-          this.halfDistance -
-          rightEl.getBoundingClientRect().width / 2
-        }px)`;
-      }
+
+      //Move the left one to form a one item width window
+      leftPos =
+        rightPos -
+        this.itemWidth -
+        this.gap +
+        rightEl.getBoundingClientRect().width;
+      leftEl.style.transform = `translateX(${leftPos}px)`;
     }
 
+    //Expand the limit to the right half an item, or shrink it depending on the mode
     if (this.draggableRightLimit > 0)
       this.draggableRightLimit +=
         this.halfDistance * (this.attackGraphMode ? 1 : -1);
 
+    //Update slide
     this.updateLineWidth();
-    this.updateLineColor();
+    this.updateLineColor(leftPos, rightPos);
     this.updateSelectedNotifications();
 
     const circle = this.slideCircleRight.nativeElement as HTMLElement;
@@ -349,7 +366,7 @@ export class TimelineComponent {
     );
   }
 
-  private updateLineColor() {
+  private updateLineColor(leftPos?: number, rightPos?: number) {
     const container = this.timeline.nativeElement as HTMLElement;
     const line = this.slideLine.nativeElement as HTMLElement;
     const leftRect = this.slideCircleLeft.nativeElement.getBoundingClientRect();
@@ -366,10 +383,10 @@ export class TimelineComponent {
       'background',
       `linear-gradient(to right,
         #343a3e 0px,
-        #343a3e ${leftCenter + container.scrollLeft}px,
-        ${this.getColor()} ${leftCenter + container.scrollLeft}px,
-        ${this.getColor()} ${rightCenter + container.scrollLeft}px,
-        #343a3e ${rightCenter + container.scrollLeft}px,
+        #343a3e ${leftPos ?? leftCenter + container.scrollLeft}px,
+        ${this.getColor()} ${leftPos ?? leftCenter + container.scrollLeft}px,
+        ${this.getColor()} ${rightPos ?? rightCenter + container.scrollLeft}px,
+        #343a3e ${rightPos ?? rightCenter + container.scrollLeft}px,
         #343a3e ${this.draggableRightLimit}px)`
     );
 
@@ -463,5 +480,15 @@ export class TimelineComponent {
 
   public unhoverItem() {
     this.tyrManager.assetGraphRenderer.unhighlightNodes();
+  }
+
+  public setSlideOnStep(attackStep: TyrAttackStep) {
+    const index = this.notifications.findIndex((n) => {
+      if (!n.attackStep) return;
+      return n.attackStep.id === attackStep.id;
+    });
+    if (index == -1) return;
+    const pos = (index + 1) * (this.itemWidth + this.gap);
+    this.moveSlide(pos, this.slideCircleRight.nativeElement);
   }
 }
