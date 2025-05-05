@@ -420,12 +420,17 @@ export class TimelineComponent {
 
   public onTimelineItemClick(index: number) {
     const notification = this.notifications[index];
+
     if (this.attackGraphMode)
       this.tyrManager.assetGraphRenderer.moveCameraToNode(notification.node);
-    else
+    else {
       this.tyrManager.assetGraphRenderer.moveAndZoomCameraToNode(
         notification.node
       );
+      this.notifications.forEach((n) => (n.node.style.selected = false));
+      notification.node.style.selected = true;
+    }
+
     this.openAssetMenu(notification.node);
 
     const position = this.marginLeft + (this.itemWidth + this.gap) * index;
