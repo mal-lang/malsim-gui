@@ -8,7 +8,12 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { TyrAssetGraphNode, TyrManager, TyrNotification } from 'tyr-js';
+import {
+  TyrAssetGraphNode,
+  TyrAttackStep,
+  TyrManager,
+  TyrNotification,
+} from 'tyr-js';
 
 @Component({
   selector: 'app-timeline',
@@ -19,6 +24,7 @@ import { TyrAssetGraphNode, TyrManager, TyrNotification } from 'tyr-js';
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
+  @Input() updateAttackGraph: (attackSteps: TyrAttackStep[]) => void;
   @Input() attackGraphMode: boolean;
 
   @ViewChild('slideCircleLeft') private slideCircleLeft!: ElementRef;
@@ -327,6 +333,14 @@ export class TimelineComponent {
       this.selectedNotifications = all;
     }
     this.tyrManager.updateAlertVisibility(all);
+
+    if (this.attackGraphMode) {
+      this.updateAttackGraph(
+        this.selectedNotifications.map((n) => n.attackStep!)
+      );
+      console.log('REACHES');
+    }
+
     this.cdRef.detectChanges();
   }
 

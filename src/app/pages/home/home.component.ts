@@ -289,10 +289,12 @@ export class HomeComponent {
 
   openAttackGraph = (attackStep: TyrAttackStep) => {
     this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
-
     this.attackGraph.openAttackGraph(attackStep);
+    this.updateAttackGraph([]);
+  };
 
-    this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);
+  updateAttackGraph = (attackSteps: TyrAttackStep[]) => {
+    this.tyrManager.attackGraphRenderer.displaySubgraph(attackSteps, 3);
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 }
