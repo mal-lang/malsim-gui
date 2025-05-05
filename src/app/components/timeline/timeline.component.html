@@ -1,4 +1,8 @@
-<footer [ngClass]="getClass(0)">
+<footer
+  [ngClass]="{
+    'attack-graph': this.attackGraphMode
+  }"
+>
   <h2>Activity Timeline</h2>
   <div id="automatic-timeline-box">
     <p>Automatic Update:</p>
@@ -10,7 +14,7 @@
       <div class="ball"></div>
     </div>
   </div>
-  <div id="timeline">
+  <div id="timeline" #timeline>
     <div id="timeline-item-list">
       <app-timeline-item
         *ngFor="let notification of notifications; let i = index"
@@ -18,13 +22,18 @@
         (click)="this.onTimelineItemClick(i)"
         (mouseenter)="this.hoverItem(notification)"
         (mouseleave)="this.unhoverItem()"
-        [ngClass]="getClass(i)"
+        [ngClass]="{
+          active: this.selectedNotifications.includes(notification)
+        }"
       ></app-timeline-item>
     </div>
     <div id="timeline-slidebar">
+      <div class="line" #slideLine></div>
+      <div id="timeline-window" #timelineWindow></div>
       <svg
-        id="slidebar-draggable"
-        #slideCircle
+        [ngClass]="{ hidden: !this.attackGraphMode }"
+        class="slidebar-draggable"
+        #slideCircleLeft
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         height="16"
@@ -32,14 +41,30 @@
       >
         <circle
           stroke-width="2"
-          stroke="#ffa100"
+          [attr.stroke]="getColor()"
           fill="#00080d"
           r="7"
           cy="8"
           cx="8"
         ></circle>
       </svg>
-      <div class="line" #slideLine></div>
+      <svg
+        class="slidebar-draggable"
+        #slideCircleRight
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        height="16"
+        width="16"
+      >
+        <circle
+          stroke-width="2"
+          [attr.stroke]="getColor()"
+          fill="#00080d"
+          r="7"
+          cy="8"
+          cx="8"
+        ></circle>
+      </svg>
     </div>
   </div>
 </footer>

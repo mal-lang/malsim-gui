@@ -11,13 +11,22 @@
       [onNodeClick]="notifyClick"
       (simulationStatusEmitter)="setAlertsInterval()"
     />
+    <app-attack-graph
+      #attackGraph
+      [tyrManager]="this.tyrManager"
+    ></app-attack-graph>
     <aside>
-      <app-asset-menu #assetMenu [tyrManager]="this.tyrManager" />
+      <app-asset-menu
+        #assetMenu
+        [tyrManager]="this.tyrManager"
+        [openAttackGraph]="this.openAttackGraph"
+      />
     </aside>
   </main>
   <app-timeline
     #timeline
     [tyrManager]="this.tyrManager"
     [openAssetMenu]="notifyClick"
+    [attackGraphMode]="this.isAttackGraphMode()"
   />
 </ng-container>

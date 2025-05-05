@@ -1,57 +1,17 @@
-<div class="card bg-dark">
-  <div class="card-header text-center">
-    {{
-      type === "historical" ? "Historical attack Graph" : "Attack graph horizon"
-    }}
+<section
+  #graphContainer
+  id="graphContainer"
+  [ngClass]="{ visible: this.isVisible }"
+>
+  <div class="viewname" [ngClass]="{ visible: this.isVisible }">
+    <img src="/assets/icons/network.png" />
+    <p>Attack Graph</p>
   </div>
-  <div class="card-body">
-    <div class="attack-graph-container">
-      <ngx-graph
-        layout="dagre"
-        [draggingEnabled]="false"
-        [links]="attackGraphLinks"
-        [nodes]="attackGraphNodes"
-        [layoutSettings]="layoutSettings"
-        [zoomToFit$]="zoomToFit$"
-      >
-        <ng-template #nodeTemplate let-node>
-          <svg:g
-            class="node"
-            ngx-tooltip
-            (click)="onNodeClick($event, node)"
-            [tp]="
-              node.active && node.logLength
-                ? 'Nr of logs produced: ' + node.logLength
-                : null
-            "
-          >
-            <svg:rect
-              [attr.width]="node.dimension.width"
-              [attr.height]="node.dimension.height"
-              [attr.fill]="node.color"
-            />
-            <svg:text
-              alignment-baseline="central"
-              [attr.x]="10"
-              [attr.y]="node.dimension.height / 1.5"
-            >
-              {{ node.label }}
-            </svg:text>
-          </svg:g>
-        </ng-template>
-
-        <ng-template #linkTemplate let-link>
-          <svg:g class="edge">
-            <svg:path
-              class="line"
-              stroke-width="2"
-              [attr.stroke]="'#d8d8d8'"
-            ></svg:path>
-          </svg:g>
-        </ng-template>
-      </ngx-graph>
-    </div>
+  <div
+    class="exit"
+    [ngClass]="{ visible: this.isVisible }"
+    (click)="this.closeAttackGraph()"
+  >
+    <img src="/assets/icons/exit.png" />
   </div>
-</div>
-
-<app-log-modal #logModal></app-log-modal>
+</section>

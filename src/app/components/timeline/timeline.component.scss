@@ -22,6 +22,27 @@ footer {
     justify-content: center;
     border-bottom: 1px solid $border;
   }
+
+  .switch.on {
+    background-color: $clementine;
+  }
+
+  &.attack-graph {
+    .switch.on {
+      background-color: $ice;
+    }
+    .line {
+      background: linear-gradient(to right, $ice 0%, $border 0%);
+    }
+    .ball {
+      border: 2px solid $ice;
+    }
+    #timeline-window {
+      position: absolute;
+      cursor: move;
+      height: 24px;
+    }
+  }
 }
 
 #timeline {
@@ -56,12 +77,18 @@ footer {
 #timeline-slidebar {
   height: 24px;
   position: relative;
+  cursor: default;
+  z-index: 1;
 }
 
-#slidebar-draggable {
+.slidebar-draggable {
   position: absolute;
   z-index: 2;
   cursor: grab;
+
+  &.hidden {
+    display: none;
+  }
 }
 
 .line {
@@ -71,7 +98,7 @@ footer {
   left: 0;
   width: 0%;
   height: 2px;
-  background: linear-gradient(to right, $clementine 0%, $border 0%);
+  z-index: 0;
 }
 
 #automatic-timeline-box {
@@ -99,21 +126,17 @@ footer {
   transition: background-color 0.3s ease;
 }
 
-.switch.on {
-  background-color: $clementine;
-}
-
 .ball {
   width: 16px;
   height: 16px;
   background-color: $dark;
-  border: 2px solid $clementine;
   border-radius: 50%;
   position: absolute;
   top: 2px;
   left: 2px;
   transition: left 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid $clementine;
 }
 
 .switch.on .ball {

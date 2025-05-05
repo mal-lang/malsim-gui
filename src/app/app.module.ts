@@ -5,7 +5,6 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { OverviewComponent } from './pages/overview/overview.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { AttackGraphComponent } from './components/attack-graph/attack-graph.component';
 import { InstanceModelComponent } from './components/instance-model/instance-model.component';
@@ -28,13 +27,11 @@ import { AssetMenuComponent } from './components/asset-menu/asset-menu.component
 @NgModule({
   declarations: [
     AppComponent,
-    OverviewComponent,
     HomeComponent,
     HeaderComponent,
     TimelineComponent,
     AssetGraphComponent,
     MenuComponent,
-    AttackGraphComponent,
     InstanceModelComponent,
     SuggestedActionsComponent,
     LogModalComponent,
@@ -47,6 +44,7 @@ import { AssetMenuComponent } from './components/asset-menu/asset-menu.component
     TippyDirective,
     TimelineItemComponent,
     AssetMenuComponent,
+    AttackGraphComponent,
   ],
   providers: [
     provideHttpClient(),

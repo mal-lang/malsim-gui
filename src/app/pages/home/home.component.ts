@@ -6,18 +6,22 @@ import { forkJoin } from 'rxjs';
 
 import {
   EdgeAffectedCondition,
+  LayoutAlgorithm,
   NodeAffectedCondition,
   parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
+  TyrAssetGraphNode,
+  TyrAssetGraphNodeStatus,
+  TyrAttackStep,
   TyrGraphNode,
-  TyrGraphNodeStatus,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
+import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +31,7 @@ import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.com
 export class HomeComponent {
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
   @ViewChild('assetGraph') assetGraph!: AssetGraphComponent;
+  @ViewChild('attackGraph') attackGraph!: AttackGraphComponent;
   @ViewChild('assetMenu') assetMenu!: AssetMenuComponent;
   @ViewChild('timeline') timeline!: TimelineComponent;
 
@@ -73,10 +78,10 @@ export class HomeComponent {
   private edgeRule: RendererRule = {
     scope: RendererRuleScope.edge,
     affectedCondition: this.condition2,
-    color: 'white',
-    width: 1,
-    edgeCurveX: 20,
-    edgeCurveY: 20,
+    color: 0xafafaf,
+    width: 5,
+    edgeCurveX: 0,
+    edgeCurveY: 0,
   };
 
   private condition3: EdgeAffectedCondition = {
@@ -94,7 +99,7 @@ export class HomeComponent {
 
   public currentDefenderSuggestions: any = {};
 
-  public notifyClick = (node: TyrGraphNode) => {};
+  public notifyClick = (node: TyrAssetGraphNode) => {};
 
   constructor(apiService: ApiService) {
     this.apiService = apiService;
@@ -102,8 +107,10 @@ export class HomeComponent {
   }
 
   async ngAfterViewInit() {
-    this.notifyClick = (node: TyrGraphNode) => {
-      this.assetMenu.open(node);
+    this.notifyClick = (node: TyrAssetGraphNode) => {
+      if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
+        this.assetMenu.open(node);
+      }
     };
     await this.assetGraph.loadSprites().then(() => {
       this.retrieveInitialData();
@@ -113,23 +120,28 @@ export class HomeComponent {
   private async retrieveInitialData() {
     forkJoin({
       receivedModel: this.apiService.getModel(),
-      attackGraph: this.apiService.getAttackGraph(),
-    }).subscribe(async ({ receivedModel, attackGraph }) => {
+      receivedAttackGraph: this.apiService.getAttackGraph(),
+    }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
       this.tyrManager = new TyrManager(
         receivedModel,
-        attackGraph.attack_steps,
+        receivedAttackGraph.attack_steps,
         this.assetGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
-      const graphContainer =
-        this.assetGraph.getAssetGraphContainer().nativeElement;
 
-      await this.tyrManager
-        .initializeRenderer(graphContainer)
-        .then(async (app) => {
-          graphContainer.appendChild(app.canvas);
-          this.tyrManager.startLayoutSimulation();
-        });
+      const assetGraphContainer =
+        this.assetGraph.getAssetGraphContainer().nativeElement;
+      const attackGraphContainer =
+        this.attackGraph.getAttackGraphContainer().nativeElement;
+
+      this.tyrManager.assetGraphRenderer.init(
+        this.assetGraph.getConfig(),
+        assetGraphContainer
+      );
+      this.tyrManager.attackGraphRenderer.init(
+        this.attackGraph.getConfig(),
+        attackGraphContainer
+      );
     });
   }
 
@@ -156,18 +168,18 @@ export class HomeComponent {
     //TODO: Expand
     switch (suggestion.description) {
       case 'Shutdown machine':
-        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
           tyrSuggestion.node
-        );
+        ) as TyrAssetGraphNode[];
         break;
       case 'Lockout user':
-        tyrSuggestion.nodeStatus = TyrGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrGraphNodeStatus.inactive;
+        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
           tyrSuggestion.node
-        );
+        ) as TyrAssetGraphNode[];
         break;
       default:
         break;
@@ -181,30 +193,32 @@ export class HomeComponent {
 
     if (this.timeline.automaticUpdate)
       tyrSuggestion.node.style.timelineStatus = tyrSuggestion.node.status;
-    this.tyrManager.updateNodesStatusStyle([tyrSuggestion.node]);
+    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(
+      tyrSuggestion.node
+    );
   }
 
-  private getIdentityNodeChildren(node: TyrGraphNode) {
-    let list = node.connections.childrenIds;
-    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+  private getIdentityNodeChildren(node: TyrAssetGraphNode) {
+    let list = node.connections.children;
+    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].asset.type != 'Application') {
-        list.push(...nodes[i].connections.childrenIds);
+        list.push(...nodes[i].connections.children);
       }
     }
     return list;
   }
 
-  private getApplicationNodeChildren(node: TyrGraphNode) {
-    let list = node.connections.childrenIds;
-    const nodes = this.tyrManager.getNodes().filter((n) => list.includes(n.id));
+  private getApplicationNodeChildren(node: TyrAssetGraphNode) {
+    let list = node.connections.children;
+    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].asset.type == 'Identity') {
-        list.push(...nodes[i].connections.childrenIds);
+        list.push(...nodes[i].connections.children);
       }
     }
     return list;
@@ -223,7 +237,7 @@ export class HomeComponent {
       if (Object.keys(latestAttackSteps).length > 0) {
         parseLatestAttackSteps(latestAttackSteps)[0];
         const alert = this.tyrManager.injestLatestAttackStep(
-          parseLatestAttackSteps(latestAttackSteps)[0],
+          parseLatestAttackSteps(latestAttackSteps)[0].id,
           this.timeline.automaticUpdate
         );
         if (alert) this.timeline.addAlert(alert);
@@ -268,4 +282,17 @@ export class HomeComponent {
     }
     return false;
   }
+
+  isAttackGraphMode() {
+    return this.tyrManager?.attackGraphRenderer?.getIsVisible?.();
+  }
+
+  openAttackGraph = (attackStep: TyrAttackStep) => {
+    this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
+
+    this.attackGraph.openAttackGraph(attackStep);
+
+    this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);
+    this.tyrManager.attackGraphRenderer.resizeViewport();
+  };
 }

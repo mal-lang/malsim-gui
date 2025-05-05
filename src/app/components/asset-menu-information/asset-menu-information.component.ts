@@ -1,45 +1,37 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import {
-  TyrGraphNode,
-  TyrGraphNodeStatus,
-  TyrManager,
-  TyrNotificationType,
-} from 'tyr-js';
+import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
 
 @Component({
   selector: 'app-asset-menu-information',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgFor],
   templateUrl: './asset-menu-information.component.html',
   styleUrl: './asset-menu-information.component.scss',
 })
 export class AssetMenuInformationComponent {
-  @Input() node: TyrGraphNode;
+  @Input() node: TyrAssetGraphNode;
 
   @Input() tyrManager: TyrManager;
-  @Input() selectAssetImage: (node: TyrGraphNode) => void;
-  public relatedNodes: TyrGraphNode[];
+  @Input() selectAssetImage: (node: TyrAssetGraphNode) => void;
+  public relatedNodes: TyrAssetGraphNode[];
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['node']) {
       if (!this.node) return;
-      const ids = this.node.connections.childrenIds;
-      this.relatedNodes = this.node.connections.paths
-        .filter((p) => ids.includes(p.destiny.id))
-        .map((p) => p.destiny);
+      this.relatedNodes = this.node.connections.children as TyrAssetGraphNode[];
     }
   }
 
   public getStatus() {
-    return TyrGraphNodeStatus[this.node.status];
+    return TyrAssetGraphNodeStatus[this.node.status];
   }
 
-  public hoverItem(node: TyrGraphNode) {
-    this.tyrManager.highlightNode(node);
+  public hoverItem(node: TyrAssetGraphNode) {
+    this.tyrManager.assetGraphRenderer.highlightNode(node);
   }
 
   public unhoverItem() {
-    this.tyrManager.unhighlightNodes();
+    this.tyrManager.assetGraphRenderer.unhighlightNodes();
   }
 }

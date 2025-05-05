@@ -75,6 +75,7 @@ export class SuggestedActionsComponent {
   }
 
   async selectAction(id: number, iteration: number) {
+
     this.selectedActions.push({ id: this.suggestedActions[id].stepId, iteration: iteration });
     this.suggestedActions[id].weight = 'SENT';
     await this.apiService.postDefenderAction(this.suggestedActions[id].stepId, iteration).then(() => {
@@ -91,7 +92,6 @@ export class SuggestedActionsComponent {
   }
 
   selectActionImage(suggestion: any): string {
-    console.log(suggestion.description);
     switch (suggestion.action.description) {
       //TODO
       case 'Shutdown machine':

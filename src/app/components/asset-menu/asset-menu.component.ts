@@ -4,13 +4,14 @@ import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
 import { CrossComponent } from '../../utils/cross/cross.component';
 import {
-  TyrGraphNode,
   TyrManager,
-  TyrGraphNodeStatus,
   getEmptyNodeStyle,
   getEmptyNodeConnectionInfo,
   getEmptyNodeCluster,
   TyrNotification,
+  TyrAssetGraphNode,
+  TyrAssetGraphNodeStatus,
+  TyrAttackStep,
 } from 'tyr-js';
 
 @Component({
@@ -28,7 +29,8 @@ import {
 })
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
-  public node: TyrGraphNode;
+  @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
+  public node: TyrAssetGraphNode;
   public notifications: TyrNotification[] = [];
   public closed: boolean = true;
   public openedMenu: string = 'information';
@@ -37,7 +39,7 @@ export class AssetMenuComponent {
     //Dummy node for init purposes
     this.node = {
       id: '',
-      status: TyrGraphNodeStatus.active,
+      status: TyrAssetGraphNodeStatus.active,
       asset: {
         id: '',
         name: '',
@@ -54,13 +56,14 @@ export class AssetMenuComponent {
       connections: getEmptyNodeConnectionInfo(),
       cluster: getEmptyNodeCluster(),
     };
+    this.close = this.close.bind(this);
   }
 
   public openMenu(menu: string) {
     this.openedMenu = menu;
   }
 
-  public open(node: TyrGraphNode) {
+  public open(node: TyrAssetGraphNode) {
     this.node = node;
     this.closed = false;
   }
@@ -68,10 +71,10 @@ export class AssetMenuComponent {
   public close() {
     this.closed = true;
     this.node.style.selected = false;
-    this.tyrManager.updateNodesStatusStyle([this.node]);
+    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
   }
 
-  public selectAssetImage(node: TyrGraphNode) {
+  public selectAssetImage(node: TyrAssetGraphNode) {
     switch (node.asset.type) {
       case 'Network':
         return '/assets/icons/network.png';
@@ -87,4 +90,9 @@ export class AssetMenuComponent {
         return '/assets/icons/shield.png';
     }
   }
+
+  openAttackGraphWindow = (attackStep: TyrAttackStep) => {
+    this.close();
+    this.openAttackGraph(attackStep);
+  };
 }
