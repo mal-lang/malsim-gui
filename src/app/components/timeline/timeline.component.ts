@@ -46,6 +46,7 @@ export class TimelineComponent {
   private gap: number = 8;
   private halfDistance: number = 68;
   private windowDifference: number = 0;
+  private settingAttackGraph: boolean = false;
 
   public notifications: TyrNotification[] = [];
   public selectedNotifications: TyrNotification[] = [];
@@ -72,7 +73,7 @@ export class TimelineComponent {
       this.renderer.setStyle(this.timelineWindow.nativeElement, 'width', `0px`);
     } else {
       this.automaticUpdate = false;
-
+      this.settingAttackGraph = true;
       //Move the right slide half an item width to the right, since the braking point now is at the end of the item and not the middle
       if (rightPos > 0) {
         rightPos +=
@@ -101,6 +102,7 @@ export class TimelineComponent {
 
     const circle = this.slideCircleRight.nativeElement as HTMLElement;
     this.moveSlide(circle.getBoundingClientRect().left, circle);
+    this.settingAttackGraph = false;
   }
 
   ngAfterViewInit() {
@@ -346,7 +348,7 @@ export class TimelineComponent {
         .map((n) => n.attackStep)
         .filter((step): step is NonNullable<typeof step> => step !== undefined);
 
-      this.updateAttackGraph(attackSteps);
+      if (!this.settingAttackGraph) this.updateAttackGraph(attackSteps);
     } else {
       this.selectedNotifications = all;
     }

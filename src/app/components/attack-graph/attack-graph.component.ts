@@ -1,5 +1,12 @@
 import { NgClass } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   AvailableInitialNodePositioning,
   FillInput,
@@ -25,9 +32,13 @@ import {
 export class AttackGraphComponent {
   public isVisible: boolean;
   @Input() tyrManager: TyrManager;
+  @Output() stepsEmitter = new EventEmitter<number>();
   @ViewChild('graphContainer') graphContainer!: ElementRef;
+  @ViewChild('optionssteps') stepSlider!: ElementRef;
 
   private config: TyrGraphConfig;
+  public selectedSteps: number = 3;
+  public maxSteps: number = 5;
 
   ngAfterViewInit() {
     this.config = {
@@ -101,5 +112,31 @@ export class AttackGraphComponent {
 
   public getConfig() {
     return this.config;
+  }
+
+  public updateSliderBackground(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value =
+      ((+target.value - +target.min) / (+target.max - +target.min)) * 100;
+    target.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
+    this.selectedSteps = +target.value;
+    this.stepsEmitter.emit(this.selectedSteps);
+  }
+
+  public updateStepMax(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (+target.value > 10 || +target.value < 2) {
+      target.value = String(this.maxSteps);
+    } else {
+      this.maxSteps = +target.value;
+    }
+
+    let value = 100;
+    if (this.selectedSteps > this.maxSteps) {
+      this.selectedSteps = this.maxSteps;
+      this.stepsEmitter.emit(this.selectedSteps);
+    } else value = ((this.selectedSteps - 1) / (this.maxSteps - 1)) * 100;
+
+    this.stepSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
   }
 }

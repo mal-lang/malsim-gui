@@ -83,3 +83,115 @@ section.visible {
 .exit.visible {
   display: flex;
 }
+
+.options {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: $dark;
+  border-top: 1px solid $border;
+
+  h2 {
+    height: 32px;
+    width: 100%;
+    margin: 0px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid $border;
+  }
+
+  form {
+    margin: 8px 0px;
+    div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    > div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+
+      label {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    width: 256px;
+    height: 2px;
+    border-radius: 3px;
+    outline: none;
+    background: linear-gradient(to right, #00e6ff 50%, #343a3e 50%);
+  }
+
+  /* Track */
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 3px;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 2px;
+    border-radius: 3px;
+  }
+
+  /* Thumb */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: $dark;
+    border: 2px solid $ice;
+    margin-top: -7px; /* Align thumb with track */
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: 2px solid $ice;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: $dark;
+  }
+
+  input[type="number"] {
+    height: 32px;
+    width: 64px;
+    border-radius: 5px;
+    border: 2px solid $ice;
+    background-color: $dark;
+    text-align: center;
+  }
+
+  input[type="number"]:focus {
+    border-color: $ice;
+    box-shadow: none;
+  }
+}
+
+.options.visible {
+  display: flex;
+}

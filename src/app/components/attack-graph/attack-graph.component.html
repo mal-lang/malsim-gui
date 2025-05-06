@@ -14,4 +14,33 @@
   >
     <img src="/assets/icons/exit.png" />
   </div>
+  <div class="options" [ngClass]="{ visible: this.isVisible }">
+    <h2>Attack Graph Building Options</h2>
+    <form>
+      <div>
+        <label>Steps</label>
+        <div>
+          <span>1</span>
+          <input
+            #optionssteps
+            type="range"
+            [min]="1"
+            [max]="maxSteps"
+            [value]="selectedSteps"
+            id="options-steps"
+            (input)="updateSliderBackground($event)"
+          />
+          <input
+            type="number"
+            id="maxSteps"
+            name="maxSteps"
+            min="2"
+            max="10"
+            value="{{ this.maxSteps }}"
+            (input)="updateStepMax($event)"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
 </section>

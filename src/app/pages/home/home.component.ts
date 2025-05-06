@@ -295,7 +295,19 @@ export class HomeComponent {
   };
 
   updateAttackGraph = (attackSteps: TyrAttackStep[]) => {
-    this.tyrManager.attackGraphRenderer.displaySubgraph(attackSteps, 3);
+    this.tyrManager.attackGraphRenderer.displaySubgraph(
+      attackSteps,
+      this.attackGraph.selectedSteps
+    );
+    this.tyrManager.attackGraphRenderer.resizeViewport();
+  };
+
+  updateAttackGraphDepth = (depth: number) => {
+    this.tyrManager.attackGraphRenderer.displaySubgraph(
+      this.timeline.selectedNotifications.map((n) => n.attackStep!),
+      depth
+    );
+
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 }
