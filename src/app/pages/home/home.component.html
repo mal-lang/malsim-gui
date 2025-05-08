@@ -14,7 +14,8 @@
     <app-attack-graph
       #attackGraph
       [tyrManager]="this.tyrManager"
-      (stepsEmitter)="updateAttackGraphDepth($event)"
+      (depthEmitter)="updateAttackGraphDepth($event)"
+      (suggestionDistEmitter)="updateAttackGraphSuggestionDist($event)"
     ></app-attack-graph>
     <aside>
       <app-asset-menu

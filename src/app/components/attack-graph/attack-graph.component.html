@@ -17,27 +17,62 @@
   <div class="options" [ngClass]="{ visible: this.isVisible }">
     <h2>Attack Graph Building Options</h2>
     <form>
-      <div>
-        <label>Steps</label>
-        <div>
+      <div class="flex">
+        <label>Depth</label>
+        <div class="flex">
           <span>1</span>
-          <input
-            #optionssteps
-            type="range"
-            [min]="1"
-            [max]="maxSteps"
-            [value]="selectedSteps"
-            id="options-steps"
-            (input)="updateSliderBackground($event)"
-          />
+          <div class="sliderDiv">
+            <input
+              #depthSlider
+              type="range"
+              [min]="1"
+              [max]="maxDepth"
+              [value]="selectedDepth"
+              id="options-steps"
+              (input)="updateSliderBackground($event)"
+            />
+            <div class="rangeNumber" #currentDepthSign>
+              {{ this.selectedDepth }}
+            </div>
+          </div>
+
           <input
             type="number"
-            id="maxSteps"
-            name="maxSteps"
+            id="maxDepth"
+            name="maxDepth"
             min="2"
             max="10"
-            value="{{ this.maxSteps }}"
-            (input)="updateStepMax($event)"
+            value="{{ this.maxDepth }}"
+            (input)="updateMaxDepth($event)"
+          />
+        </div>
+      </div>
+      <div class="flex">
+        <label>Suggestion Dist.</label>
+        <div class="flex">
+          <span>1</span>
+          <div class="sliderDiv">
+            <input
+              #suggestionSlider
+              type="range"
+              [min]="1"
+              [max]="maxSuggestionDist"
+              [value]="selectedSuggestionDist"
+              id="options-steps"
+              (input)="updateSliderBackground($event)"
+            />
+            <div class="rangeNumber" #currentSuggestionSign>
+              {{ this.selectedSuggestionDist }}
+            </div>
+          </div>
+          <input
+            type="number"
+            id="maxSuggestionDist"
+            name="maxSuggestionDist"
+            min="2"
+            max="5"
+            value="{{ maxSuggestionDist }}"
+            (input)="updateMaxSuggestionDist($event)"
           />
         </div>
       </div>

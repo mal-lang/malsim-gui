@@ -30,15 +30,24 @@ import {
   styleUrl: './attack-graph.component.scss',
 })
 export class AttackGraphComponent {
-  public isVisible: boolean;
   @Input() tyrManager: TyrManager;
-  @Output() stepsEmitter = new EventEmitter<number>();
+
+  @Output() depthEmitter = new EventEmitter<number>();
+  @Output() suggestionDistEmitter = new EventEmitter<number>();
+
   @ViewChild('graphContainer') graphContainer!: ElementRef;
-  @ViewChild('optionssteps') stepSlider!: ElementRef;
+  @ViewChild('depthSlider') depthSlider!: ElementRef;
+  @ViewChild('suggestionSlider') suggestionSlider!: ElementRef;
+  @ViewChild('currentDepthSign') currentDepthSign!: ElementRef;
+  @ViewChild('currentSuggestionSign') currentSuggestionSign!: ElementRef;
 
   private config: TyrGraphConfig;
-  public selectedSteps: number = 3;
-  public maxSteps: number = 5;
+
+  public isVisible: boolean;
+  public selectedDepth: number = 3;
+  public maxDepth: number = 5;
+  public selectedSuggestionDist: number = 2;
+  public maxSuggestionDist: number = 3;
 
   ngAfterViewInit() {
     this.config = {
@@ -90,6 +99,34 @@ export class AttackGraphComponent {
       clusterRules: [],
       simulationConfig: { type: LayoutAlgorithm.sugiyama },
     };
+
+    this.depthSlider.nativeElement.addEventListener(
+      'mousedown',
+      (event: MouseEvent) => {
+        this.currentDepthSign.nativeElement.style.visibility = 'visible';
+      }
+    );
+
+    this.depthSlider.nativeElement.addEventListener(
+      'mouseup',
+      (event: MouseEvent) => {
+        this.currentDepthSign.nativeElement.style.visibility = 'hidden';
+      }
+    );
+
+    this.suggestionSlider.nativeElement.addEventListener(
+      'mousedown',
+      (event: MouseEvent) => {
+        this.currentSuggestionSign.nativeElement.style.visibility = 'visible';
+      }
+    );
+
+    this.suggestionSlider.nativeElement.addEventListener(
+      'mouseup',
+      (event: MouseEvent) => {
+        this.currentSuggestionSign.nativeElement.style.visibility = 'hidden';
+      }
+    );
   }
 
   constructor() {
@@ -114,29 +151,64 @@ export class AttackGraphComponent {
     return this.config;
   }
 
+  private updateSign(sign: HTMLElement, value: number) {
+    const offset = 16; // Fixed offset
+    sign.style.left = `calc(${value}% - ${offset}px)`;
+  }
+
   public updateSliderBackground(event: Event): void {
     const target = event.target as HTMLInputElement;
     const value =
       ((+target.value - +target.min) / (+target.max - +target.min)) * 100;
     target.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
-    this.selectedSteps = +target.value;
-    this.stepsEmitter.emit(this.selectedSteps);
+
+    if (target === this.depthSlider.nativeElement) {
+      this.selectedDepth = +target.value;
+      this.depthEmitter.emit(this.selectedDepth);
+      this.updateSign(this.currentDepthSign.nativeElement, value);
+    }
+    if (target === this.suggestionSlider.nativeElement) {
+      this.selectedSuggestionDist = +target.value;
+      this.suggestionDistEmitter.emit(this.selectedSuggestionDist);
+      this.updateSign(this.currentSuggestionSign.nativeElement, value);
+    }
   }
 
-  public updateStepMax(event: Event): void {
+  public updateMaxDepth(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (+target.value > 10 || +target.value < 2) {
-      target.value = String(this.maxSteps);
+      target.value = String(this.maxDepth);
     } else {
-      this.maxSteps = +target.value;
+      this.maxDepth = +target.value;
     }
 
     let value = 100;
-    if (this.selectedSteps > this.maxSteps) {
-      this.selectedSteps = this.maxSteps;
-      this.stepsEmitter.emit(this.selectedSteps);
-    } else value = ((this.selectedSteps - 1) / (this.maxSteps - 1)) * 100;
+    if (this.selectedDepth > this.maxDepth) {
+      this.selectedDepth = this.maxDepth;
+      this.depthEmitter.emit(this.selectedDepth);
+    } else value = ((this.selectedDepth - 1) / (this.maxDepth - 1)) * 100;
 
-    this.stepSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
+    this.depthSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
+    this.updateSign(this.currentDepthSign.nativeElement, value);
+  }
+
+  public updateMaxSuggestionDist(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (+target.value > 10 || +target.value < 2) {
+      target.value = String(this.maxSuggestionDist);
+    } else {
+      this.maxSuggestionDist = +target.value;
+    }
+    let value = 100;
+    if (this.selectedSuggestionDist > this.maxSuggestionDist) {
+      this.selectedSuggestionDist = this.maxSuggestionDist;
+      this.suggestionDistEmitter.emit(this.selectedSuggestionDist);
+    } else
+      value =
+        ((this.selectedSuggestionDist - 1) / (this.maxSuggestionDist - 1)) *
+        100;
+
+    this.suggestionSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
+    this.updateSign(this.currentSuggestionSign.nativeElement, value);
   }
 }

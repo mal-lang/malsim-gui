@@ -297,7 +297,7 @@ export class HomeComponent {
   updateAttackGraph = (attackSteps: TyrAttackStep[]) => {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       attackSteps,
-      this.attackGraph.selectedSteps
+      this.attackGraph.selectedDepth
     );
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
@@ -307,6 +307,15 @@ export class HomeComponent {
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
       depth
     );
+
+    this.tyrManager.attackGraphRenderer.resizeViewport();
+  };
+
+  updateAttackGraphSuggestionDist = (dist: number) => {
+    /*this.tyrManager.attackGraphRenderer.displaySubgraph(
+      this.timeline.selectedNotifications.map((n) => n.attackStep!),
+      depth
+    );*/
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
