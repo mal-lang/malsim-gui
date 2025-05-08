@@ -171,7 +171,7 @@ section.visible {
     background-color: $dark;
     border: 2px solid $ice;
     margin-top: -7px; /* Align thumb with track */
-    cursor: pointer;
+    cursor: grab;
   }
   input[type="range"]::-moz-range-thumb {
     height: 16px;
@@ -179,7 +179,7 @@ section.visible {
     border-radius: 50%;
     border: 2px solid $ice;
     border-radius: 50%;
-    cursor: pointer;
+    cursor: grab;
     background-color: $dark;
   }
 
