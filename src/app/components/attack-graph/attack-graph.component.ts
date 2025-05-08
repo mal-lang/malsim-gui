@@ -32,8 +32,7 @@ import {
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
 
-  @Output() depthEmitter = new EventEmitter<number>();
-  @Output() suggestionDistEmitter = new EventEmitter<number>();
+  @Output() emitter = new EventEmitter<any>();
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @ViewChild('depthSlider') depthSlider!: ElementRef;
@@ -151,6 +150,13 @@ export class AttackGraphComponent {
     return this.config;
   }
 
+  private emitValues() {
+    this.emitter.emit({
+      depth: this.selectedDepth,
+      suggestionDist: this.selectedSuggestionDist,
+    });
+  }
+
   private updateSign(sign: HTMLElement, value: number) {
     const offset = 16; // Fixed offset
     sign.style.left = `calc(${value}% - ${offset}px)`;
@@ -164,14 +170,14 @@ export class AttackGraphComponent {
 
     if (target === this.depthSlider.nativeElement) {
       this.selectedDepth = +target.value;
-      this.depthEmitter.emit(this.selectedDepth);
+
       this.updateSign(this.currentDepthSign.nativeElement, value);
     }
     if (target === this.suggestionSlider.nativeElement) {
       this.selectedSuggestionDist = +target.value;
-      this.suggestionDistEmitter.emit(this.selectedSuggestionDist);
       this.updateSign(this.currentSuggestionSign.nativeElement, value);
     }
+    this.emitValues();
   }
 
   public updateMaxDepth(event: Event): void {
@@ -185,11 +191,11 @@ export class AttackGraphComponent {
     let value = 100;
     if (this.selectedDepth > this.maxDepth) {
       this.selectedDepth = this.maxDepth;
-      this.depthEmitter.emit(this.selectedDepth);
     } else value = ((this.selectedDepth - 1) / (this.maxDepth - 1)) * 100;
 
     this.depthSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
     this.updateSign(this.currentDepthSign.nativeElement, value);
+    this.emitValues();
   }
 
   public updateMaxSuggestionDist(event: Event): void {
@@ -202,7 +208,6 @@ export class AttackGraphComponent {
     let value = 100;
     if (this.selectedSuggestionDist > this.maxSuggestionDist) {
       this.selectedSuggestionDist = this.maxSuggestionDist;
-      this.suggestionDistEmitter.emit(this.selectedSuggestionDist);
     } else
       value =
         ((this.selectedSuggestionDist - 1) / (this.maxSuggestionDist - 1)) *
@@ -210,5 +215,6 @@ export class AttackGraphComponent {
 
     this.suggestionSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
     this.updateSign(this.currentSuggestionSign.nativeElement, value);
+    this.emitValues();
   }
 }

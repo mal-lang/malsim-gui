@@ -14,8 +14,7 @@
     <app-attack-graph
       #attackGraph
       [tyrManager]="this.tyrManager"
-      (depthEmitter)="updateAttackGraphDepth($event)"
-      (suggestionDistEmitter)="updateAttackGraphSuggestionDist($event)"
+      (emitter)="updateAttackGraph($event)"
     ></app-attack-graph>
     <aside>
       <app-asset-menu
@@ -30,6 +29,6 @@
     [tyrManager]="this.tyrManager"
     [openAssetMenu]="notifyClick"
     [attackGraphMode]="this.isAttackGraphMode()"
-    [updateAttackGraph]="this.updateAttackGraph"
+    [displayAttackGraph]="this.displayAttackGraph"
   />
 </ng-container>

@@ -24,7 +24,7 @@ import {
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
-  @Input() updateAttackGraph: (attackSteps: TyrAttackStep[]) => void;
+  @Input() displayAttackGraph: (attackSteps: TyrAttackStep[]) => void;
   @Input() attackGraphMode: boolean;
 
   @ViewChild('slideCircleLeft') private slideCircleLeft!: ElementRef;
@@ -348,7 +348,7 @@ export class TimelineComponent {
         .map((n) => n.attackStep)
         .filter((step): step is NonNullable<typeof step> => step !== undefined);
 
-      if (!this.settingAttackGraph) this.updateAttackGraph(attackSteps);
+      if (!this.settingAttackGraph) this.displayAttackGraph(attackSteps);
     } else {
       this.selectedNotifications = all;
     }

@@ -291,31 +291,25 @@ export class HomeComponent {
     this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
     this.attackGraph.openAttackGraph(attackStep);
     this.timeline.setSlideOnStep(attackStep);
-    this.updateAttackGraph([attackStep]);
+    this.displayAttackGraph([attackStep]);
   };
 
-  updateAttackGraph = (attackSteps: TyrAttackStep[]) => {
+  displayAttackGraph = (attackSteps: TyrAttackStep[]) => {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       attackSteps,
-      this.attackGraph.selectedDepth
+      this.attackGraph.selectedDepth,
+      this.attackGraph.selectedSuggestionDist
     );
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 
-  updateAttackGraphDepth = (depth: number) => {
+  updateAttackGraph = (event: any) => {
+    console.log(event.depth, event.suggestionDist);
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
-      depth
+      event.depth,
+      event.suggestionDist
     );
-
-    this.tyrManager.attackGraphRenderer.resizeViewport();
-  };
-
-  updateAttackGraphSuggestionDist = (dist: number) => {
-    /*this.tyrManager.attackGraphRenderer.displaySubgraph(
-      this.timeline.selectedNotifications.map((n) => n.attackStep!),
-      depth
-    );*/
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
