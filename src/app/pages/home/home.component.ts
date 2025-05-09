@@ -11,6 +11,7 @@ import {
   parseLatestAttackSteps,
   RendererRule,
   RendererRuleScope,
+  Texture,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
@@ -18,6 +19,10 @@ import {
   TyrManager,
   TyrNotification,
   TyrNotificationType,
+  Assets,
+  TyrAlertStatus,
+  Sprite,
+  ColorMatrixFilter,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -38,6 +43,18 @@ export class HomeComponent {
   private apiService;
   private intervalId: any;
   private intervalTime: number = 1000 * 10; // 10 seconds;
+
+  private networkSprite?: Texture;
+  private shieldSprite?: Texture;
+  private connectionRuleSprite?: Texture;
+  private idSprite?: Texture;
+  private vulnerabilitySprite?: Texture;
+  private applicationSprite?: Texture;
+
+  private alertSprite?: Texture;
+  private controlledSprite?: Texture;
+  private inactiveSprite?: Texture;
+  private disconnectedSprite?: Texture;
 
   public tyrManager: TyrManager;
 
@@ -104,6 +121,9 @@ export class HomeComponent {
   constructor(apiService: ApiService) {
     this.apiService = apiService;
     this.cursorStyle = 'default';
+    this.getAssetIcon = this.getAssetIcon.bind(this);
+    this.getNodeStatusIcon = this.getNodeStatusIcon.bind(this);
+    this.selectAlertIcon = this.selectAlertIcon.bind(this);
   }
 
   async ngAfterViewInit() {
@@ -112,7 +132,7 @@ export class HomeComponent {
         this.assetMenu.open(node);
       }
     };
-    await this.assetGraph.loadSprites().then(() => {
+    await this.loadSprites().then(() => {
       this.retrieveInitialData();
     });
   }
@@ -314,4 +334,142 @@ export class HomeComponent {
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
+
+  public async loadSprites() {
+    const assetUrls = {
+      network: '/assets/icons/network.png',
+      shield: '/assets/icons/shield.png',
+      connectionRule: '/assets/icons/networking.png',
+      id: '/assets/icons/id-card.png',
+      vulnerability: '/assets/icons/icognito.png',
+      application: '/assets/icons/app.png',
+      alert: '/assets/icons/alert.png',
+      controlled: '/assets/icons/controlled.png',
+      disconnected: '/assets/icons/suggestions/suggestion-disconnect.png',
+      turnoff: '/assets/icons/suggestions/suggestion-turnoff.png',
+      user: '/assets/icons/suggestions/suggestion-user.png',
+    };
+
+    // Step 1: Add assets to the cache
+    Assets.add([
+      { alias: 'network', src: assetUrls.network },
+      { alias: 'shield', src: assetUrls.shield },
+      { alias: 'connectionRule', src: assetUrls.connectionRule },
+      { alias: 'id', src: assetUrls.id },
+      { alias: 'vulnerability', src: assetUrls.vulnerability },
+      { alias: 'application', src: assetUrls.application },
+      { alias: 'alert', src: assetUrls.alert },
+      { alias: 'controlled', src: assetUrls.controlled },
+      { alias: 'disconnected', src: assetUrls.disconnected },
+      { alias: 'turnoff', src: assetUrls.turnoff },
+      { alias: 'user', src: assetUrls.user },
+    ]);
+
+    // Step 2: Load all assets in parallel
+    const [
+      networkSprite,
+      shieldSprite,
+      connectionRuleSprite,
+      idSprite,
+      vulnerabilitySprite,
+      applicationSprite,
+      alertSprite,
+      controlledSprite,
+      disconnectedSprite,
+      turnoffSprite,
+      userSprite,
+    ] = await Promise.all([
+      Assets.load('network'),
+      Assets.load('shield'),
+      Assets.load('connectionRule'),
+      Assets.load('id'),
+      Assets.load('vulnerability'),
+      Assets.load('application'),
+      Assets.load('alert'),
+      Assets.load('controlled'),
+      Assets.load('disconnected'),
+      Assets.load('turnoff'),
+      Assets.load('user'),
+    ]);
+
+    // Step 3: Assign them to class properties
+    this.networkSprite = networkSprite;
+    this.shieldSprite = shieldSprite;
+    this.connectionRuleSprite = connectionRuleSprite;
+    this.idSprite = idSprite;
+    this.vulnerabilitySprite = vulnerabilitySprite;
+    this.applicationSprite = applicationSprite;
+    this.alertSprite = alertSprite;
+    this.controlledSprite = controlledSprite;
+    this.disconnectedSprite = disconnectedSprite;
+    this.inactiveSprite = turnoffSprite;
+
+    console.log('✅ All assets added & loaded successfully!');
+  }
+
+  public getAssetIcon(node: any): Sprite {
+    let asset;
+    if (node.asset)
+      //AssetGraphNode
+      asset = node.asset;
+    if (node.attackStep)
+      //AttackGraphNode
+      asset = node.attackStep.asset.asset;
+
+    if (!asset) return new Sprite();
+
+    let texture;
+    switch (asset.type) {
+      case 'Network':
+        texture = this.networkSprite!;
+        break;
+      case 'Application':
+        texture = this.applicationSprite!;
+        break;
+      case 'ConnectionRule':
+        texture = this.connectionRuleSprite!;
+        break;
+      case 'Identity':
+        texture = this.idSprite!;
+        break;
+      case 'SoftwareVulnerability':
+        texture = this.vulnerabilitySprite!;
+        break;
+      default:
+        texture = this.shieldSprite!;
+        break;
+    }
+
+    const sprite = new Sprite(texture);
+
+    //Invert color to white if attack graph calls it
+    if (node.attackStep) {
+      const colorMatrix = new ColorMatrixFilter();
+      colorMatrix.negative(true); // Invert colors
+      sprite.filters = [colorMatrix];
+    }
+    return sprite;
+  }
+
+  public selectAlertIcon(alert: TyrAlertStatus): Texture {
+    switch (alert) {
+      case TyrAlertStatus.alerted:
+        return this.alertSprite!;
+      case TyrAlertStatus.controlled:
+        return this.controlledSprite!;
+      default:
+        return this.alertSprite!;
+    }
+  }
+
+  public getNodeStatusIcon(status: TyrAssetGraphNodeStatus): Texture {
+    switch (status) {
+      case TyrAssetGraphNodeStatus.inactive:
+        return this.inactiveSprite!;
+      case TyrAssetGraphNodeStatus.disconnected:
+        return this.disconnectedSprite!;
+      default:
+        return this.alertSprite!;
+    }
+  }
 }

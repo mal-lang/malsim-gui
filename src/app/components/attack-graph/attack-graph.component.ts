@@ -11,14 +11,17 @@ import {
   AvailableInitialNodePositioning,
   FillInput,
   LayoutAlgorithm,
+  Sprite,
   TextStyleAlign,
   TextStyleFontWeight,
   Texture,
   TyrAlertStatus,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
+  TyrAttackGraphNode,
   TyrAttackStep,
   TyrGraphConfig,
+  TyrGraphNode,
   TyrManager,
 } from 'tyr-js';
 
@@ -31,6 +34,7 @@ import {
 })
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
+  @Input() getAssetIcon: (node: TyrGraphNode) => Sprite;
 
   @Output() emitter = new EventEmitter<any>();
 
@@ -72,8 +76,8 @@ export class AttackGraphComponent {
         getNodeStatusIcon: (alert: TyrAssetGraphNodeStatus) => {
           return new Texture();
         },
-        getNodeImage: (node: TyrAssetGraphNode) => {
-          return new Texture();
+        getNodeImage: (node: TyrGraphNode) => {
+          return this.getAssetIcon(node);
         },
         imageMargin: 0.5,
         textInvisible: false,

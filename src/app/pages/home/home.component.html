@@ -9,11 +9,15 @@
       #assetGraph
       id="assetGraphContainer"
       [onNodeClick]="notifyClick"
+      [getAssetIcon]="this.getAssetIcon"
+      [getNodeStatusIcon]="this.getNodeStatusIcon"
+      [selectAlertIcon]="this.selectAlertIcon"
       (simulationStatusEmitter)="setAlertsInterval()"
     />
     <app-attack-graph
       #attackGraph
       [tyrManager]="this.tyrManager"
+      [getAssetIcon]="this.getAssetIcon"
       (emitter)="updateAttackGraph($event)"
     ></app-attack-graph>
     <aside>
