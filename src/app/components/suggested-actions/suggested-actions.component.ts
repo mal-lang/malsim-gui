@@ -14,13 +14,18 @@ interface SuggestedAction {
   description: string;
   iteration: number;
   system: string;
-  agents: Array<string>;
+  agents: Array<AgentSuggestion>;
   image: string;
 }
 
 interface SelectedAction {
   id: number;
   iteration: number;
+}
+
+interface AgentSuggestion {
+  name: string;
+  weight: number;
 }
 
 @Component({
@@ -42,16 +47,21 @@ export class SuggestedActionsComponent {
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
     this.selectedActions = [];
+
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
         let index = actions.findIndex(
           (a: SuggestedAction) => a.stepId === Number(stepId)
         );
 
+        let defenderSuggestion = defenderSuggestions[agent][stepId];
+        const agentSuggestion: AgentSuggestion = {
+          name: agent,
+          weight: +Number(defenderSuggestion.weight).toFixed(2),
+        };
         if (index !== -1) {
-          actions[index].agents.push(agent);
+          actions[index].agents.push(agentSuggestion);
         } else {
-          let defenderSuggestion = defenderSuggestions[agent][stepId];
           if (
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system
@@ -62,27 +72,31 @@ export class SuggestedActionsComponent {
               iteration: defenderSuggestion.iteration,
               description: defenderSuggestion.action.description,
               system: defenderSuggestion.action.system,
-              agents: [agent],
+              agents: [agentSuggestion],
               image: this.selectActionImage(defenderSuggestion),
             });
           }
         }
       });
     });
-
+    console.log;
     this.suggestedActions = actions;
     this.cdRef.detectChanges();
   }
 
   async selectAction(id: number, iteration: number) {
-
-    this.selectedActions.push({ id: this.suggestedActions[id].stepId, iteration: iteration });
-    this.suggestedActions[id].weight = 'SENT';
-    await this.apiService.postDefenderAction(this.suggestedActions[id].stepId, iteration).then(() => {
-      this.suggestedActions[id].weight = 'DONE';
-
-      this.onSuggestionSelected.emit(this.suggestedActions[id]);
+    this.selectedActions.push({
+      id: this.suggestedActions[id].stepId,
+      iteration: iteration,
     });
+    this.suggestedActions[id].weight = 'SENT';
+    await this.apiService
+      .postDefenderAction(this.suggestedActions[id].stepId, iteration)
+      .then(() => {
+        this.suggestedActions[id].weight = 'DONE';
+
+        this.onSuggestionSelected.emit(this.suggestedActions[id]);
+      });
   }
 
   isSelected(id: number, iteration: number) {

@@ -119,36 +119,70 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     gap: 8px;
+    margin-right: 16px;
 
-    span {
-      font-size: 10px;
-      font-weight: bold;
-      color: $dark;
-      border-radius: 20px;
-      background-color: $white;
-      padding: 4px 8px;
-      max-width: 100%;
-    }
-
-    p {
-      font-size: 14px;
-      margin: 0px;
-      color: $white;
-      text-align: left;
-    }
-
-    :last-child {
-      background-color: inherit;
-      color: inherit;
-      padding: inherit;
-      font-size: 12px;
-      font-weight: normal;
-
+    .suggested-action-description {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
       span {
-        font-weight: bold;
+        font-size: 13px;
+        color: $dark;
+        border-radius: 20px;
+        background-color: $white;
+        padding: 4px 8px;
+        max-width: 100%;
+        display: inline-block;
+      }
+    }
+
+    .suggested-action-agents {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      font-size: 12px;
+      font-weight: bold;
+
+      div {
+        display: flex;
+        width: 100%;
+        gap: 8px;
+
+        span:first-child {
+          width: auto;
+          word-break: break-word;
+          max-width: calc(100% - 40px);
+        }
+
+        .dots {
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          color: gray;
+        }
+
+        .dots::before {
+          content: "........................................................................................................................................................................................................";
+          display: block;
+          width: 100%;
+          overflow: hidden;
+        }
+
+        span:last-child {
+          width: 32px;
+          color: $ice;
+        }
       }
     }
   }

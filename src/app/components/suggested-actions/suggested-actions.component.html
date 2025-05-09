@@ -19,16 +19,22 @@
         </div>
 
         <div class="suggested-action-main">
-          <span>{{ action.agents }}</span>
-          <p>{{ action.description }}</p>
-          <p>
-            System: <span>{{ action.system }}</span>
-          </p>
+          <div class="suggested-action-description">
+            <p>
+              <span>{{ action.description }}</span>
+            </p>
+            <p>
+              System: <b>{{ action.system }}</b>
+            </p>
+          </div>
+          <div class="suggested-action-agents">
+            <div *ngFor="let agent of action.agents">
+              <span>{{ agent.name }}</span>
+              <span class="dots"></span>
+              <span>{{ agent.weight }}</span>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="suggested-action-reward">
-        <p>{{ action.weight }}</p>
       </div>
     </div>
   </div>
