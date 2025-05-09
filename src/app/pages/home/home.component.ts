@@ -126,6 +126,7 @@ export class HomeComponent {
         receivedModel,
         receivedAttackGraph.attack_steps,
         this.assetGraph.getConfig(),
+        this.attackGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
 
@@ -289,10 +290,28 @@ export class HomeComponent {
 
   openAttackGraph = (attackStep: TyrAttackStep) => {
     this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
-
     this.attackGraph.openAttackGraph(attackStep);
+    this.timeline.setSlideOnStep(attackStep);
+    this.displayAttackGraph([attackStep]);
+  };
 
-    this.tyrManager.attackGraphRenderer.displaySubgraph(attackStep, 3);
+  displayAttackGraph = (attackSteps: TyrAttackStep[]) => {
+    this.tyrManager.attackGraphRenderer.displaySubgraph(
+      attackSteps,
+      this.attackGraph.selectedDepth,
+      this.attackGraph.selectedSuggestionDist
+    );
+    this.tyrManager.attackGraphRenderer.resizeViewport();
+  };
+
+  updateAttackGraph = (event: any) => {
+    console.log(event.depth, event.suggestionDist);
+    this.tyrManager.attackGraphRenderer.displaySubgraph(
+      this.timeline.selectedNotifications.map((n) => n.attackStep!),
+      event.depth,
+      event.suggestionDist
+    );
+
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 }
