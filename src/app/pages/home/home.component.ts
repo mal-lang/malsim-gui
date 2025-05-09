@@ -126,6 +126,7 @@ export class HomeComponent {
         receivedModel,
         receivedAttackGraph.attack_steps,
         this.assetGraph.getConfig(),
+        this.attackGraph.getConfig(),
         [this.nodeRule, this.nodeRule2, this.edgeRule]
       );
 

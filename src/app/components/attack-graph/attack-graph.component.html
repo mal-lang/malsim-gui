@@ -2,6 +2,7 @@
   #graphContainer
   id="graphContainer"
   [ngClass]="{ visible: this.isVisible }"
+  [style.cursor]="this.cursorStyle"
 >
   <div class="viewname" [ngClass]="{ visible: this.isVisible }">
     <img src="/assets/icons/network.png" />

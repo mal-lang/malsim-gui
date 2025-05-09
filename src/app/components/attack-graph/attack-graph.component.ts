@@ -47,6 +47,7 @@ export class AttackGraphComponent {
   public maxDepth: number = 5;
   public selectedSuggestionDist: number = 2;
   public maxSuggestionDist: number = 3;
+  public cursorStyle = 'grab';
 
   ngAfterViewInit() {
     this.config = {
@@ -58,7 +59,7 @@ export class AttackGraphComponent {
       marginY: 0,
       graphWorldWidth: 20000,
       graphWorldHeight: 20000,
-      backgroundColor: '#212529',
+      backgroundColor: '#00080d',
       nodes: {
         initialPositioning: {
           type: AvailableInitialNodePositioning.random,
@@ -83,11 +84,15 @@ export class AttackGraphComponent {
           fill: 0xffffff as FillInput,
           align: 'left' as TextStyleAlign,
           fontWeight: 'bold' as TextStyleFontWeight,
-          stroke: 'black',
+          stroke: 'white',
         },
         hoverable: true,
-        onPointerOn: () => {},
-        onPointerOut: () => {},
+        onPointerOn: () => {
+          this.cursorStyle = 'pointer';
+        },
+        onPointerOut: () => {
+          this.cursorStyle = 'grab';
+        },
         onClick: () => {},
         onFirstRendered: () => {},
       },
