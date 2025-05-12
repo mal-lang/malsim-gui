@@ -268,6 +268,9 @@ export class HomeComponent {
       if (this.checkDefenderSuggestions(defenderSuggestions)) {
         this.currentDefenderSuggestions = defenderSuggestions;
         this.suggestedActions.updateSuggestedActions(defenderSuggestions);
+        this.tyrManager.attackGraphRenderer.updateSuggestedDefenses(
+          this.suggestedActions.suggestedActions.map((a) => String(a.stepId))
+        );
       }
     });
   }
