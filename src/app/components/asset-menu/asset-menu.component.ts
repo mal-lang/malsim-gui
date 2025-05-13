@@ -12,6 +12,7 @@ import {
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
+  getEmptyAnimationHelper,
 } from 'tyr-js';
 
 @Component({
@@ -55,7 +56,7 @@ export class AssetMenuComponent {
       style: getEmptyNodeStyle(),
       connections: getEmptyNodeConnectionInfo(),
       cluster: getEmptyNodeCluster(),
-      animationHelper: { startX: 0, startY: 0, deltaX: 0, deltaY: 0 },
+      animationHelper: getEmptyAnimationHelper(),
     };
     this.close = this.close.bind(this);
   }
