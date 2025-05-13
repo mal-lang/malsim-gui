@@ -9,7 +9,7 @@
       class="suggested-action"
       *ngFor="let action of suggestedActions; let i = index"
       [ngClass]="{
-        selected: this.isSelected(i, action.iteration)
+        selected: action.performed
       }"
       (click)="this.selectAction(i, action.iteration)"
     >

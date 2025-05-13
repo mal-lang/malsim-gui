@@ -23,6 +23,7 @@ import {
   TyrGraphConfig,
   TyrGraphNode,
   TyrManager,
+  ColorSource,
 } from 'tyr-js';
 
 @Component({
@@ -35,6 +36,12 @@ import {
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
   @Input() getAssetIcon: (node: TyrGraphNode) => Sprite;
+  @Input() getAttackStepIcon: (node: TyrAttackStep) =>
+    | {
+        texture: Texture;
+        background: ColorSource;
+      }
+    | undefined;
 
   @Output() emitter = new EventEmitter<any>();
 
@@ -70,11 +77,8 @@ export class AttackGraphComponent {
           radiusX: 20000,
           radiusY: 20000,
         },
-        getNodeAlertIcon: (alert: TyrAlertStatus) => {
-          return new Texture();
-        },
-        getNodeStatusIcon: (alert: TyrAssetGraphNodeStatus) => {
-          return new Texture();
+        getAttackStepIcon: (attackStep: TyrAttackStep) => {
+          return this.getAttackStepIcon(attackStep);
         },
         getNodeImage: (node: TyrGraphNode) => {
           return this.getAssetIcon(node);

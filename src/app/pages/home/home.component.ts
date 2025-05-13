@@ -23,6 +23,7 @@ import {
   TyrAlertStatus,
   Sprite,
   ColorMatrixFilter,
+  ColorSource,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -50,6 +51,11 @@ export class HomeComponent {
   private idSprite?: Texture;
   private vulnerabilitySprite?: Texture;
   private applicationSprite?: Texture;
+
+  private bulbSprite?: Texture;
+  private checkSprite?: Texture;
+  private warningSprite?: Texture;
+  private eyeSprite?: Texture;
 
   private alertSprite?: Texture;
   private controlledSprite?: Texture;
@@ -124,6 +130,7 @@ export class HomeComponent {
     this.getAssetIcon = this.getAssetIcon.bind(this);
     this.getNodeStatusIcon = this.getNodeStatusIcon.bind(this);
     this.selectAlertIcon = this.selectAlertIcon.bind(this);
+    this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
   }
 
   async ngAfterViewInit() {
@@ -351,6 +358,10 @@ export class HomeComponent {
       disconnected: '/assets/icons/suggestions/suggestion-disconnect.png',
       turnoff: '/assets/icons/suggestions/suggestion-turnoff.png',
       user: '/assets/icons/suggestions/suggestion-user.png',
+      bulb: '/assets/icons/attack-graph/light-bulb.png',
+      check: '/assets/icons/attack-graph/check.png',
+      eye: '/assets/icons/attack-graph/eye.png',
+      warning: '/assets/icons/attack-graph/warning-sign.png',
     };
 
     // Step 1: Add assets to the cache
@@ -365,6 +376,10 @@ export class HomeComponent {
       { alias: 'controlled', src: assetUrls.controlled },
       { alias: 'disconnected', src: assetUrls.disconnected },
       { alias: 'turnoff', src: assetUrls.turnoff },
+      { alias: 'bulb', src: assetUrls.bulb },
+      { alias: 'warning', src: assetUrls.warning },
+      { alias: 'check', src: assetUrls.check },
+      { alias: 'eye', src: assetUrls.eye },
       { alias: 'user', src: assetUrls.user },
     ]);
 
@@ -380,6 +395,11 @@ export class HomeComponent {
       controlledSprite,
       disconnectedSprite,
       turnoffSprite,
+      bulbSprite,
+      bellSprite,
+      warningSprite,
+      eyeSprite,
+      checkSprite,
       userSprite,
     ] = await Promise.all([
       Assets.load('network'),
@@ -392,6 +412,11 @@ export class HomeComponent {
       Assets.load('controlled'),
       Assets.load('disconnected'),
       Assets.load('turnoff'),
+      Assets.load('bulb'),
+      Assets.load('bell'),
+      Assets.load('warning'),
+      Assets.load('eye'),
+      Assets.load('check'),
       Assets.load('user'),
     ]);
 
@@ -406,6 +431,10 @@ export class HomeComponent {
     this.controlledSprite = controlledSprite;
     this.disconnectedSprite = disconnectedSprite;
     this.inactiveSprite = turnoffSprite;
+    this.bulbSprite = bulbSprite;
+    this.warningSprite = warningSprite;
+    this.eyeSprite = eyeSprite;
+    this.checkSprite = checkSprite;
 
     console.log('✅ All assets added & loaded successfully!');
   }
@@ -446,12 +475,33 @@ export class HomeComponent {
     const sprite = new Sprite(texture);
 
     //Invert color to white if attack graph calls it
-    if (node.attackStep) {
+    if (node.attackStep && !node.attackStep.isActive) {
       const colorMatrix = new ColorMatrixFilter();
       colorMatrix.negative(true); // Invert colors
       sprite.filters = [colorMatrix];
     }
     return sprite;
+  }
+
+  public getAttackGraphNodeIcon(
+    attackStep: TyrAttackStep
+  ): { texture: Texture; background: ColorSource } | undefined {
+    if (attackStep.type === 'defense') {
+      if (attackStep.isActive)
+        return { texture: this.checkSprite!, background: 0x00bdd2 };
+      if (
+        this.suggestedActions.suggestedActions
+          .map((a) => a.stepId)
+          .includes(+attackStep.id)
+      )
+        return { texture: this.bulbSprite!, background: 0x005c69 };
+    } else {
+      if (attackStep.isActive)
+        return { texture: this.warningSprite!, background: 0xffc300 };
+      if (attackStep.isObservable)
+        return { texture: this.eyeSprite!, background: 0x990000 };
+    }
+    return;
   }
 
   public selectAlertIcon(alert: TyrAlertStatus): Texture {

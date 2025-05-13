@@ -3,10 +3,12 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   Output,
 } from '@angular/core';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
+import { TyrManager } from 'tyr-js';
 
 interface SuggestedAction {
   stepId: number;
@@ -16,6 +18,7 @@ interface SuggestedAction {
   system: string;
   agents: Array<AgentSuggestion>;
   image: string;
+  performed: boolean;
 }
 
 interface SelectedAction {
@@ -37,6 +40,8 @@ interface AgentSuggestion {
 export class SuggestedActionsComponent {
   suggestedActions: Array<SuggestedAction> = [];
   selectedActions: SelectedAction[];
+
+  @Input() tyrManager: TyrManager;
   @Output() onSuggestionSelected = new EventEmitter<any>();
 
   constructor(
@@ -46,7 +51,7 @@ export class SuggestedActionsComponent {
 
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
-    this.selectedActions = [];
+    this.tyrManager.markDefensesAsActive([]);
 
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
@@ -74,35 +79,29 @@ export class SuggestedActionsComponent {
               system: defenderSuggestion.action.system,
               agents: [agentSuggestion],
               image: this.selectActionImage(defenderSuggestion),
+              performed: false,
             });
           }
         }
       });
     });
-    console.log;
     this.suggestedActions = actions;
     this.cdRef.detectChanges();
   }
 
   async selectAction(id: number, iteration: number) {
-    this.selectedActions.push({
-      id: this.suggestedActions[id].stepId,
-      iteration: iteration,
-    });
-    this.suggestedActions[id].weight = 'SENT';
     await this.apiService
       .postDefenderAction(this.suggestedActions[id].stepId, iteration)
       .then(() => {
-        this.suggestedActions[id].weight = 'DONE';
-
+        this.suggestedActions[id].performed = true;
+        this.tyrManager.markDefensesAsActive(
+          this.suggestedActions
+            .filter((a) => a.performed)
+            .map((a) => String(a.stepId))
+        );
+        console.log(id);
         this.onSuggestionSelected.emit(this.suggestedActions[id]);
       });
-  }
-
-  isSelected(id: number, iteration: number) {
-    return this.selectedActions.some(
-      (a) => a.id === id && a.iteration === iteration
-    );
   }
 
   selectActionImage(suggestion: any): string {
