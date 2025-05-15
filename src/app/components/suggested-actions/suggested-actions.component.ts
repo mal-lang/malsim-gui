@@ -71,12 +71,13 @@ export class SuggestedActionsComponent {
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system
           ) {
+            const systems = JSON.parse(defenderSuggestion.action.system);
             actions.push({
               stepId: Number(stepId),
               weight: Number(defenderSuggestion.weight).toFixed(2),
               iteration: defenderSuggestion.iteration,
               description: defenderSuggestion.action.description,
-              system: defenderSuggestion.action.system,
+              system: systems.join(','),
               agents: [agentSuggestion],
               image: this.selectActionImage(
                 this.tyrManager.getAttackStepType(stepId)

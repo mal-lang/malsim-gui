@@ -132,7 +132,7 @@
       justify-content: center;
       gap: 8px;
       width: 100%;
-      span {
+      > span {
         font-size: 13px;
         color: $dark;
         border-radius: 20px;
@@ -140,6 +140,24 @@
         padding: 4px 8px;
         max-width: 100%;
         display: inline-block;
+      }
+    }
+
+    .suggested-action-systems {
+      width: 260px;
+      max-width: 260px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      span {
+        display: inline-block;
+        max-width: calc(100% - 60px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: bold;
+        vertical-align: top;
       }
     }
 

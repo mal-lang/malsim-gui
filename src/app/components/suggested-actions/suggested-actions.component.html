@@ -23,9 +23,9 @@
             <p>
               <span>{{ action.description }}</span>
             </p>
-            <p>
-              System: <b>{{ action.system }}</b>
-            </p>
+            <div class="suggested-action-systems">
+              Systems: <span>{{ action.system }}</span>
+            </div>
           </div>
           <div class="suggested-action-agents">
             <div *ngFor="let agent of action.agents">
