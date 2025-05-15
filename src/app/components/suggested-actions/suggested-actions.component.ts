@@ -71,6 +71,7 @@ export class SuggestedActionsComponent {
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system
           ) {
+            console.log(defenderSuggestion);
             actions.push({
               stepId: Number(stepId),
               weight: Number(defenderSuggestion.weight).toFixed(2),
@@ -78,7 +79,9 @@ export class SuggestedActionsComponent {
               description: defenderSuggestion.action.description,
               system: defenderSuggestion.action.system,
               agents: [agentSuggestion],
-              image: this.selectActionImage(defenderSuggestion),
+              image: this.selectActionImage(
+                this.tyrManager.getAttackStepType(stepId)
+              ),
               performed: false,
             });
           }
@@ -99,16 +102,19 @@ export class SuggestedActionsComponent {
             .filter((a) => a.performed)
             .map((a) => String(a.stepId))
         );
-        console.log(id);
         this.onSuggestionSelected.emit(this.suggestedActions[id]);
       });
   }
 
-  selectActionImage(suggestion: any): string {
-    switch (suggestion.action.description) {
+  selectActionImage(type?: string): string {
+    switch (type) {
       //TODO
-      case 'Shutdown machine':
+      case 'Application:notPresent':
         return 'assets/icons/suggestions/turnoff.png';
+      case 'ConnectionRule:restricted':
+        return 'assets/icons/suggestions/disconnect.png';
+      case 'Identity:notPresent':
+        return 'assets/icons/suggestions/user.png';
       default:
         return '';
     }
