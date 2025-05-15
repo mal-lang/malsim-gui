@@ -335,7 +335,6 @@ export class HomeComponent {
   };
 
   updateAttackGraph = (event: any) => {
-    console.log(event.depth, event.suggestionDist);
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
       event.depth,

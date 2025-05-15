@@ -71,7 +71,6 @@ export class SuggestedActionsComponent {
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system
           ) {
-            console.log(defenderSuggestion);
             actions.push({
               stepId: Number(stepId),
               weight: Number(defenderSuggestion.weight).toFixed(2),
