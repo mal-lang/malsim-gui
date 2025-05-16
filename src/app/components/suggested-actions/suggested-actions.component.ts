@@ -15,7 +15,7 @@ interface SuggestedAction {
   weight: string;
   description: string;
   iteration: number;
-  system: string;
+  systems: string;
   agents: Array<AgentSuggestion>;
   image: string;
   performed: boolean;
@@ -69,33 +69,16 @@ export class SuggestedActionsComponent {
           console.log('repeat', actions[index]);
           actions[index].agents.push(agentSuggestion);
         } else {
-          console.log(
-            'non',
-            defenderSuggestion.action.description,
-            defenderSuggestion.action.system.length
-          );
           if (
             defenderSuggestion.action.description &&
-            defenderSuggestion.action.system.length > 0
+            defenderSuggestion.action.systems > 0
           ) {
-            console.log('push', {
-              stepId: Number(stepId),
-              weight: Number(defenderSuggestion.weight).toFixed(2),
-              iteration: defenderSuggestion.iteration,
-              description: defenderSuggestion.action.description,
-              system: defenderSuggestion.action.system.join(','),
-              agents: [agentSuggestion],
-              image: this.selectActionImage(
-                this.tyrManager.getAttackStepType(stepId)
-              ),
-              performed: false,
-            });
             actions.push({
               stepId: Number(stepId),
               weight: Number(defenderSuggestion.weight).toFixed(2),
               iteration: defenderSuggestion.iteration,
               description: defenderSuggestion.action.description,
-              system: defenderSuggestion.action.system.join(','),
+              systems: defenderSuggestion.action.systems.join(','),
               agents: [agentSuggestion],
               image: this.selectActionImage(
                 this.tyrManager.getAttackStepType(stepId)
@@ -107,7 +90,6 @@ export class SuggestedActionsComponent {
       });
     });
     this.suggestedActions = actions;
-    console.log(actions);
     this.cdRef.detectChanges();
   }
 
