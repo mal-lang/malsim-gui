@@ -52,7 +52,7 @@ export class SuggestedActionsComponent {
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
     this.tyrManager.markDefensesAsActive([]);
-    console.log(defenderSuggestions);
+
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
         let index = actions.findIndex(
@@ -64,13 +64,28 @@ export class SuggestedActionsComponent {
           name: agent,
           weight: +Number(defenderSuggestion.weight).toFixed(2),
         };
+
         if (index !== -1) {
+          console.log('repeat', actions[index]);
           actions[index].agents.push(agentSuggestion);
         } else {
+          console.log('non');
           if (
             defenderSuggestion.action.description &&
             defenderSuggestion.action.system
           ) {
+            console.log('push', {
+              stepId: Number(stepId),
+              weight: Number(defenderSuggestion.weight).toFixed(2),
+              iteration: defenderSuggestion.iteration,
+              description: defenderSuggestion.action.description,
+              system: defenderSuggestion.action.system.join(','),
+              agents: [agentSuggestion],
+              image: this.selectActionImage(
+                this.tyrManager.getAttackStepType(stepId)
+              ),
+              performed: false,
+            });
             actions.push({
               stepId: Number(stepId),
               weight: Number(defenderSuggestion.weight).toFixed(2),
@@ -88,6 +103,7 @@ export class SuggestedActionsComponent {
       });
     });
     this.suggestedActions = actions;
+    console.log(actions);
     this.cdRef.detectChanges();
   }
 
