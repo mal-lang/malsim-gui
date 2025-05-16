@@ -69,10 +69,14 @@ export class SuggestedActionsComponent {
           console.log('repeat', actions[index]);
           actions[index].agents.push(agentSuggestion);
         } else {
-          console.log('non');
+          console.log(
+            'non',
+            defenderSuggestion.action.description,
+            defenderSuggestion.action.system.length
+          );
           if (
             defenderSuggestion.action.description &&
-            defenderSuggestion.action.system
+            defenderSuggestion.action.system.length > 0
           ) {
             console.log('push', {
               stepId: Number(stepId),
