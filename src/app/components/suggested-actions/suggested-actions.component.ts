@@ -70,7 +70,7 @@ export class SuggestedActionsComponent {
         } else {
           if (
             defenderSuggestion.action.description &&
-            defenderSuggestion.action.systems > 0
+            defenderSuggestion.action.systems
           ) {
             actions.push({
               stepId: Number(stepId),
