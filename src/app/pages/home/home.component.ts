@@ -185,6 +185,7 @@ export class HomeComponent {
 
     const tyrSuggestion: TyrNotification = {
       node: attackstep.asset,
+      attackStep: attackstep,
       type: TyrNotificationType.suggestion,
       timestamp: Date.now(),
       hidden: false,

@@ -54,10 +54,14 @@ export class AssetMenuAlertsComponent {
   }
 
   private getSuggestionImage(suggestion: TyrNotification) {
-    switch (suggestion.description) {
+    switch (suggestion.attackStep?.langGraphAttackStep) {
       //TODO
-      case 'Shutdown machine':
+      case 'Application:notPresent':
         return 'assets/icons/suggestions/suggestion-turnoff.png';
+      case 'ConnectionRule:restricted':
+        return 'assets/icons/suggestions/suggestion-disconnect.png';
+      case 'Identity:notPresent':
+        return 'assets/icons/suggestions/suggestion-user.png';
       default:
         return '';
     }
