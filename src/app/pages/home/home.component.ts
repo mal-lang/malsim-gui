@@ -263,12 +263,14 @@ export class HomeComponent {
 
       //Latest Attack Step
       if (Object.keys(latestAttackSteps).length > 0) {
-        parseLatestAttackSteps(latestAttackSteps)[0];
-        const alert = this.tyrManager.injestLatestAttackStep(
-          parseLatestAttackSteps(latestAttackSteps)[0].id,
-          this.timeline.automaticUpdate
-        );
-        if (alert) this.timeline.addAlert(alert);
+        const parsedAttackSteps = parseLatestAttackSteps(latestAttackSteps);
+        for (let i = 0; i < parsedAttackSteps.length; i++) {
+          const alert = this.tyrManager.injestLatestAttackStep(
+            parsedAttackSteps[i].id,
+            this.timeline.automaticUpdate
+          );
+          if (alert) this.timeline.addAlert(alert);
+        }
       }
 
       //Defender Suggestions
