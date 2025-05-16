@@ -66,7 +66,6 @@ export class SuggestedActionsComponent {
         };
 
         if (index !== -1) {
-          console.log('repeat', actions[index]);
           actions[index].agents.push(agentSuggestion);
         } else {
           if (
@@ -99,11 +98,6 @@ export class SuggestedActionsComponent {
       .then(() => {
         this.suggestedActions[id].performed = true;
         this.tyrManager.markDefensesAsActive(
-          this.suggestedActions
-            .filter((a) => a.performed)
-            .map((a) => String(a.stepId))
-        );
-        console.log(
           this.suggestedActions
             .filter((a) => a.performed)
             .map((a) => String(a.stepId))
