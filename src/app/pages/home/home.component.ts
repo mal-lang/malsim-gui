@@ -194,20 +194,26 @@ export class HomeComponent {
     };
 
     //TODO: Expand
-    switch (suggestion.description) {
-      case 'Shutdown machine':
+    switch (suggestion.type) {
+      case 'Application:notPresent':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
-        tyrSuggestion.otherAffectedNodes = this.getApplicationNodeChildren(
-          tyrSuggestion.node
+        tyrSuggestion.otherAffectedNodes = this.getNodeChildren(
+          tyrSuggestion.node,
+          true
         ) as TyrAssetGraphNode[];
         break;
-      case 'Lockout user':
+      case 'Identity:notPresent':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
-        tyrSuggestion.otherAffectedNodes = this.getIdentityNodeChildren(
-          tyrSuggestion.node
+        tyrSuggestion.otherAffectedNodes = this.getNodeChildren(
+          tyrSuggestion.node,
+          false
         ) as TyrAssetGraphNode[];
+        break;
+      case 'ConnectionRule:restricted':
+        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
+        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
         break;
       default:
         break;
@@ -226,29 +232,19 @@ export class HomeComponent {
     );
   }
 
-  private getIdentityNodeChildren(node: TyrAssetGraphNode) {
+  private getNodeChildren(node: TyrAssetGraphNode, isShutdownMachine: boolean) {
     let list = node.connections.children;
     const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].asset.type != 'Application') {
-        list.push(...nodes[i].connections.children);
+    if (isShutdownMachine) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].asset.type == 'Identity') {
+          list.push(...nodes[i].connections.children);
+        }
       }
     }
-    return list;
-  }
 
-  private getApplicationNodeChildren(node: TyrAssetGraphNode) {
-    let list = node.connections.children;
-    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
-
-    //Also add identity children nodes (This is a workaround, wont work for all nodes)
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].asset.type == 'Identity') {
-        list.push(...nodes[i].connections.children);
-      }
-    }
     return list;
   }
 

@@ -19,6 +19,7 @@ interface SuggestedAction {
   agents: Array<AgentSuggestion>;
   image: string;
   performed: boolean;
+  type: string;
 }
 
 interface SelectedAction {
@@ -79,6 +80,7 @@ export class SuggestedActionsComponent {
               description: defenderSuggestion.action.description,
               systems: defenderSuggestion.action.systems.join(','),
               agents: [agentSuggestion],
+              type: this.tyrManager.getAttackStepType(stepId) ?? '',
               image: this.selectActionImage(
                 this.tyrManager.getAttackStepType(stepId)
               ),
