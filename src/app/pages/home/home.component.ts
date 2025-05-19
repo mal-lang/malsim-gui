@@ -28,6 +28,7 @@ import {
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
+import { easeBack } from 'd3';
 
 @Component({
   selector: 'app-home',
@@ -339,7 +340,7 @@ export class HomeComponent {
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
       event.depth,
       event.suggestionDist,
-      true
+      event.forward
     );
 
     this.tyrManager.attackGraphRenderer.resizeViewport();

@@ -4,9 +4,29 @@
   [ngClass]="{ visible: this.isVisible }"
   [style.cursor]="this.cursorStyle"
 >
-  <div class="viewname" [ngClass]="{ visible: this.isVisible }">
-    <img src="/assets/icons/network.png" />
-    <p>Attack Graph</p>
+  <div class="top-left">
+    <div class="viewname" [ngClass]="{ visible: this.isVisible }">
+      <img src="/assets/icons/network.png" />
+      <p>Attack Graph</p>
+    </div>
+    <div class="buttons">
+      <div
+        class="forward"
+        [ngClass]="{ selected: this.isForward }"
+        (click)="this.selectForward()"
+        #forward
+      >
+        <img src="/assets/icons/attack-graph/forward.png" />
+      </div>
+      <div
+        class="backward"
+        [ngClass]="{ selected: !this.isForward }"
+        (click)="this.selectBackwards()"
+        #backward
+      >
+        <img src="/assets/icons/attack-graph/backward.png" />
+      </div>
+    </div>
   </div>
   <div
     class="exit"
@@ -15,6 +35,7 @@
   >
     <app-cross />
   </div>
+
   <div class="options" [ngClass]="{ visible: this.isVisible }">
     <h2>Attack Graph Building Options</h2>
     <form>

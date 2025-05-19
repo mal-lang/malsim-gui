@@ -12,6 +12,12 @@ section.visible {
   border-left: 2px solid $border;
 }
 
+.top-left {
+  position: absolute;
+  top: 16px;
+  left: 32px;
+}
+
 .viewname {
   height: 32px;
   width: 192px;
@@ -20,10 +26,7 @@ section.visible {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  position: absolute;
 
-  top: 16px;
-  left: 32px;
   gap: 16px;
   margin: auto;
 
@@ -53,6 +56,47 @@ section.visible {
 
 .viewname.visible {
   display: flex;
+}
+
+.buttons {
+  width: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: $dark;
+
+    border: 2px solid white;
+    border-radius: 100%;
+    height: 32px;
+    width: 32px;
+
+    img {
+      height: 20px;
+      width: 20px;
+    }
+  }
+
+  div.selected {
+    border: 2px solid $clementine;
+  }
+
+  div:hover {
+    cursor: pointer;
+    border: 2px solid $clementine;
+    transition: ease-out 0.1s;
+  }
+
+  div.selected:hover {
+    cursor: auto;
+    border: 2px solid $clementine;
+  }
 }
 
 .exit {

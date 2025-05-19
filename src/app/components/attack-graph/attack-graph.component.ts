@@ -47,6 +47,9 @@ export class AttackGraphComponent {
   @ViewChild('currentDepthSign') currentDepthSign!: ElementRef;
   @ViewChild('currentSuggestionSign') currentSuggestionSign!: ElementRef;
 
+  @ViewChild('forward') forward!: ElementRef;
+  @ViewChild('backward') backward!: ElementRef;
+
   private config: TyrGraphConfig;
 
   public isVisible: boolean;
@@ -55,6 +58,7 @@ export class AttackGraphComponent {
   public selectedSuggestionDist: number = 2;
   public maxSuggestionDist: number = 3;
   public cursorStyle = 'grab';
+  public isForward: boolean = true;
 
   ngAfterViewInit() {
     this.config = {
@@ -147,6 +151,7 @@ export class AttackGraphComponent {
 
   public closeAttackGraph() {
     this.isVisible = false;
+    this.isForward = true;
     this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
     this.tyrManager.attackGraphRenderer.setIsVisible(false);
   }
@@ -163,6 +168,7 @@ export class AttackGraphComponent {
     this.emitter.emit({
       depth: this.selectedDepth,
       suggestionDist: this.selectedSuggestionDist,
+      forward: this.isForward,
     });
   }
 
@@ -224,6 +230,18 @@ export class AttackGraphComponent {
 
     this.suggestionSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
     this.updateSign(this.currentSuggestionSign.nativeElement, value);
+    this.emitValues();
+  }
+
+  public selectForward() {
+    if (this.isForward) return;
+    this.isForward = true;
+    this.emitValues();
+  }
+
+  public selectBackwards() {
+    if (!this.isForward) return;
+    this.isForward = false;
     this.emitValues();
   }
 }
