@@ -328,7 +328,8 @@ export class HomeComponent {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       attackSteps,
       this.attackGraph.selectedDepth,
-      this.attackGraph.selectedSuggestionDist
+      this.attackGraph.selectedSuggestionDist,
+      true
     );
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
@@ -337,7 +338,8 @@ export class HomeComponent {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
       event.depth,
-      event.suggestionDist
+      event.suggestionDist,
+      true
     );
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
@@ -394,7 +396,6 @@ export class HomeComponent {
       disconnectedSprite,
       turnoffSprite,
       bulbSprite,
-      bellSprite,
       warningSprite,
       eyeSprite,
       checkSprite,
@@ -411,7 +412,6 @@ export class HomeComponent {
       Assets.load('disconnected'),
       Assets.load('turnoff'),
       Assets.load('bulb'),
-      Assets.load('bell'),
       Assets.load('warning'),
       Assets.load('eye'),
       Assets.load('check'),

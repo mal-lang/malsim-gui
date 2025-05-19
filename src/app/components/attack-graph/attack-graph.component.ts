@@ -15,21 +15,17 @@ import {
   TextStyleAlign,
   TextStyleFontWeight,
   Texture,
-  TyrAlertStatus,
-  TyrAssetGraphNode,
-  TyrAssetGraphNodeStatus,
-  TyrAttackGraphNode,
   TyrAttackStep,
   TyrGraphConfig,
   TyrGraphNode,
   TyrManager,
   ColorSource,
 } from 'tyr-js';
-
+import { CrossComponent } from '../../utils/cross/cross.component';
 @Component({
   selector: 'app-attack-graph',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, CrossComponent],
   templateUrl: './attack-graph.component.html',
   styleUrl: './attack-graph.component.scss',
 })

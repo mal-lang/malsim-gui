@@ -1,5 +1,5 @@
 <section [ngClass]="{ visible: !closed }">
-  <app-cross (click)="this.close()" />
+  <div class="exit"><app-cross (click)="this.close()" /></div>
   <h2>{{ node!.asset.name }}: {{ node.asset.type }}</h2>
   <div class="menu-options">
     <p

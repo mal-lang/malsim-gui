@@ -53,3 +53,13 @@ h2 {
 p {
   font-family: "Inter";
 }
+
+.exit:hover {
+  cursor: pointer;
+  color: $clementine;
+  transition: ease-out 0.1s;
+  .cross {
+    fill: $clementine;
+    transition: fill ease-out 0.1s;
+  }
+}
