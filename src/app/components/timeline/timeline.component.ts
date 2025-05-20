@@ -209,11 +209,15 @@ export class TimelineComponent {
 
         if (this.clickedCircle === leftEl) {
           this.clickedCircleDraggableRightLimit =
-            rightEl.getBoundingClientRect().left - this.halfDistance;
+            rightEl.getBoundingClientRect().left +
+            container.scrollLeft -
+            this.halfDistance;
           this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
         } else {
           this.clickedCircleDraggableLeftLimit = this.attackGraphMode
-            ? leftEl.getBoundingClientRect().left + this.halfDistance
+            ? leftEl.getBoundingClientRect().left +
+              container.scrollLeft +
+              this.halfDistance
             : this.draggableLeftLimit;
           this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
         }
@@ -236,6 +240,7 @@ export class TimelineComponent {
 
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
+      const container = this.timeline.nativeElement as HTMLElement;
 
       if (this.isWindowClicked) {
         this.isWindowClicked = false;
@@ -244,7 +249,7 @@ export class TimelineComponent {
 
         const posLeft = slideLeftEl.getBoundingClientRect().left;
         const windowWidth = windowEl.getBoundingClientRect().width;
-        let offsetX = posLeft;
+        let offsetX = posLeft + container.scrollLeft;
 
         this.clickedCircleDraggableLeftLimit = this.draggableLeftLimit;
         this.clickedCircleDraggableRightLimit =
@@ -252,10 +257,10 @@ export class TimelineComponent {
         this.moveSlide(offsetX, this.slideCircleLeft.nativeElement);
 
         this.clickedCircleDraggableLeftLimit =
-          this.draggableLeftLimit + windowWidth;
+          this.draggableLeftLimit + windowWidth - container.scrollLeft;
         this.clickedCircleDraggableRightLimit = this.draggableRightLimit;
         this.moveSlide(
-          slideLeftEl.getBoundingClientRect().left + windowWidth,
+          offsetX + windowWidth - this.itemWidth,
           this.slideCircleRight.nativeElement
         );
         this.isWindowClicked = false;
@@ -290,9 +295,10 @@ export class TimelineComponent {
 
   private moveSlide(position: number, circle: HTMLElement) {
     let translatedX = this.calculateSelectedItem(position);
+    const container = this.timeline.nativeElement as HTMLElement;
     if (circle == this.slideCircleRight.nativeElement && this.attackGraphMode) {
       if (
-        circle.getBoundingClientRect().left >
+        circle.getBoundingClientRect().left + container.scrollLeft >
         this.clickedCircleDraggableLeftLimit
       )
         translatedX =
@@ -300,18 +306,13 @@ export class TimelineComponent {
             ? this.draggableRightLimit
             : translatedX + this.itemWidth;
       if (
-        circle.getBoundingClientRect().left <=
+        circle.getBoundingClientRect().left + container.scrollLeft <=
         this.clickedCircleDraggableLeftLimit
-      )
+      ) {
         translatedX =
           this.slideCircleLeft.nativeElement.getBoundingClientRect().left +
-          this.itemWidth +
-          this.gap;
-    }
-
-    if (this.isWindowClicked) {
-      if (circle == this.slideCircleLeft.nativeElement) {
-      } else {
+          container.scrollLeft +
+          this.itemWidth;
       }
     }
 
