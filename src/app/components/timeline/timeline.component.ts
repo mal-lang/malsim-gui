@@ -439,9 +439,9 @@ export class TimelineComponent {
     const position = this.marginLeft + (this.itemWidth + this.gap) * index;
     const current =
       this.slideCircleRight.nativeElement.getBoundingClientRect().left;
-    if (position < current) return;
 
     this.moveSlide(position, this.slideCircleRight.nativeElement);
+    this.moveSlide(position, this.slideCircleLeft.nativeElement);
   }
 
   public addAlert(alert: TyrNotification) {
