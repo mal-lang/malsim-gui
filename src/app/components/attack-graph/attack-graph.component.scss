@@ -5,6 +5,13 @@ section {
   background-color: $dark;
 
   position: relative;
+
+  * {
+    -webkit-user-select: none; /* Chrome, Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
+    user-select: none; /* Standard */
+  }
 }
 
 section.visible {
@@ -35,10 +42,6 @@ section.visible {
   border-radius: 20px;
 
   cursor: auto;
-
-  * {
-    user-select: none;
-  }
 
   img {
     height: 20px;
