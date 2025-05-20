@@ -58,6 +58,7 @@ export class TimelineComponent {
     if (!changes['attackGraphMode']) return;
     if (!this.slideCircleRight) return;
 
+    const circle = this.slideCircleRight.nativeElement as HTMLElement;
     const leftEl = this.slideCircleLeft.nativeElement as HTMLElement;
     const rightEl = this.slideCircleRight.nativeElement as HTMLElement;
     const container = this.timeline.nativeElement as HTMLElement;
@@ -65,31 +66,20 @@ export class TimelineComponent {
     let leftPos = leftEl.getBoundingClientRect().left + container.scrollLeft;
     let rightPos = rightEl.getBoundingClientRect().left + container.scrollLeft;
 
-    console.log(leftPos, rightPos);
-
     if (!this.attackGraphMode) {
       //Set automatic update to true when jumping back to asset graph mode
       this.automaticUpdate = true;
       //Move slide left to the left of the slide when in asset graph mode
-      leftEl.style.transform = `translateX(${this.draggableLeftLimit}px)`;
+      leftPos = 0;
+      this.moveSlide(0, leftEl);
       this.renderer.setStyle(this.timelineWindow.nativeElement, 'width', `0px`);
     } else {
       this.automaticUpdate = false;
       this.settingAttackGraph = true;
-      //Move the right slide half an item width to the right, since the braking point now is at the end of the item and not the middle
-      if (rightPos > 0) {
-        rightPos +=
-          this.halfDistance - rightEl.getBoundingClientRect().width / 2;
-        rightEl.style.transform = `translateX(${rightPos}px)`;
-      }
 
-      //Move the left one to form a one item width window
-      leftPos =
-        rightPos -
-        this.itemWidth -
-        this.gap +
-        rightEl.getBoundingClientRect().width;
-      leftEl.style.transform = `translateX(${leftPos}px)`;
+      this.moveSlide(rightPos, this.slideCircleLeft.nativeElement);
+
+      rightPos += this.halfDistance;
     }
 
     //Expand the limit to the right half an item, or shrink it depending on the mode
@@ -102,8 +92,7 @@ export class TimelineComponent {
     this.updateLineColor(leftPos, rightPos);
     this.updateSelectedNotifications();
 
-    const circle = this.slideCircleRight.nativeElement as HTMLElement;
-    this.moveSlide(circle.getBoundingClientRect().left, circle);
+    this.moveSlide(rightPos, circle);
     this.settingAttackGraph = false;
   }
 
@@ -388,6 +377,8 @@ export class TimelineComponent {
     const leftCenter = leftRect.left + leftRect.width / 2;
     const rightCenter = rightRect.left + rightRect.width / 2;
 
+    const left = this.attackGraphMode ? leftCenter + container.scrollLeft : 0;
+
     this.renderer.setStyle(line, 'left', `0px`);
     this.renderer.setStyle(line, 'width', `${this.draggableRightLimit}px`);
     this.renderer.setStyle(
@@ -395,8 +386,8 @@ export class TimelineComponent {
       'background',
       `linear-gradient(to right,
         #343a3e 0px,
-        #343a3e ${leftPos ?? leftCenter + container.scrollLeft}px,
-        ${this.getColor()} ${leftPos ?? leftCenter + container.scrollLeft}px,
+        #343a3e ${leftPos ?? left}px,
+        ${this.getColor()} ${leftPos ?? left}px,
         ${this.getColor()} ${rightPos ?? rightCenter + container.scrollLeft}px,
         #343a3e ${rightPos ?? rightCenter + container.scrollLeft}px,
         #343a3e ${this.draggableRightLimit}px)`
