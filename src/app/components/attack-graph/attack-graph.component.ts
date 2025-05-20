@@ -38,7 +38,7 @@ export class AttackGraphComponent {
         background: ColorSource;
       }
     | undefined;
-
+  @Input() parentCloseAttackGraph: () => void;
   @Output() emitter = new EventEmitter<any>();
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
@@ -152,8 +152,8 @@ export class AttackGraphComponent {
   public closeAttackGraph() {
     this.isVisible = false;
     this.isForward = true;
-    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
-    this.tyrManager.attackGraphRenderer.setIsVisible(false);
+
+    this.parentCloseAttackGraph();
   }
 
   public getAttackGraphContainer() {

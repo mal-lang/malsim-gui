@@ -1,16 +1,19 @@
 @import "../../../styles.scss";
 
 #graphContainer {
+  display: none;
   position: relative;
-  width: 100%;
+  width: 0px;
   height: 100%;
   min-width: 0px;
   min-height: 0px;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
-
+#graphContainer.visible {
+  display: flex;
+  width: 100%;
+}
 .cursor-pointer {
   cursor: pointer;
 }

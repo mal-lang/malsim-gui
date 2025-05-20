@@ -13,6 +13,7 @@
       [getAssetIcon]="this.getAssetIcon"
       [getNodeStatusIcon]="this.getNodeStatusIcon"
       [selectAlertIcon]="this.selectAlertIcon"
+      [isVisible]="this.displayAssetGraph"
       (simulationStatusEmitter)="setAlertsInterval()"
     />
     <app-attack-graph
@@ -20,6 +21,7 @@
       [tyrManager]="this.tyrManager"
       [getAssetIcon]="this.getAssetIcon"
       [getAttackStepIcon]="this.getAttackGraphNodeIcon"
+      [parentCloseAttackGraph]="this.closeAttackGraph"
       (emitter)="updateAttackGraph($event)"
     ></app-attack-graph>
     <aside>
