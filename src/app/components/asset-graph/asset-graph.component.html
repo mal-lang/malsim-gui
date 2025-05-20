@@ -1,4 +1,11 @@
-<div #graphContainer id="graphContainer" [style.cursor]="this.cursorStyle">
+<div
+  #graphContainer
+  id="graphContainer"
+  [ngClass]="{
+    visible: this.isVisible
+  }"
+  [style.cursor]="this.cursorStyle"
+>
   <div *ngIf="!this.simulationEnded" class="loader"></div>
   <div *ngIf="this.simulationEnded" class="viewname">
     <img src="/assets/icons/network.png" />

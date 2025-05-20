@@ -64,6 +64,7 @@ export class HomeComponent {
   private disconnectedSprite?: Texture;
 
   public tyrManager: TyrManager;
+  public displayAssetGraph: boolean = true;
 
   private condition: NodeAffectedCondition = {
     _: 'node',
@@ -131,6 +132,7 @@ export class HomeComponent {
     this.getAssetIcon = this.getAssetIcon.bind(this);
     this.getNodeStatusIcon = this.getNodeStatusIcon.bind(this);
     this.selectAlertIcon = this.selectAlertIcon.bind(this);
+    this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
     this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
   }
 
@@ -323,6 +325,13 @@ export class HomeComponent {
     this.attackGraph.openAttackGraph(attackStep);
     this.timeline.setSlideOnStep(attackStep);
     this.displayAttackGraph([attackStep]);
+    this.displayAssetGraph = false;
+  };
+
+  closeAttackGraph = () => {
+    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
+    this.tyrManager.attackGraphRenderer.setIsVisible(false);
+    this.displayAssetGraph = true;
   };
 
   displayAttackGraph = (attackSteps: TyrAttackStep[]) => {

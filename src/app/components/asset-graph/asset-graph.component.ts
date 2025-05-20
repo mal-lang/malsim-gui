@@ -31,6 +31,7 @@ import {
 })
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
+  @Input() isVisible: boolean;
   @Input() attackStepMap: any;
   @Input() getAssetIcon: (node: TyrGraphNode) => Sprite;
   @Input() getNodeStatusIcon: (node: TyrAssetGraphNodeStatus) => Texture;

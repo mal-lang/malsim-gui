@@ -58,12 +58,14 @@ export class TimelineComponent {
     if (!changes['attackGraphMode']) return;
     if (!this.slideCircleRight) return;
 
-    const leftEl = this.slideCircleLeft.nativeElement;
-    const rightEl = this.slideCircleRight.nativeElement;
+    const leftEl = this.slideCircleLeft.nativeElement as HTMLElement;
+    const rightEl = this.slideCircleRight.nativeElement as HTMLElement;
     const container = this.timeline.nativeElement as HTMLElement;
 
-    let leftPos = leftEl.getBoundingClientRect().left;
-    let rightPos = rightEl.getBoundingClientRect().left;
+    let leftPos = leftEl.getBoundingClientRect().left + container.scrollLeft;
+    let rightPos = rightEl.getBoundingClientRect().left + container.scrollLeft;
+
+    console.log(leftPos, rightPos);
 
     if (!this.attackGraphMode) {
       //Set automatic update to true when jumping back to asset graph mode

@@ -15,7 +15,7 @@ section {
 }
 
 section.visible {
-  width: calc(calc(100vw - 360px) / 2);
+  width: calc(100vw - 360px);
   border-left: 2px solid $border;
 }
 
