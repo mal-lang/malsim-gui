@@ -5,17 +5,11 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
 
 import {
-  EdgeAffectedCondition,
-  LayoutAlgorithm,
-  NodeAffectedCondition,
   parseLatestAttackSteps,
-  RendererRule,
-  RendererRuleScope,
   Texture,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
-  TyrGraphNode,
   TyrManager,
   TyrNotification,
   TyrNotificationType,
@@ -29,7 +23,7 @@ import {
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
-import { easeBack } from 'd3';
+import { assetGraphRendererRules } from 'src/tyr-js/assetGraphRendererRules';
 
 @Component({
   selector: 'app-home',
@@ -66,56 +60,6 @@ export class HomeComponent {
 
   public tyrManager: TyrManager;
   public displayAssetGraph: boolean = true;
-
-  private condition: NodeAffectedCondition = {
-    _: 'node',
-    all: true,
-  };
-
-  private nodeRule: RendererRule = {
-    scope: RendererRuleScope.node,
-    affectedCondition: this.condition,
-    vertices: 0,
-    color: 'white',
-    width: 50,
-    height: 50,
-  };
-
-  private condition4: NodeAffectedCondition = {
-    _: 'node',
-    all: false,
-    type: 'Network',
-  };
-
-  private nodeRule2: RendererRule = {
-    scope: RendererRuleScope.node,
-    affectedCondition: this.condition4,
-    vertices: 8,
-    color: 'blue',
-    width: 80,
-    height: 80,
-  };
-
-  private condition2: EdgeAffectedCondition = {
-    _: 'edge',
-    all: true,
-  };
-
-  private edgeRule: RendererRule = {
-    scope: RendererRuleScope.edge,
-    affectedCondition: this.condition2,
-    color: 0xafafaf,
-    width: 5,
-    edgeCurveX: 0,
-    edgeCurveY: 0,
-  };
-
-  private condition3: EdgeAffectedCondition = {
-    _: 'edge',
-    all: false,
-    sourceType: 'Network',
-    targetType: 'Network',
-  };
 
   public cursorStyle = 'default';
   public rewardValue: { reward: number; iteration: number } = {
@@ -173,7 +117,7 @@ export class HomeComponent {
 
       this.tyrManager.assetGraphRenderer.init(
         assetGraphContainer,
-        [this.nodeRule, this.edgeRule],
+        assetGraphRendererRules,
         this.assetGraph.getConfig()
       );
     });
