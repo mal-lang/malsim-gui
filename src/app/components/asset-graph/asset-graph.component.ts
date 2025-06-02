@@ -7,21 +7,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  Assets,
   AvailableInitialNodePositioning,
   FillInput,
   LayoutAlgorithm,
   SimulationConfig,
   TextStyleAlign,
   TextStyleFontWeight,
-  Texture,
-  TyrAlertStatus,
   TyrAssetGraphNode,
   TyrAssetGraphClusterRule,
-  TyrGraphConfig,
-  TyrGraphNode,
-  TyrAssetGraphNodeStatus,
-  Sprite,
   TyrAssetGraphConfig,
 } from 'tyr-js';
 
@@ -37,6 +30,7 @@ export class AssetGraphComponent {
   @Input() onNodeClick: (node: TyrAssetGraphNode) => void;
   @Output() simulationStatusEmitter = new EventEmitter<any>();
 
+  private config: TyrAssetGraphConfig;
   private clusterRules: TyrAssetGraphClusterRule[] = [
     {
       type: 'Network',
@@ -45,7 +39,6 @@ export class AssetGraphComponent {
       type: 'Application',
     },
   ];
-
   private layout: SimulationConfig = {
     type: LayoutAlgorithm.kamada_kawai,
     alpha: 1,
@@ -57,8 +50,6 @@ export class AssetGraphComponent {
       edgeDistance: 400,
     },
   };
-
-  private config: TyrAssetGraphConfig;
 
   public cursorStyle = 'grab';
   public simulationEnded = false;

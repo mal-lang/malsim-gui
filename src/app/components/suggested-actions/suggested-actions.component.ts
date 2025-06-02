@@ -52,7 +52,7 @@ export class SuggestedActionsComponent {
 
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
-    this.tyrManager.markDefensesAsActive([]);
+    this.tyrManager.markDefensesAsPerformed([]);
 
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
@@ -99,7 +99,7 @@ export class SuggestedActionsComponent {
       .postDefenderAction(this.suggestedActions[id].stepId, iteration)
       .then(() => {
         this.suggestedActions[id].performed = true;
-        this.tyrManager.markDefensesAsActive(
+        this.tyrManager.markDefensesAsPerformed(
           this.suggestedActions
             .filter((a) => a.performed)
             .map((a) => String(a.stepId))

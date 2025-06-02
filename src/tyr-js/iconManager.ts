@@ -1,7 +1,7 @@
 import {
   Assets,
+  AttackGraphSprite,
   ColorMatrixFilter,
-  ColorSource,
   Sprite,
   Texture,
   TyrAlertStatus,
@@ -222,36 +222,31 @@ export class IconManager {
     return new Sprite(texture);
   }
 
-  public getAttackGraphNodeIcon(
-    attackStep: TyrAttackStep
-  ): { sprite: Sprite; background: ColorSource } | undefined {
+  public getAttackGraphNodeIcon(attackStep: TyrAttackStep): AttackGraphSprite {
+    const result: AttackGraphSprite = {
+      sprite: undefined,
+      background: undefined,
+    };
+
     if (attackStep.type === 'defense') {
-      if (attackStep.isActive)
-        return {
-          sprite: new Sprite(this.attackStepsStatusIcons.checkSprite),
-          background: 0x00bdd2,
-        };
-      if (
-        this.suggestedActions.suggestedActions
-          .map((a: any) => a.stepId)
-          .includes(+attackStep.id)
-      )
-        return {
-          sprite: new Sprite(this.attackStepsStatusIcons.bulbSprite),
-          background: 0x005c69,
-        };
+      if (attackStep.extras.performed) {
+        result.sprite = new Sprite(this.attackStepsStatusIcons.checkSprite);
+        result.background = 0x00bdd2;
+      }
+      if (attackStep.extras.recommended) {
+        result.sprite = new Sprite(this.attackStepsStatusIcons.bulbSprite);
+        result.background = 0x005c69;
+      }
     } else {
-      if (attackStep.isActive)
-        return {
-          sprite: new Sprite(this.attackStepsStatusIcons.warningSprite),
-          background: 0xffc300,
-        };
-      if (attackStep.isObservable)
-        return {
-          sprite: new Sprite(this.attackStepsStatusIcons.eyeSprite),
-          background: 0x990000,
-        };
+      if (attackStep.extras.observable) {
+        result.sprite = new Sprite(this.attackStepsStatusIcons.eyeSprite);
+        result.background = 0x990000;
+      }
+      if (attackStep.extras.performed) {
+        result.sprite = new Sprite(this.attackStepsStatusIcons.warningSprite);
+        result.background = 0xffc300;
+      }
     }
-    return;
+    return result;
   }
 }
