@@ -30,15 +30,23 @@ interface RewardValue {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
+
+/**
+ * HomeComponent acts like the main component of this project. It aims to initialize the rest of components as well as TyrJS, and act like
+ * central point where all information from all components, TyrJS and the API converge.
+ */
 export class HomeComponent {
+  //All child components
   @ViewChild('suggestedActions') suggestedActions!: SuggestedActionsComponent;
   @ViewChild('assetGraph') assetGraph!: AssetGraphComponent;
   @ViewChild('attackGraph') attackGraph!: AttackGraphComponent;
   @ViewChild('assetMenu') assetMenu!: AssetMenuComponent;
   @ViewChild('timeline') timeline!: TimelineComponent;
 
+  //Interval information, determines every how much information is retrieved from the API
   private intervalId: any;
   private intervalTime: number = 1000 * 10; // 10 seconds;
+
   private apiService;
   private iconManager: IconManager;
   private externalTools: ExternalUtils;
@@ -51,6 +59,7 @@ export class HomeComponent {
   public notifyClick = (node: TyrAssetGraphNode) => {};
 
   constructor(apiService: ApiService) {
+    //Default data
     this.apiService = apiService;
     this.iconManager = new IconManager();
     this.rewardValue = {
@@ -62,13 +71,12 @@ export class HomeComponent {
     this.currentDefenderSuggestions = {};
   }
 
+  /**
+   * Intializes the retrieval of data as soon as this component is initialized.
+   * It starts off by loading all icons through the icon manager. Once finished
+   * it retrieves the initial information from the API.
+   */
   async ngAfterViewInit() {
-    this.notifyClick = (node: TyrAssetGraphNode) => {
-      if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
-        this.assetMenu.open(node);
-      }
-    };
-
     //Load icons, and once they are loaded, retrieve initial information from API
     await this.iconManager.load().then(() => {
       this.externalTools = {
@@ -79,8 +87,27 @@ export class HomeComponent {
       };
       this.retrieveInitialData();
     });
+
+    /** It also initializes notifyClick, a function meant to be called each time
+     * the user clicks, in this case, in the asset graph visualization.
+     *
+     * This is necessary since these interactions are triggered in the tyrJS library
+     * and not this project, and therefore, we need to "listen" to them.
+     */
+    this.notifyClick = (node: TyrAssetGraphNode) => {
+      if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
+        this.assetMenu.open(node);
+      }
+    };
   }
 
+  /**
+   * Helper function meant to check if the received defender suggestions
+   * are indeed correct and different from the ones already displayed.
+   *
+   * @param {any} defenderSuggestions - The received raw JSON with the defender suggestions
+   * @returns {boolean} - If the suggestions should be updated or not.
+   */
   private checkDefenderSuggestions(defenderSuggestions: any): boolean {
     if (!defenderSuggestions) {
       return false;
@@ -114,12 +141,17 @@ export class HomeComponent {
   }
 
   //API data retriever functions
+
+  /**
+   * Receives the model and attack graph from the API. Then, it initializes TyrJS and
+   * the asset and attack graph visualizations by initializing their renderers.
+   */
   private async retrieveInitialData() {
     forkJoin({
       receivedModel: this.apiService.getModel(),
       receivedAttackGraph: this.apiService.getAttackGraph(),
     }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
-      //Use this data to initialize tyr-js
+      //Once the model and attack graph is received, this data is used to initialize tyr-js
       this.tyrManager = new TyrManager(
         receivedModel,
         receivedAttackGraph,
@@ -132,7 +164,7 @@ export class HomeComponent {
       const attackGraphContainer =
         this.attackGraph.getAttackGraphContainer().nativeElement;
 
-      //Initialize renderers
+      //Initialize renderers for the asset and attack graphs
       this.tyrManager.assetGraphRenderer.init(
         assetGraphContainer,
         assetGraphRendererRules,
@@ -147,16 +179,22 @@ export class HomeComponent {
     });
   }
 
+  /**
+   * Retrieves the latest attacker's performed attack step, the reward value,
+   * and the current ML's agent suggestions from the API.
+   *
+   * This function is meant to be executed iteratively.
+   */
   private async retrieveAlerts() {
     forkJoin({
       latestAttackSteps: this.apiService.getLatestAttackSteps(),
       rewardValue: this.apiService.getRewardValue(),
       defenderSuggestions: this.apiService.getDefenderSuggestions(),
     }).subscribe(({ latestAttackSteps, rewardValue, defenderSuggestions }) => {
-      //Reward
+      //Store the Reward
       this.rewardValue = rewardValue;
 
-      //Latest Attack Step
+      //Passes the latest attack step into the tyrJS and to the timeline, for both to add them to their respective visualizations.
       if (Object.keys(latestAttackSteps).length > 0) {
         const parsedAttackSteps = parseLatestAttackSteps(latestAttackSteps);
         for (let i = 0; i < parsedAttackSteps.length; i++) {
@@ -168,7 +206,7 @@ export class HomeComponent {
         }
       }
 
-      //Defender Suggestions
+      //If the agents suggestions are new, it send the data to tyrJS and updates the project's defender suggestion list (the one in the left side of the screen)
       if (this.checkDefenderSuggestions(defenderSuggestions)) {
         this.currentDefenderSuggestions = defenderSuggestions;
         this.suggestedActions.updateSuggestedActions(defenderSuggestions);
@@ -181,7 +219,11 @@ export class HomeComponent {
 
   //FUNCTIONS PASSED TO CHILD COMPONENTS
 
-  //This function is executed by the asset graph component. Its passed to the config and executed (inits interval) after the graph has been renderered
+  /**
+   * Initializes the interval to call retrieveAlerts() iteratively
+   * This function is passed to the asset graph component, which contains the asset graph renderer configuration. This is done so, so that
+   * TyrJS can call this once everything, and not get any alert prior to the initialization of the asset graph visualization.
+   */
   public setAlertsInterval() {
     this.intervalId = setInterval(() => {
       this.retrieveAlerts();
@@ -189,6 +231,11 @@ export class HomeComponent {
   }
 
   //Timeline related functions
+  /**
+   * Adds the executed suggestion to the timeline, and sends the suggestion to TyrJS to visualize its effects in the network.
+   *
+   * @param { any } suggestion - the performed suggestion
+   */
   addExecutedSuggestionToTimeline(suggestion: any) {
     const getNodeChildren = (
       node: TyrAssetGraphNode,
@@ -211,12 +258,14 @@ export class HomeComponent {
       return list;
     };
 
+    //Finds the suggested step in the attack graph
     const attackstep = this.tyrManager
       .getAttackSteps()
       .find((a) => a.id == suggestion.stepId);
 
     if (!attackstep) throw new Error('TODO');
 
+    //Creates the notification with its information
     const tyrSuggestion: TyrNotification = {
       node: attackstep.asset,
       attackStep: attackstep,
@@ -228,11 +277,17 @@ export class HomeComponent {
       otherAffectedNodes: [],
     };
 
-    //TODO: Expand
+    /*
+    Depending on the suggestion type, it will be visualized in different ways in the graph visualization. For instance,
+    application:notPresent will shutdown the application, and therefore all its children (users and connection rules), which means 
+    they also need to be "shutdown". All of this is decided here
+    */
     switch (suggestion.type) {
       case 'Application:notPresent':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+
+        //All its children are also shutdown
         tyrSuggestion.otherAffectedNodes = getNodeChildren(
           tyrSuggestion.node,
           true
@@ -241,6 +296,8 @@ export class HomeComponent {
       case 'Identity:notPresent':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+
+        //All its children, except applications will be shutdown
         tyrSuggestion.otherAffectedNodes = getNodeChildren(
           tyrSuggestion.node,
           false
@@ -249,15 +306,19 @@ export class HomeComponent {
       case 'ConnectionRule:restricted':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+        //There are no other affected nodes in this case, only the CR will be turned off.
         break;
       default:
         break;
     }
 
+    //Send the performed suggestion to TyrJS for its effect to be visualized in the asset graph.
     this.tyrManager.receivePerformedSuggestion(
       tyrSuggestion,
       this.timeline.automaticUpdate
     );
+
+    //Add the suggestion to the timeline
     this.timeline.addPerformedSuggestion(tyrSuggestion);
 
     if (this.timeline.automaticUpdate)
@@ -272,20 +333,11 @@ export class HomeComponent {
     return this.tyrManager?.attackGraphRenderer?.getIsVisible?.();
   }
 
-  openAttackGraph = (attackStep: TyrAttackStep) => {
-    this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
-    this.attackGraph.openAttackGraph(attackStep);
-    this.timeline.setSlideOnStep(attackStep);
-    this.displayAttackGraph([attackStep]);
-    this.displayAssetGraph = false;
-  };
-
-  closeAttackGraph = () => {
-    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
-    this.tyrManager.attackGraphRenderer.setIsVisible(false);
-    this.displayAssetGraph = true;
-  };
-
+  /**
+   * Creates the attack graph from the àssed attack steps
+   *
+   * @param { TyrAttackStep[] } attackSteps - the attack step(s) to build the attack graph(s) from
+   */
   displayAttackGraph = (attackSteps: TyrAttackStep[]) => {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       attackSteps,
@@ -293,9 +345,45 @@ export class HomeComponent {
       this.attackGraph.selectedSuggestionDist,
       true
     );
+    //Center camera to graph
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
 
+  /**
+   * Creates the attack graph and expands its HTML element to allow for its visualization.
+   *
+   * @param { TyrAttackStep } attackStep - the attack step to build the attack graph from
+   */
+  openAttackGraph = (attackStep: TyrAttackStep) => {
+    //Activate the attack graph mode
+    this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
+
+    //Expand the attack graph HTML element so its visible now
+    this.attackGraph.openAttackGraph(attackStep);
+
+    //Set the timeline slide to this particular attack step
+    this.timeline.setSlideOnStep(attackStep);
+
+    //Generate the attack graph
+    this.displayAttackGraph([attackStep]);
+    this.displayAssetGraph = false;
+  };
+
+  /**
+   * Closes the attack graph, shrinking its HTML element and setting everything necessary to only display the asset graph
+   */
+  closeAttackGraph = () => {
+    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
+    this.tyrManager.attackGraphRenderer.setIsVisible(false);
+    this.displayAssetGraph = true;
+  };
+
+  /**
+   * Updates the current visualization, displaying the attack graph but now with the setted depth, suggestion distance
+   * and forward (if we are looking forward or backwards in the graph)
+   *
+   * @param {any} event - the emitted value with depth, suggestionDist and forward to update the visualization
+   */
   updateAttackGraph = (event: any) => {
     this.tyrManager.attackGraphRenderer.displaySubgraph(
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
