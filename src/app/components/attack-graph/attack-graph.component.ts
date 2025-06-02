@@ -20,6 +20,7 @@ import {
   TyrGraphNode,
   TyrManager,
   ColorSource,
+  TyrAttackGraphConfig,
 } from 'tyr-js';
 import { CrossComponent } from '../../utils/cross/cross.component';
 @Component({
@@ -50,7 +51,7 @@ export class AttackGraphComponent {
   @ViewChild('forward') forward!: ElementRef;
   @ViewChild('backward') backward!: ElementRef;
 
-  private config: TyrGraphConfig;
+  private config: TyrAttackGraphConfig;
 
   public isVisible: boolean;
   public selectedDepth: number = 3;
@@ -62,54 +63,20 @@ export class AttackGraphComponent {
 
   ngAfterViewInit() {
     this.config = {
-      centerX:
-        (this.graphContainer.nativeElement as HTMLElement).offsetWidth / 2,
-      centerY:
-        (this.graphContainer.nativeElement as HTMLElement).offsetHeight / 2,
       marginX: 0,
       marginY: 0,
-      graphWorldWidth: 20000,
-      graphWorldHeight: 20000,
       backgroundColor: '#00080d',
+      textConfig: {
+        fontFamily: 'arial',
+        fontSize: 64,
+        fill: 0xffffff as FillInput,
+        align: 'left' as TextStyleAlign,
+        fontWeight: 'bold' as TextStyleFontWeight,
+        stroke: 'white',
+      },
       nodes: {
-        initialPositioning: {
-          type: AvailableInitialNodePositioning.random,
-          radiusX: 20000,
-          radiusY: 20000,
-        },
-        getAttackStepIcon: (attackStep: TyrAttackStep) => {
-          return this.getAttackStepIcon(attackStep);
-        },
-        getNodeImage: (node: TyrGraphNode) => {
-          return this.getAssetIcon(node);
-        },
-        imageMargin: 0.5,
-        textInvisible: false,
-        highlightColor: 0xffa100,
-        textConfig: {
-          fontFamily: 'arial',
-          fontSize: 64,
-          fill: 0xffffff as FillInput,
-          align: 'left' as TextStyleAlign,
-          fontWeight: 'bold' as TextStyleFontWeight,
-          stroke: 'white',
-        },
-        hoverable: true,
-        onPointerOn: () => {
-          this.cursorStyle = 'pointer';
-        },
-        onPointerOut: () => {
-          this.cursorStyle = 'grab';
-        },
-        onClick: () => {},
-        onFirstRendered: () => {},
+        imageMargin: 0,
       },
-      edges: {
-        animated: true,
-        unidirectional: true,
-      },
-      clusterRules: [],
-      simulationConfig: { type: LayoutAlgorithm.sugiyama },
     };
 
     this.depthSlider.nativeElement.addEventListener(

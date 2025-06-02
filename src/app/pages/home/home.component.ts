@@ -24,6 +24,7 @@ import {
   Sprite,
   ColorMatrixFilter,
   ColorSource,
+  ExternalUtils,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -152,12 +153,17 @@ export class HomeComponent {
       receivedModel: this.apiService.getModel(),
       receivedAttackGraph: this.apiService.getAttackGraph(),
     }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
+      const externalTools: ExternalUtils = {
+        getAttackStepIcon: this.getAttackGraphNodeIcon,
+        getAssetIcon: this.getAssetIcon,
+        getAssetNodeStatusIcon: this.getNodeStatusIcon,
+        getAlertIcon: this.selectAlertIcon,
+      };
+
       this.tyrManager = new TyrManager(
         receivedModel,
-        receivedAttackGraph.attack_steps,
-        this.assetGraph.getConfig(),
-        this.attackGraph.getConfig(),
-        [this.nodeRule, this.nodeRule2, this.edgeRule]
+        receivedAttackGraph,
+        externalTools
       );
 
       const assetGraphContainer =
@@ -166,12 +172,9 @@ export class HomeComponent {
         this.attackGraph.getAttackGraphContainer().nativeElement;
 
       this.tyrManager.assetGraphRenderer.init(
-        this.assetGraph.getConfig(),
-        assetGraphContainer
-      );
-      this.tyrManager.attackGraphRenderer.init(
-        this.attackGraph.getConfig(),
-        attackGraphContainer
+        assetGraphContainer,
+        [this.nodeRule, this.edgeRule],
+        this.assetGraph.getConfig()
       );
     });
   }
@@ -183,7 +186,10 @@ export class HomeComponent {
   }
 
   addExecutedSuggestionToTimeline(suggestion: any) {
-    const attackstep = this.tyrManager.findNodeAttackStepId(suggestion.stepId);
+    const attackstep = this.tyrManager
+      .getAttackSteps()
+      .find((a) => a.id == suggestion.stepId);
+
     if (!attackstep) throw new Error('TODO');
 
     const tyrSuggestion: TyrNotification = {
@@ -223,7 +229,7 @@ export class HomeComponent {
         break;
     }
 
-    this.tyrManager.injectPerformedSuggestion(
+    this.tyrManager.receivePerformedSuggestion(
       tyrSuggestion,
       this.timeline.automaticUpdate
     );
@@ -238,7 +244,9 @@ export class HomeComponent {
 
   private getNodeChildren(node: TyrAssetGraphNode, isShutdownMachine: boolean) {
     let list = node.connections.children;
-    const nodes = this.tyrManager.getAssets().filter((n) => list.includes(n));
+    const nodes = this.tyrManager
+      .getAssetGraphNodes()
+      .filter((n) => list.includes(n));
 
     //Also add identity children nodes (This is a workaround, wont work for all nodes)
     if (isShutdownMachine) {
@@ -265,7 +273,7 @@ export class HomeComponent {
       if (Object.keys(latestAttackSteps).length > 0) {
         const parsedAttackSteps = parseLatestAttackSteps(latestAttackSteps);
         for (let i = 0; i < parsedAttackSteps.length; i++) {
-          const alert = this.tyrManager.injestLatestAttackStep(
+          const alert = this.tyrManager.receiveLatestAttackStep(
             parsedAttackSteps[i].id,
             this.timeline.automaticUpdate
           );

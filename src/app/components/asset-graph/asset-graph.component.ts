@@ -22,6 +22,7 @@ import {
   TyrGraphNode,
   TyrAssetGraphNodeStatus,
   Sprite,
+  TyrAssetGraphConfig,
 } from 'tyr-js';
 
 @Component({
@@ -60,7 +61,7 @@ export class AssetGraphComponent {
     },
   };
 
-  private config: TyrGraphConfig;
+  private config: TyrAssetGraphConfig;
 
   public cursorStyle = 'grab';
   public simulationEnded = false;
@@ -78,26 +79,23 @@ export class AssetGraphComponent {
       graphWorldWidth: 20000,
       graphWorldHeight: 20000,
       backgroundColor: '#212529',
+      textConfig: {
+        fontFamily: 'arial',
+        fontSize: 40,
+        fill: 0xffffff as FillInput,
+        align: 'left' as TextStyleAlign,
+        fontWeight: 'bold' as TextStyleFontWeight,
+        stroke: 'black',
+      },
       nodes: {
         initialPositioning: {
           type: AvailableInitialNodePositioning.random,
           radiusX: 20000,
           radiusY: 20000,
         },
-        getNodeAlertIcon: this.selectAlertIcon,
-        getNodeStatusIcon: this.getNodeStatusIcon,
-        getNodeImage: this.getAssetIcon,
         imageMargin: 0.5,
         textInvisible: false,
         highlightColor: 0xffa100,
-        textConfig: {
-          fontFamily: 'arial',
-          fontSize: 40,
-          fill: 0xffffff as FillInput,
-          align: 'left' as TextStyleAlign,
-          fontWeight: 'bold' as TextStyleFontWeight,
-          stroke: 'black',
-        },
         hoverable: true,
         onPointerOn: () => {
           this.cursorStyle = 'pointer';
