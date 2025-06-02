@@ -8,18 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  AvailableInitialNodePositioning,
   FillInput,
-  LayoutAlgorithm,
-  Sprite,
   TextStyleAlign,
   TextStyleFontWeight,
-  Texture,
   TyrAttackStep,
-  TyrGraphConfig,
-  TyrGraphNode,
   TyrManager,
-  ColorSource,
   TyrAttackGraphConfig,
 } from 'tyr-js';
 import { CrossComponent } from '../../utils/cross/cross.component';
@@ -32,13 +25,7 @@ import { CrossComponent } from '../../utils/cross/cross.component';
 })
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
-  @Input() getAssetIcon: (node: TyrGraphNode) => Sprite;
-  @Input() getAttackStepIcon: (node: TyrAttackStep) =>
-    | {
-        texture: Texture;
-        background: ColorSource;
-      }
-    | undefined;
+
   @Input() parentCloseAttackGraph: () => void;
   @Output() emitter = new EventEmitter<any>();
 

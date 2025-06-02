@@ -34,9 +34,6 @@ export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() isVisible: boolean;
   @Input() attackStepMap: any;
-  @Input() getAssetIcon: (node: TyrGraphNode) => Sprite;
-  @Input() getNodeStatusIcon: (node: TyrAssetGraphNodeStatus) => Texture;
-  @Input() selectAlertIcon: (node: TyrAlertStatus) => Texture;
   @Input() onNodeClick: (node: TyrAssetGraphNode) => void;
   @Output() simulationStatusEmitter = new EventEmitter<any>();
 

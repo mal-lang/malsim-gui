@@ -24,6 +24,7 @@ import { TimelineComponent } from 'src/app/components/timeline/timeline.componen
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
 import { assetGraphRendererRules } from 'src/tyr-js/assetGraphRendererRules';
+import { IconManager } from 'src/tyr-js/iconManager';
 
 @Component({
   selector: 'app-home',
@@ -38,25 +39,10 @@ export class HomeComponent {
   @ViewChild('timeline') timeline!: TimelineComponent;
 
   private apiService;
+  private iconManager: IconManager;
+
   private intervalId: any;
   private intervalTime: number = 1000 * 10; // 10 seconds;
-
-  private networkSprite?: Texture;
-  private shieldSprite?: Texture;
-  private connectionRuleSprite?: Texture;
-  private idSprite?: Texture;
-  private vulnerabilitySprite?: Texture;
-  private applicationSprite?: Texture;
-
-  private bulbSprite?: Texture;
-  private checkSprite?: Texture;
-  private warningSprite?: Texture;
-  private eyeSprite?: Texture;
-
-  private alertSprite?: Texture;
-  private controlledSprite?: Texture;
-  private inactiveSprite?: Texture;
-  private disconnectedSprite?: Texture;
 
   public tyrManager: TyrManager;
   public displayAssetGraph: boolean = true;
@@ -73,12 +59,7 @@ export class HomeComponent {
 
   constructor(apiService: ApiService) {
     this.apiService = apiService;
-    this.cursorStyle = 'default';
-    this.getAssetIcon = this.getAssetIcon.bind(this);
-    this.getNodeStatusIcon = this.getNodeStatusIcon.bind(this);
-    this.selectAlertIcon = this.selectAlertIcon.bind(this);
-    this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
-    this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
+    this.iconManager = new IconManager();
   }
 
   async ngAfterViewInit() {
@@ -87,7 +68,7 @@ export class HomeComponent {
         this.assetMenu.open(node);
       }
     };
-    await this.loadSprites().then(() => {
+    await this.iconManager.load().then(() => {
       this.retrieveInitialData();
     });
   }
@@ -98,10 +79,10 @@ export class HomeComponent {
       receivedAttackGraph: this.apiService.getAttackGraph(),
     }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
       const externalTools: ExternalUtils = {
-        getAttackStepIcon: this.getAttackGraphNodeIcon,
-        getAssetIcon: this.getAssetIcon,
-        getAssetNodeStatusIcon: this.getNodeStatusIcon,
-        getAlertIcon: this.selectAlertIcon,
+        getAttackStepIcon: this.iconManager.getAttackGraphNodeIcon,
+        getAssetIcon: this.iconManager.getAssetIcon,
+        getAssetNodeStatusIcon: this.iconManager.getNodeStatusIcon,
+        getAlertIcon: this.iconManager.selectAlertIcon,
       };
 
       this.tyrManager = new TyrManager(
@@ -306,183 +287,4 @@ export class HomeComponent {
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
-
-  public async loadSprites() {
-    const assetUrls = {
-      network: '/assets/icons/network.png',
-      shield: '/assets/icons/shield.png',
-      connectionRule: '/assets/icons/networking.png',
-      id: '/assets/icons/id-card.png',
-      vulnerability: '/assets/icons/icognito.png',
-      application: '/assets/icons/app.png',
-      alert: '/assets/icons/alert.png',
-      controlled: '/assets/icons/controlled.png',
-      disconnected: '/assets/icons/suggestions/suggestion-disconnect.png',
-      turnoff: '/assets/icons/suggestions/suggestion-turnoff.png',
-      user: '/assets/icons/suggestions/suggestion-user.png',
-      bulb: '/assets/icons/attack-graph/light-bulb.png',
-      check: '/assets/icons/attack-graph/check.png',
-      eye: '/assets/icons/attack-graph/eye.png',
-      warning: '/assets/icons/attack-graph/warning-sign.png',
-    };
-
-    // Step 1: Add assets to the cache
-    Assets.add([
-      { alias: 'network', src: assetUrls.network },
-      { alias: 'shield', src: assetUrls.shield },
-      { alias: 'connectionRule', src: assetUrls.connectionRule },
-      { alias: 'id', src: assetUrls.id },
-      { alias: 'vulnerability', src: assetUrls.vulnerability },
-      { alias: 'application', src: assetUrls.application },
-      { alias: 'alert', src: assetUrls.alert },
-      { alias: 'controlled', src: assetUrls.controlled },
-      { alias: 'disconnected', src: assetUrls.disconnected },
-      { alias: 'turnoff', src: assetUrls.turnoff },
-      { alias: 'bulb', src: assetUrls.bulb },
-      { alias: 'warning', src: assetUrls.warning },
-      { alias: 'check', src: assetUrls.check },
-      { alias: 'eye', src: assetUrls.eye },
-      { alias: 'user', src: assetUrls.user },
-    ]);
-
-    // Step 2: Load all assets in parallel
-    const [
-      networkSprite,
-      shieldSprite,
-      connectionRuleSprite,
-      idSprite,
-      vulnerabilitySprite,
-      applicationSprite,
-      alertSprite,
-      controlledSprite,
-      disconnectedSprite,
-      turnoffSprite,
-      bulbSprite,
-      warningSprite,
-      eyeSprite,
-      checkSprite,
-      userSprite,
-    ] = await Promise.all([
-      Assets.load('network'),
-      Assets.load('shield'),
-      Assets.load('connectionRule'),
-      Assets.load('id'),
-      Assets.load('vulnerability'),
-      Assets.load('application'),
-      Assets.load('alert'),
-      Assets.load('controlled'),
-      Assets.load('disconnected'),
-      Assets.load('turnoff'),
-      Assets.load('bulb'),
-      Assets.load('warning'),
-      Assets.load('eye'),
-      Assets.load('check'),
-      Assets.load('user'),
-    ]);
-
-    // Step 3: Assign them to class properties
-    this.networkSprite = networkSprite;
-    this.shieldSprite = shieldSprite;
-    this.connectionRuleSprite = connectionRuleSprite;
-    this.idSprite = idSprite;
-    this.vulnerabilitySprite = vulnerabilitySprite;
-    this.applicationSprite = applicationSprite;
-    this.alertSprite = alertSprite;
-    this.controlledSprite = controlledSprite;
-    this.disconnectedSprite = disconnectedSprite;
-    this.inactiveSprite = turnoffSprite;
-    this.bulbSprite = bulbSprite;
-    this.warningSprite = warningSprite;
-    this.eyeSprite = eyeSprite;
-    this.checkSprite = checkSprite;
-
-    console.log('✅ All assets added & loaded successfully!');
-  }
-
-  public getAssetIcon(node: any): Sprite {
-    let asset;
-    if (node.asset)
-      //AssetGraphNode
-      asset = node.asset;
-    if (node.attackStep)
-      //AttackGraphNode
-      asset = node.attackStep.asset.asset;
-
-    if (!asset) return new Sprite();
-
-    let texture;
-    switch (asset.type) {
-      case 'Network':
-        texture = this.networkSprite!;
-        break;
-      case 'Application':
-        texture = this.applicationSprite!;
-        break;
-      case 'ConnectionRule':
-        texture = this.connectionRuleSprite!;
-        break;
-      case 'Identity':
-        texture = this.idSprite!;
-        break;
-      case 'SoftwareVulnerability':
-        texture = this.vulnerabilitySprite!;
-        break;
-      default:
-        texture = this.shieldSprite!;
-        break;
-    }
-
-    const sprite = new Sprite(texture);
-
-    //Invert color to white if attack graph calls it
-    if (node.attackStep && !node.attackStep.isActive) {
-      const colorMatrix = new ColorMatrixFilter();
-      colorMatrix.negative(true); // Invert colors
-      sprite.filters = [colorMatrix];
-    }
-    return sprite;
-  }
-
-  public getAttackGraphNodeIcon(
-    attackStep: TyrAttackStep
-  ): { texture: Texture; background: ColorSource } | undefined {
-    if (attackStep.type === 'defense') {
-      if (attackStep.isActive)
-        return { texture: this.checkSprite!, background: 0x00bdd2 };
-      if (
-        this.suggestedActions.suggestedActions
-          .map((a) => a.stepId)
-          .includes(+attackStep.id)
-      )
-        return { texture: this.bulbSprite!, background: 0x005c69 };
-    } else {
-      if (attackStep.isActive)
-        return { texture: this.warningSprite!, background: 0xffc300 };
-      if (attackStep.isObservable)
-        return { texture: this.eyeSprite!, background: 0x990000 };
-    }
-    return;
-  }
-
-  public selectAlertIcon(alert: TyrAlertStatus): Texture {
-    switch (alert) {
-      case TyrAlertStatus.alerted:
-        return this.alertSprite!;
-      case TyrAlertStatus.controlled:
-        return this.controlledSprite!;
-      default:
-        return this.alertSprite!;
-    }
-  }
-
-  public getNodeStatusIcon(status: TyrAssetGraphNodeStatus): Texture {
-    switch (status) {
-      case TyrAssetGraphNodeStatus.inactive:
-        return this.inactiveSprite!;
-      case TyrAssetGraphNodeStatus.disconnected:
-        return this.disconnectedSprite!;
-      default:
-        return this.alertSprite!;
-    }
-  }
 }
