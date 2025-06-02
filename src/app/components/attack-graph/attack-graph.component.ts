@@ -23,9 +23,13 @@ import { CrossComponent } from '../../utils/cross/cross.component';
   templateUrl: './attack-graph.component.html',
   styleUrl: './attack-graph.component.scss',
 })
+
+/**
+ * AttackGraphComponent is where the attack graph visualization will be hosted.
+ * It contains the AttackGraphRenderer configuration which will be sent to tyrJS through HomeComponent -> AttackGraphComponent.getConfig()
+ */
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
-
   @Input() parentCloseAttackGraph: () => void;
   @Output() emitter = new EventEmitter<any>();
 
@@ -49,6 +53,7 @@ export class AttackGraphComponent {
   public isForward: boolean = true;
 
   ngAfterViewInit() {
+    //Configuration for the attack graph - modify this to modify the attack graph visualization style / behaviour
     this.config = {
       marginX: 0,
       marginY: 0,
@@ -66,6 +71,7 @@ export class AttackGraphComponent {
       },
     };
 
+    //Event listeners for sliders
     this.depthSlider.nativeElement.addEventListener(
       'mousedown',
       (event: MouseEvent) => {
@@ -96,6 +102,7 @@ export class AttackGraphComponent {
   }
 
   constructor() {
+    //Star off invisible
     this.isVisible = false;
   }
 
@@ -118,6 +125,12 @@ export class AttackGraphComponent {
     return this.config;
   }
 
+  /**
+   * Emits the depth, suggestion distance and direction (forward) of the attack graph to HomeComponent,
+   * so it can later send it to TyrJS and build the graph with this information.
+   *
+   * This is determined by the sliders, and will be called each time they are updated.
+   */
   private emitValues() {
     this.emitter.emit({
       depth: this.selectedDepth,
@@ -126,11 +139,17 @@ export class AttackGraphComponent {
     });
   }
 
+  /**
+   * Adjusts the slider sign location(current slider position number that appears on top when the user moves the slider)
+   */
   private updateSign(sign: HTMLElement, value: number) {
     const offset = 16; // Fixed offset
     sign.style.left = `calc(${value}% - ${offset}px)`;
   }
 
+  /**
+   * Updates the color of the slider, so it matches its current position.
+   */
   public updateSliderBackground(event: Event): void {
     const target = event.target as HTMLInputElement;
     const value =
@@ -149,6 +168,9 @@ export class AttackGraphComponent {
     this.emitValues();
   }
 
+  /**
+   * Updates the maximum attack graph depth.
+   */
   public updateMaxDepth(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (+target.value > 10 || +target.value < 2) {
@@ -167,6 +189,9 @@ export class AttackGraphComponent {
     this.emitValues();
   }
 
+  /**
+   * Updates the maximum suggestion distance.
+   */
   public updateMaxSuggestionDist(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (+target.value > 10 || +target.value < 2) {
@@ -187,12 +212,17 @@ export class AttackGraphComponent {
     this.emitValues();
   }
 
+  /**
+   * Changes the attack graph direction to forward and emits the new values to HomeComponent, so it can later send it to TyrJS.
+   */
   public selectForward() {
     if (this.isForward) return;
     this.isForward = true;
     this.emitValues();
   }
-
+  /**
+   * Changes the attack graph direction to backwards and emits the new values to HomeComponent, so it can later send it to TyrJS.
+   */
   public selectBackwards() {
     if (!this.isForward) return;
     this.isForward = false;

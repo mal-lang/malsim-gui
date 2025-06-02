@@ -23,6 +23,11 @@ import {
   templateUrl: './asset-graph.component.html',
   styleUrl: './asset-graph.component.scss',
 })
+
+/**
+ * AssetGraphComponent is where the asset graph visualization will be hosted.
+ * It contains the AssetGraphRenderer configuration which will be sent to tyrJS through HomeComponent -> AssetGraphComponent.getConfig()
+ */
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() isVisible: boolean;
@@ -57,6 +62,7 @@ export class AssetGraphComponent {
   constructor() {}
 
   ngAfterViewInit() {
+    //Configuration for the asset graph - modify this to modify the asset graph visualization style / behaviour
     this.config = {
       centerX:
         (this.graphContainer.nativeElement as HTMLElement).offsetWidth / 2,
