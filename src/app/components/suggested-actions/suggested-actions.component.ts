@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
+import { selectActionImage } from 'src/app/utils/functions/utils';
 import { TyrManager } from 'tyr-js';
 
 interface SuggestedAction {
@@ -38,6 +39,10 @@ interface AgentSuggestion {
   styleUrl: './suggested-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+/**
+ * SuggestedActionsComponent is the component where all the ML agents' suggestions will be displayed (the window on the left).
+ */
 export class SuggestedActionsComponent {
   suggestedActions: Array<SuggestedAction> = [];
   selectedActions: SelectedAction[];
@@ -50,6 +55,11 @@ export class SuggestedActionsComponent {
     private cdRef: ChangeDetectorRef
   ) {}
 
+  /**
+   * Parses and updated the suggested actions.
+   *
+   * @param {any} defenderSuggestions - The received suggestions from the API.
+   */
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
     this.tyrManager.markDefensesAsPerformed([]);
@@ -81,7 +91,7 @@ export class SuggestedActionsComponent {
               systems: defenderSuggestion.action.systems.join(','),
               agents: [agentSuggestion],
               type: this.tyrManager.getAttackStepType(stepId) ?? '',
-              image: this.selectActionImage(
+              image: selectActionImage(
                 this.tyrManager.getAttackStepType(stepId)
               ),
               performed: false,
@@ -94,6 +104,12 @@ export class SuggestedActionsComponent {
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Executes the given suggestion/action
+   *
+   * @param {number} id - The id of the suggestion to perform.
+   * @param {number} iteration - The current iteration.
+   */
   async selectAction(id: number, iteration: number) {
     await this.apiService
       .postDefenderAction(this.suggestedActions[id].stepId, iteration)
@@ -106,19 +122,5 @@ export class SuggestedActionsComponent {
         );
         this.onSuggestionSelected.emit(this.suggestedActions[id]);
       });
-  }
-
-  selectActionImage(type?: string): string {
-    switch (type) {
-      //TODO
-      case 'Application:notPresent':
-        return 'assets/icons/suggestions/turnoff.png';
-      case 'ConnectionRule:restricted':
-        return 'assets/icons/suggestions/disconnect.png';
-      case 'Identity:notPresent':
-        return 'assets/icons/suggestions/user.png';
-      default:
-        return '';
-    }
   }
 }

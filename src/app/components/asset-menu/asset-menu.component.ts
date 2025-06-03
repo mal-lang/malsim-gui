@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AssetMenuAlertsComponent } from '../asset-menu-alerts/asset-menu-alerts.component';
 import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
-import { CrossComponent } from '../../utils/cross/cross.component';
+import { CrossComponent } from '../../utils/components/cross/cross.component';
 import {
   TyrManager,
   getEmptyNodeStyle,
@@ -13,7 +13,13 @@ import {
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
   getEmptyAnimationHelper,
+  getEmptyAssetGraphNode,
 } from 'tyr-js';
+
+enum AvailableAssetMenus {
+  information,
+  alerts,
+}
 
 @Component({
   selector: 'app-asset-menu',
@@ -28,71 +34,60 @@ import {
   templateUrl: './asset-menu.component.html',
   styleUrl: './asset-menu.component.scss',
 })
+
+/**
+ * AssetMenuComponent its the main component for the menu that appears on the right when an asset is clicked.
+ * It displays information about the asset, its CIA values, its status, its alerts and its connected assets.
+ */
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
   public node: TyrAssetGraphNode;
   public notifications: TyrNotification[] = [];
   public closed: boolean = true;
-  public openedMenu: string = 'information';
+  AvailableAssetMenus = AvailableAssetMenus; //expose to html
+  public openedMenu: AvailableAssetMenus = AvailableAssetMenus.information;
 
   constructor() {
     //Dummy node for init purposes
-    this.node = {
-      id: '',
-      status: TyrAssetGraphNodeStatus.active,
-      asset: {
-        id: '',
-        name: '',
-        type: '',
-        associatedAssets: [],
-      },
-      x: 0,
-      y: 0,
-      originalX: 0,
-      originalY: 0,
-      notificationList: [],
-      nodeReward: 0,
-      style: getEmptyNodeStyle(),
-      connections: getEmptyNodeConnectionInfo(),
-      cluster: getEmptyNodeCluster(),
-      animationHelper: getEmptyAnimationHelper(),
-    };
+    this.node = getEmptyAssetGraphNode();
     this.close = this.close.bind(this);
   }
 
-  public openMenu(menu: string) {
-    this.openedMenu = menu;
-  }
-
-  public open(node: TyrAssetGraphNode) {
+  /**
+   * Select the node. Meant to be used when the targetted node is changed.
+   *
+   * @param {TyrAssetGraphNode} node - The node to be selected.
+   */
+  public selectNode(node: TyrAssetGraphNode) {
     this.node = node;
     this.closed = false;
   }
 
+  /**
+   * Opens the selected menu
+   *
+   * @param {AvailableAssetMenus} menu - The menu to be opened.
+   */
+  public open(menu: AvailableAssetMenus) {
+    this.openedMenu = menu;
+  }
+
+  /**
+   * Closes all the menu
+   */
   public close() {
     this.closed = true;
     this.node.style.selected = false;
     this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
   }
 
-  public selectAssetImage(node: TyrAssetGraphNode) {
-    switch (node.asset.type) {
-      case 'Network':
-        return '/assets/icons/network.png';
-      case 'Application':
-        return '/assets/icons/app.png';
-      case 'ConnectionRule':
-        return '/assets/icons/networking.png';
-      case 'Identity':
-        return '/assets/icons/id-card.png';
-      case 'SoftwareVulnerability':
-        return '/assets/icons/icognito.png';
-      default:
-        return '/assets/icons/shield.png';
-    }
-  }
-
+  /**
+   * Opens the attack graph window.
+   * Meant to be used when an alert(attackStep) has been selected.
+   *
+   * @param {TyrAttackStep} attackStep - The attack step to build the attack graph from.
+   */
   openAttackGraphWindow = (attackStep: TyrAttackStep) => {
     this.close();
     this.openAttackGraph(attackStep);
