@@ -4,13 +4,13 @@
   <div class="menu-options">
     <p
       [ngClass]="{ selected: openedMenu == AvailableAssetMenus.information }"
-      (click)="this.openMenu(AvailableAssetMenus.information)"
+      (click)="this.open(AvailableAssetMenus.information)"
     >
       INFORMATION
     </p>
     <p
       [ngClass]="{ selected: openedMenu == AvailableAssetMenus.alerts }"
-      (click)="this.openMenu(AvailableAssetMenus.alerts)"
+      (click)="this.open(AvailableAssetMenus.alerts)"
     >
       ALERTS
     </p>
@@ -20,7 +20,6 @@
       *ngIf="openedMenu == AvailableAssetMenus.information"
       [node]="this.node"
       [tyrManager]="this.tyrManager"
-      [selectAssetImage]="this.selectAssetImage"
     />
     <app-asset-menu-alerts
       *ngIf="openedMenu == AvailableAssetMenus.alerts"

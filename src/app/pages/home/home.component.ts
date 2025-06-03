@@ -96,7 +96,7 @@ export class HomeComponent {
      */
     this.notifyClick = (node: TyrAssetGraphNode) => {
       if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
-        this.assetMenu.open(node);
+        this.assetMenu.selectNode(node);
       }
     };
   }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AssetMenuAlertsComponent } from '../asset-menu-alerts/asset-menu-alerts.component';
 import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
-import { CrossComponent } from '../../utils/cross/cross.component';
+import { CrossComponent } from '../../utils/components/cross/cross.component';
 import {
   TyrManager,
   getEmptyNodeStyle,
@@ -54,38 +54,34 @@ export class AssetMenuComponent {
     this.close = this.close.bind(this);
   }
 
-  public openMenu(menu: AvailableAssetMenus) {
-    this.openedMenu = menu;
-  }
-
-  public open(node: TyrAssetGraphNode) {
+  /**
+   * Select the node. Meant to be used when the targetted node is changed.
+   */
+  public selectNode(node: TyrAssetGraphNode) {
     this.node = node;
     this.closed = false;
   }
 
+  /**
+   * Opens the selected menu
+   */
+  public open(menu: AvailableAssetMenus) {
+    this.openedMenu = menu;
+  }
+
+  /**
+   * Closes all the menu
+   */
   public close() {
     this.closed = true;
     this.node.style.selected = false;
     this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
   }
 
-  public selectAssetImage(node: TyrAssetGraphNode) {
-    switch (node.asset.type) {
-      case 'Network':
-        return '/assets/icons/network.png';
-      case 'Application':
-        return '/assets/icons/app.png';
-      case 'ConnectionRule':
-        return '/assets/icons/networking.png';
-      case 'Identity':
-        return '/assets/icons/id-card.png';
-      case 'SoftwareVulnerability':
-        return '/assets/icons/icognito.png';
-      default:
-        return '/assets/icons/shield.png';
-    }
-  }
-
+  /**
+   * Opens the attack graph window.
+   * Meant to be used when an alert(attackStep) has been selected.
+   */
   openAttackGraphWindow = (attackStep: TyrAttackStep) => {
     this.close();
     this.openAttackGraph(attackStep);

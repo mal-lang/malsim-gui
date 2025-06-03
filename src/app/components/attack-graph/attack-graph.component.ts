@@ -15,7 +15,7 @@ import {
   TyrManager,
   TyrAttackGraphConfig,
 } from 'tyr-js';
-import { CrossComponent } from '../../utils/cross/cross.component';
+import { CrossComponent } from '../../utils/components/cross/cross.component';
 @Component({
   selector: 'app-attack-graph',
   standalone: true,

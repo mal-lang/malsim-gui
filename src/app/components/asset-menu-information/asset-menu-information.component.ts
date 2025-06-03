@@ -1,5 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { selectAssetImage } from 'src/app/utils/functions/utils';
 import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
 
 @Component({
@@ -13,8 +14,9 @@ export class AssetMenuInformationComponent {
   @Input() node: TyrAssetGraphNode;
 
   @Input() tyrManager: TyrManager;
-  @Input() selectAssetImage: (node: TyrAssetGraphNode) => void;
+
   public relatedNodes: TyrAssetGraphNode[];
+  public selectAssetImage: (node: TyrAssetGraphNode) => void = selectAssetImage;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['node']) {
