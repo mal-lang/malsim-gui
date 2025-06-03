@@ -3,27 +3,27 @@
   <h2>{{ node!.asset.name }}: {{ node.asset.type }}</h2>
   <div class="menu-options">
     <p
-      [ngClass]="{ selected: this.openedMenu == 'information' }"
-      (click)="this.openMenu('information')"
+      [ngClass]="{ selected: openedMenu == AvailableAssetMenus.information }"
+      (click)="this.openMenu(AvailableAssetMenus.information)"
     >
       INFORMATION
     </p>
     <p
-      [ngClass]="{ selected: this.openedMenu == 'alerts' }"
-      (click)="this.openMenu('alerts')"
+      [ngClass]="{ selected: openedMenu == AvailableAssetMenus.alerts }"
+      (click)="this.openMenu(AvailableAssetMenus.alerts)"
     >
       ALERTS
     </p>
   </div>
   <div class="menu-content">
     <app-asset-menu-information
-      *ngIf="this.openedMenu == 'information'"
+      *ngIf="openedMenu == AvailableAssetMenus.information"
       [node]="this.node"
       [tyrManager]="this.tyrManager"
       [selectAssetImage]="this.selectAssetImage"
     />
     <app-asset-menu-alerts
-      *ngIf="this.openedMenu == 'alerts'"
+      *ngIf="openedMenu == AvailableAssetMenus.alerts"
       [node]="this.node"
       [openAttackGraph]="this.openAttackGraphWindow"
     />

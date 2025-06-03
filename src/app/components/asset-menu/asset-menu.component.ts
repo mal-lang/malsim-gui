@@ -13,7 +13,13 @@ import {
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
   getEmptyAnimationHelper,
+  getEmptyAssetGraphNode,
 } from 'tyr-js';
+
+enum AvailableAssetMenus {
+  information,
+  alerts,
+}
 
 @Component({
   selector: 'app-asset-menu',
@@ -28,40 +34,27 @@ import {
   templateUrl: './asset-menu.component.html',
   styleUrl: './asset-menu.component.scss',
 })
+
+/**
+ * AssetMenuComponent its the main component for the menu that appears on the right when an asset is clicked.
+ * It displays information about the asset, its CIA values, its status, its alerts and its connected assets.
+ */
 export class AssetMenuComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
   public node: TyrAssetGraphNode;
   public notifications: TyrNotification[] = [];
   public closed: boolean = true;
-  public openedMenu: string = 'information';
+  AvailableAssetMenus = AvailableAssetMenus; //expose to html
+  public openedMenu: AvailableAssetMenus = AvailableAssetMenus.information;
 
   constructor() {
     //Dummy node for init purposes
-    this.node = {
-      id: '',
-      status: TyrAssetGraphNodeStatus.active,
-      asset: {
-        id: '',
-        name: '',
-        type: '',
-        associatedAssets: [],
-      },
-      x: 0,
-      y: 0,
-      originalX: 0,
-      originalY: 0,
-      notificationList: [],
-      nodeReward: 0,
-      style: getEmptyNodeStyle(),
-      connections: getEmptyNodeConnectionInfo(),
-      cluster: getEmptyNodeCluster(),
-      animationHelper: getEmptyAnimationHelper(),
-    };
+    this.node = getEmptyAssetGraphNode();
     this.close = this.close.bind(this);
   }
 
-  public openMenu(menu: string) {
+  public openMenu(menu: AvailableAssetMenus) {
     this.openedMenu = menu;
   }
 
