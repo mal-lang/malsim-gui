@@ -38,7 +38,6 @@ export class AttackGraphComponent {
   @ViewChild('suggestionSlider') suggestionSlider!: ElementRef;
   @ViewChild('currentDepthSign') currentDepthSign!: ElementRef;
   @ViewChild('currentSuggestionSign') currentSuggestionSign!: ElementRef;
-
   @ViewChild('forward') forward!: ElementRef;
   @ViewChild('backward') backward!: ElementRef;
 
@@ -52,6 +51,14 @@ export class AttackGraphComponent {
   public cursorStyle = 'grab';
   public isForward: boolean = true;
 
+  constructor() {
+    //Star off invisible
+    this.isVisible = false;
+  }
+
+  /**
+   * The Attack Graphs' configuration is written here. Since it contains some functions that must interact with this component, we deemed this was the best place to configure the visualization.
+   */
   ngAfterViewInit() {
     //Configuration for the attack graph - modify this to modify the attack graph visualization style / behaviour
     this.config = {
@@ -101,26 +108,31 @@ export class AttackGraphComponent {
     );
   }
 
-  constructor() {
-    //Star off invisible
-    this.isVisible = false;
-  }
-
+  /**
+   * Make the attack graph HTML element visible
+   */
   public openAttackGraph(attackStep: TyrAttackStep) {
     this.isVisible = true;
   }
 
+  /**
+   * Make the attack graph HTML element invisible
+   */
   public closeAttackGraph() {
-    this.isVisible = false;
-    this.isForward = true;
-
     this.parentCloseAttackGraph();
+    this.isVisible = false;
   }
 
+  /**
+   * Returns the attack graph HTML element
+   */
   public getAttackGraphContainer() {
     return this.graphContainer;
   }
 
+  /**
+   * Returns the attack graph configuration
+   */
   public getConfig() {
     return this.config;
   }

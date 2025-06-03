@@ -61,6 +61,9 @@ export class AssetGraphComponent {
 
   constructor() {}
 
+  /**
+   * The AssetGraph's configuration is written here. Since it contains some functions that must interact with this component, we deemed this was the best place to configure the visualization.
+   */
   ngAfterViewInit() {
     //Configuration for the asset graph - modify this to modify the asset graph visualization style / behaviour
     this.config = {
@@ -114,10 +117,15 @@ export class AssetGraphComponent {
     };
   }
 
+  /**
+   * Returns the asset graph configuration
+   */
   public getConfig() {
     return this.config;
   }
-
+  /**
+   * Returns the asset graph HTML element
+   */
   public getAssetGraphContainer() {
     return this.graphContainer;
   }
