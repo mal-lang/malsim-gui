@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { selectAssetImage } from 'src/app/utils/functions/utils';
 import { TyrNotification } from 'tyr-js';
 
 @Component({
@@ -13,6 +14,9 @@ export class TimelineItemComponent {
   alertImageURL: string;
   timestamp: string;
 
+  /**
+   * On created, it gets the timestamp and parses it to a readable format. It also fetches the correct image to be displayed.
+   */
   ngOnInit() {
     this.timestamp = new Date(this.notification.timestamp)
       .toLocaleString('sv-SE', {
@@ -25,25 +29,6 @@ export class TimelineItemComponent {
       })
       .replace(',', '');
 
-    switch (this.notification.node.asset.type) {
-      case 'Network':
-        this.alertImageURL = '/assets/icons/network.png';
-        break;
-      case 'Application':
-        this.alertImageURL = '/assets/icons/app.png';
-        break;
-      case 'ConnectionRule':
-        this.alertImageURL = '/assets/icons/networking.png';
-        break;
-      case 'Identity':
-        this.alertImageURL = '/assets/icons/id-card.png';
-        break;
-      case 'SoftwareVulnerability':
-        this.alertImageURL = '/assets/icons/icognito.png';
-        break;
-      default:
-        this.alertImageURL = '/assets/icons/shield.png';
-        break;
-    }
+    this.alertImageURL = selectAssetImage(this.notification.node);
   }
 }

@@ -11,7 +11,6 @@ import {
  * @return {string} - The url to the image.
  */
 export function selectAssetImage(node: TyrAssetGraphNode): string {
-  console.log(node);
   switch (node.asset.type) {
     case 'Network':
       return '/assets/icons/network.png';
