@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-
-import ATTACKGRAPH from '../../../assets/api_examples/get_attack_graph.json';
-import MODEL from '../../../assets/api_examples/get_model.json';
-import DEFENDERSUGGESTIONS from '../../../assets/api_examples/get_defender_suggestions.json';
-import ENABLEDATTACKSTEPS from '../../../assets/api_examples/get_enabled_attack_steps.json';
-import ENABLEDEFENSESTEPS from '../../../assets/api_examples/get_enabled_defense_steps.json';
-import LATESTATTACKSTEPS from '../../../assets/api_examples/get_latest_attack_steps.json';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

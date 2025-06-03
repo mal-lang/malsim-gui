@@ -4,8 +4,9 @@ Angular 18 application
 
 ## Requirements
 
-Node.js version 18 or higher
-NPM version 10 or higher
+1. Node.js version 18 or higher
+2. Last version of TyrJS downloaded locally and ready for use
+3. NPM version 10 or higher
 
 [How to install Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
@@ -38,6 +39,15 @@ To serve a devlopment server run: `ng serve --open` in the /core-web folder
 ## Development setup
 
 Install all dependencies with `npm install --force` in tyr-gui/
+
+
+
+Download and set up TyrJS locally. Find how to do so in tyr-js/docs/installation.md.
+
+Then, execute `npm link tyr-js` under /tyr-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
+
+
+
 Start and serve a development server with `ng serve --open`
 
 ## Update TYR_GUI managed application
