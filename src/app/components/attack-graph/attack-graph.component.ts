@@ -111,7 +111,7 @@ export class AttackGraphComponent {
   /**
    * Make the attack graph HTML element visible
    */
-  public openAttackGraph(attackStep: TyrAttackStep) {
+  public openAttackGraph() {
     this.isVisible = true;
   }
 
@@ -153,6 +153,9 @@ export class AttackGraphComponent {
 
   /**
    * Adjusts the slider sign location(current slider position number that appears on top when the user moves the slider)
+   *
+   * @param {HTMLElement} sign - The html elemnt whose position must be adjusted.
+   * @param {number} value - The new slider value.
    */
   private updateSign(sign: HTMLElement, value: number) {
     const offset = 16; // Fixed offset
@@ -161,6 +164,8 @@ export class AttackGraphComponent {
 
   /**
    * Updates the color of the slider, so it matches its current position.
+   *
+   * @param {Event} event - The event that triggered this function.
    */
   public updateSliderBackground(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -182,6 +187,8 @@ export class AttackGraphComponent {
 
   /**
    * Updates the maximum attack graph depth.
+   *
+   * @param {Event} event - The event that triggered this function.
    */
   public updateMaxDepth(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -203,6 +210,8 @@ export class AttackGraphComponent {
 
   /**
    * Updates the maximum suggestion distance.
+   *
+   * @param {Event} event - The event that triggered this function.
    */
   public updateMaxSuggestionDist(event: Event): void {
     const target = event.target as HTMLInputElement;

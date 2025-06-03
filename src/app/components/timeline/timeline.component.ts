@@ -21,6 +21,10 @@ import {
   styleUrl: './timeline.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+/**
+ * TimelineComponent is the component where all the performed activity (attack and defenses) are displayed in chronological order.
+ */
 export class TimelineComponent {
   @Input() tyrManager: TyrManager;
   @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
@@ -47,6 +51,9 @@ export class TimelineComponent {
   private halfDistance: number = 68;
   private windowDifference: number = 0;
   private settingAttackGraph: boolean = false;
+
+  private colorAssetGraphMode: string = '#ffa100';
+  private colorAttackGraphMode: string = '#00e6ff';
 
   public notifications: TyrNotification[] = [];
   public selectedNotifications: TyrNotification[] = [];
@@ -96,7 +103,11 @@ export class TimelineComponent {
     this.settingAttackGraph = false;
   }
 
+  /**
+   * When the component is first renderer, all the event listeners are set.
+   */
   ngAfterViewInit() {
+    //Sets original position and paints the component accordingly
     const start = 0;
     this.draggableLeftLimit = start;
     this.draggableRightLimit = start;
@@ -108,6 +119,7 @@ export class TimelineComponent {
     );
     this.updateLineColor();
 
+    //On mouse press - left circle (for both modes)
     this.renderer.listen(
       this.slideCircleLeft.nativeElement,
       'mousedown',
@@ -117,6 +129,7 @@ export class TimelineComponent {
       }
     );
 
+    //On mouse press - right circle (for attack graph mode)
     this.renderer.listen(
       this.slideCircleRight.nativeElement,
       'mousedown',
@@ -126,6 +139,7 @@ export class TimelineComponent {
       }
     );
 
+    //On mouse press - timeline window (for attack graph mode)
     this.renderer.listen(
       this.timelineWindow.nativeElement,
       'mousedown',
@@ -138,6 +152,7 @@ export class TimelineComponent {
       }
     );
 
+    //On mouse move - ony triggers if the mouse is pressed
     this.renderer.listen(document, 'mousemove', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
       const container = this.timeline.nativeElement as HTMLElement;
@@ -229,6 +244,7 @@ export class TimelineComponent {
       }
     });
 
+    //On mouse release
     this.renderer.listen(document, 'mouseup', (event: MouseEvent) => {
       if (!this.isMouseClicked) return;
       const container = this.timeline.nativeElement as HTMLElement;
@@ -284,10 +300,20 @@ export class TimelineComponent {
     });
   }
 
+  /**
+   * Moves the slide circle to the desired position
+   *
+   * @param {number} position - The position (the notification number to move the circle to).
+   * @param {HTMLElement} circle - The HTML element of the circle to be moved (left or right).
+   */
   private moveSlide(position: number, circle: HTMLElement) {
+    //Gets the target X position from the passed position number. It is calculated with the notifications width and the gaps between them
     let translatedX = this.calculateSelectedItem(position);
     const container = this.timeline.nativeElement as HTMLElement;
+
+    //If its the right circle to move, we need to check its position and check it doesnt exceed the delimited limits -> clickedCircleDraggableLeftLimit (left) & clickedCircleDraggableLeftLimit (right)
     if (circle == this.slideCircleRight.nativeElement && this.attackGraphMode) {
+      //Check for right-most limit, and set it instead if translatedX + width exceeds it
       if (
         circle.getBoundingClientRect().left + container.scrollLeft >
         this.clickedCircleDraggableLeftLimit
@@ -296,6 +322,8 @@ export class TimelineComponent {
           translatedX + this.itemWidth > this.draggableRightLimit
             ? this.draggableRightLimit
             : translatedX + this.itemWidth;
+
+      //Check for left-most limit (in this case, the left circle), and set it instead if translatedX is less than it. ItemWidth is added to allow for a small gap between both circles, so they never touch.
       if (
         circle.getBoundingClientRect().left + container.scrollLeft <=
         this.clickedCircleDraggableLeftLimit
@@ -307,12 +335,17 @@ export class TimelineComponent {
       }
     }
 
+    //Set the new position, and update the painted section and the selected notifications
     this.renderer.setStyle(circle, 'transform', `translateX(${translatedX}px)`);
     this.updateLineColor();
     this.updateSelectedNotifications();
   }
 
+  /**
+   * Calculates which notifications are selected in the timeline, and marks them as selected so they get highlighted.
+   */
   private updateSelectedNotifications() {
+    //Calculate right circle position
     const container = this.timeline.nativeElement as HTMLElement;
     const rightRect =
       this.slideCircleRight.nativeElement.getBoundingClientRect();
@@ -322,20 +355,25 @@ export class TimelineComponent {
       Math.trunc(rightPosition / (this.itemWidth + this.gap)) +
       (this.attackGraphMode ? 2 : 1);
 
+    //If asset graph mode, all notifications from 0, up until the circle position (rightIndex) are selected
     const all = this.notifications.slice(0, rightIndex);
 
+    //If attack graph mode, all notifications in between the left and right circle are selected instead
     if (this.attackGraphMode) {
+      //Calculate left circle position
       const leftRect =
         this.slideCircleLeft.nativeElement.getBoundingClientRect();
       const leftCenter = leftRect.left + container.scrollLeft;
       const leftPosition = this.calculateSelectedItem(leftCenter);
       const leftIndex = Math.trunc(leftPosition / (this.itemWidth + this.gap));
 
+      //Get selected notifications from left circle to right circle
       this.selectedNotifications = this.notifications.slice(
         leftIndex,
         rightIndex - 1
       );
 
+      //Update the attack graph with these new selected alerts -> only happens because we are in attack graph mode
       const attackSteps = this.selectedNotifications
         .map((n) => n.attackStep)
         .filter((step): step is NonNullable<typeof step> => step !== undefined);
@@ -344,10 +382,18 @@ export class TimelineComponent {
     } else {
       this.selectedNotifications = all;
     }
+
+    //Updates the alert visibility in the tyr-js
     this.tyrManager.updateAlertVisibility(all);
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Returns the X position of the item passed, based on its position in the array.
+   *
+   * @param {number} position - The position of the item in the array.
+   * @return {number} The position of the selected icon relative to their width
+   */
   private calculateSelectedItem(position: number): number {
     const base =
       this.marginLeft -
@@ -367,6 +413,12 @@ export class TimelineComponent {
     );
   }
 
+  /**
+   * Paints the timeline orange or blue (depending on the mode), from the leftPos to the rightPos.
+   *
+   * @param {number} leftPos (Optional) - Where to start painting the timeline.
+   * @param {number} rightPos (Optional) - Where to stop painting the timeline.
+   */
   private updateLineColor(leftPos?: number, rightPos?: number) {
     const container = this.timeline.nativeElement as HTMLElement;
     const line = this.slideLine.nativeElement as HTMLElement;
@@ -402,6 +454,9 @@ export class TimelineComponent {
     this.renderer.setStyle(window, 'width', `${rightCenter - leftCenter}px`);
   }
 
+  /**
+   * Updates the timeline width depending on the timeline's right limit, which is calculated from the number of alerts that have been received
+   */
   private updateLineWidth() {
     this.renderer.setStyle(
       this.slideLine.nativeElement,
@@ -410,16 +465,28 @@ export class TimelineComponent {
     );
   }
 
+  /**
+   * Gets the right color depending on the mode the timeline is in.
+   */
   public getColor(): string {
-    return this.attackGraphMode ? '#00e6ff' : '#ffa100';
+    return this.attackGraphMode
+      ? this.colorAttackGraphMode
+      : this.colorAssetGraphMode;
   }
 
+  /**
+   * It performes different actions when an item in the timeline is clicked:
+   *
+   * + Opens the asset menu
+   * + Moves the timeline to that item
+   * + Move the asset graph camera to the node (only in asset graph mode)
+   *
+   * @param {number} index -
+   */
   public onTimelineItemClick(index: number) {
     const notification = this.notifications[index];
 
-    if (this.attackGraphMode)
-      this.tyrManager.assetGraphRenderer.moveCameraToNode(notification.node);
-    else {
+    if (!this.attackGraphMode) {
       this.tyrManager.assetGraphRenderer.moveAndZoomCameraToNode(
         notification.node
       );
@@ -430,13 +497,16 @@ export class TimelineComponent {
     this.openAssetMenu(notification.node);
 
     const position = this.marginLeft + (this.itemWidth + this.gap) * index;
-    const current =
-      this.slideCircleRight.nativeElement.getBoundingClientRect().left;
 
     this.moveSlide(position, this.slideCircleRight.nativeElement);
     this.moveSlide(position, this.slideCircleLeft.nativeElement);
   }
 
+  /**
+   * Adds an alert to the timeline, rendering it and updating its width and limits.
+   *
+   * @param {TyrNotification} alert - The alert to be added.
+   */
   public addAlert(alert: TyrNotification) {
     const container = this.timeline.nativeElement as HTMLElement;
     this.draggableRightLimit +=
@@ -454,6 +524,11 @@ export class TimelineComponent {
     }
   }
 
+  /**
+   * Adds a suggestion to the timeline, rendering it and updating its width and limits.
+   *
+   * @param {TyrNotification} suggestion - The suggestion to be added.
+   */
   public addPerformedSuggestion(suggestion: TyrNotification) {
     const container = this.timeline.nativeElement as HTMLElement;
     this.draggableRightLimit +=
@@ -471,10 +546,18 @@ export class TimelineComponent {
     }
   }
 
+  /**
+   * Deletes the passed alert from the timeline
+   *
+   * @param {TyrNotification} alert - The suggestion to be deleted.
+   */
   public deleteAlert(alert: TyrNotification) {
     this.notifications = this.notifications.filter((a) => a !== alert);
   }
 
+  /**
+   * Activates the automatic update, which will move the circles automatically to include any alert received
+   */
   public toggleAutomaticUpdate() {
     this.automaticUpdate = !this.automaticUpdate;
     if (this.automaticUpdate) {
@@ -485,14 +568,27 @@ export class TimelineComponent {
     }
   }
 
+  /**
+   * Tells TyrJS to highlight (in the asset graph) the asset related to the timeline item that is being hovered
+   *
+   * @param {TyrNotification} notification - The alert whose asset will be highlighted.
+   */
   public hoverItem(notification: TyrNotification) {
     this.tyrManager.assetGraphRenderer.highlightNode(notification.node);
   }
 
+  /**
+   * Tells TyrJS to unhighlight all nodes from the asset graph
+   */
   public unhoverItem() {
     this.tyrManager.assetGraphRenderer.unhighlightNodes();
   }
 
+  /**
+   * Finds the attack step and sets the timeline to select it.
+   *
+   * @param {TyrAttackStep} attackStep - The attack step to be selected.
+   */
   public setSlideOnStep(attackStep: TyrAttackStep) {
     const index = this.notifications.findIndex((n) => {
       if (!n.attackStep) return;

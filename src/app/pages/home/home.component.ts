@@ -359,7 +359,7 @@ export class HomeComponent {
     this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
 
     //Expand the attack graph HTML element so its visible now
-    this.attackGraph.openAttackGraph(attackStep);
+    this.attackGraph.openAttackGraph();
 
     //Set the timeline slide to this particular attack step
     this.timeline.setSlideOnStep(attackStep);

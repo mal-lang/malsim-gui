@@ -56,6 +56,8 @@ export class AssetMenuComponent {
 
   /**
    * Select the node. Meant to be used when the targetted node is changed.
+   *
+   * @param {TyrAssetGraphNode} node - The node to be selected.
    */
   public selectNode(node: TyrAssetGraphNode) {
     this.node = node;
@@ -64,6 +66,8 @@ export class AssetMenuComponent {
 
   /**
    * Opens the selected menu
+   *
+   * @param {AvailableAssetMenus} menu - The menu to be opened.
    */
   public open(menu: AvailableAssetMenus) {
     this.openedMenu = menu;
@@ -81,6 +85,8 @@ export class AssetMenuComponent {
   /**
    * Opens the attack graph window.
    * Meant to be used when an alert(attackStep) has been selected.
+   *
+   * @param {TyrAttackStep} attackStep - The attack step to build the attack graph from.
    */
   openAttackGraphWindow = (attackStep: TyrAttackStep) => {
     this.close();
