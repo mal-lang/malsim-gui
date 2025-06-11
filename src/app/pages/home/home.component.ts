@@ -13,6 +13,7 @@ import {
   TyrNotification,
   TyrNotificationType,
   ExternalUtils,
+  TyrAlertStatus,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -85,8 +86,8 @@ export class HomeComponent {
         getAssetNodeStatusIcon: this.iconManager.getNodeStatusIcon,
         getAlertIcon: this.iconManager.selectAlertIcon,
       };
-      this.retrieveInitialData();
     });
+    this.retrieveInitialData();
 
     /** It also initializes notifyClick, a function meant to be called each time
      * the user clicks, in this case, in the asset graph visualization.
@@ -147,35 +148,77 @@ export class HomeComponent {
    * the asset and attack graph visualizations by initializing their renderers.
    */
   private async retrieveInitialData() {
-    forkJoin({
-      receivedModel: this.apiService.getModel(),
-      receivedAttackGraph: this.apiService.getAttackGraph(),
-    }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
-      //Once the model and attack graph is received, this data is used to initialize tyr-js
-      this.tyrManager = new TyrManager(
-        receivedModel,
-        receivedAttackGraph,
-        this.externalTools
-      );
+    forkJoin([
+      this.apiService.getModel(),
+      this.apiService.getAttackGraph(),
+      this.apiService.getPerformedNodes(),
+    ]).subscribe({
+      next: async ([receivedModel, receivedAttackGraph]) => {
+        //Once the model and attack graph is received, this data is used to initialize tyr-js
+        this.tyrManager = new TyrManager(
+          receivedModel,
+          receivedAttackGraph,
+          this.externalTools
+        );
 
-      //Get the HTMLElements where to render both graphs
-      const assetGraphContainer =
-        this.assetGraph.getAssetGraphContainer().nativeElement;
-      const attackGraphContainer =
-        this.attackGraph.getAttackGraphContainer().nativeElement;
+        //Get the HTMLElements where to render both graphs
+        const assetGraphContainer =
+          this.assetGraph.getAssetGraphContainer().nativeElement;
+        const attackGraphContainer =
+          this.attackGraph.getAttackGraphContainer().nativeElement;
 
-      //Initialize renderers for the asset and attack graphs
-      this.tyrManager.assetGraphRenderer.init(
-        assetGraphContainer,
-        assetGraphRendererRules,
-        this.assetGraph.getConfig()
-      );
+        //Initialize renderers for the asset and attack graphs
+        this.tyrManager.assetGraphRenderer.init(
+          assetGraphContainer,
+          assetGraphRendererRules,
+          this.assetGraph.getConfig()
+        );
 
-      this.tyrManager.attackGraphRenderer.init(
-        attackGraphContainer,
-        [],
-        this.attackGraph.getConfig()
-      );
+        this.tyrManager.attackGraphRenderer.init(
+          attackGraphContainer,
+          [],
+          this.attackGraph.getConfig()
+        );
+      },
+      complete: () => {
+        this.apiService.getPerformedNodes().subscribe({
+          next: async (performedNodes) => {
+            const attackGraph = this.tyrManager.getAttackGraphNodes();
+
+            for (let i = 0; i < performedNodes.length; i++) {
+              const node = performedNodes[i];
+              const step = attackGraph.find((n) => n.id === node.node_id);
+
+              if (!step) throw new Error('Step not found');
+
+              let alert: TyrNotification;
+              if (step.attackStep.type === 'defense') {
+                const asset = step.attackStep.asset;
+                alert = {
+                  type: TyrNotificationType.suggestion,
+                  node: asset,
+                  description: '',
+                  status: TyrAlertStatus.alerted,
+                  timestamp: Date.now(),
+                  attackStep: step.attackStep,
+                  hidden: this.timeline.automaticUpdate,
+                  currentColor: 0x000000,
+                  otherAffectedNodes: [],
+                };
+                this.tyrManager.receivePerformedSuggestion(alert);
+                this.tyrManager.markDefensesAsPerformed([node.node_id]);
+              } else {
+                alert = this.tyrManager.receiveLatestAttackStep(
+                  node.node_id,
+                  this.timeline.automaticUpdate
+                )!;
+              }
+
+              this.timeline.addAlert(alert);
+            }
+          },
+        });
+      },
     });
   }
 
