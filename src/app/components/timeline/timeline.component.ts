@@ -359,7 +359,7 @@ export class TimelineComponent {
 
     let all = this.notifications.slice(0, rightIndex);
 
-    if (rightPosition === 0) all = [];
+    if (rightPosition === 0) all = []; //Empty if nothing selected
 
     //If attack graph mode, all notifications in between the left and right circle are selected instead
     if (this.attackGraphMode) {
