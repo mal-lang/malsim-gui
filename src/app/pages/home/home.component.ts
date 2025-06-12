@@ -48,6 +48,7 @@ export class HomeComponent {
   //Interval information, determines every how much information is retrieved from the API
   private intervalId: any;
   private intervalTime: number = 1000 * 10; // 10 seconds;
+  private iteration = -1;
 
   private apiService;
   private iconManager: IconManager;
@@ -66,7 +67,7 @@ export class HomeComponent {
     this.iconManager = new IconManager();
     this.rewardValue = {
       reward: 0,
-      iteration: -1,
+      iteration: this.iteration,
     };
     this.cursorStyle = 'default';
     this.displayAssetGraph = true;
@@ -184,15 +185,22 @@ export class HomeComponent {
       complete: () => {
         this.apiService.getPerformedNodes().subscribe({
           next: async (performedNodes) => {
-            for (let i = 0; i < performedNodes.length; i++) {
-              const node = performedNodes[i];
-
-              this.getNotificationFromPerformedNode(node.node_id);
-            }
+            if (performedNodes.length < 1) return;
+            this.parsePerformedNodes(performedNodes);
+            const iterations = performedNodes.map((n: any) => n.iteration);
+            this.iteration = Math.max(...iterations) + 1;
           },
         });
       },
     });
+  }
+
+  private async parsePerformedNodes(performedNodes: any) {
+    for (let i = 0; i < performedNodes.length; i++) {
+      const node = performedNodes[i];
+
+      this.getNotificationFromPerformedNode(node.node_id);
+    }
   }
 
   private getNotificationFromPerformedNode(nodeId: string) {
@@ -203,7 +211,7 @@ export class HomeComponent {
 
     if (step.attackStep.type === 'defense') {
       const step = attackGraph.find((n) => n.id === nodeId);
-      console.log(step);
+
       const asset = step!.attackStep.asset;
       alert = {
         type: TyrNotificationType.suggestion,
@@ -239,19 +247,20 @@ export class HomeComponent {
    */
   private async retrieveAlerts() {
     forkJoin({
-      latestAttackSteps: this.apiService.getLatestAttackSteps(),
+      newPerformedNodes: this.apiService.getPerformedNodes(this.iteration),
       rewardValue: this.apiService.getRewardValue(),
       defenderSuggestions: this.apiService.getDefenderSuggestions(),
-    }).subscribe(({ latestAttackSteps, rewardValue, defenderSuggestions }) => {
+    }).subscribe(({ newPerformedNodes, rewardValue, defenderSuggestions }) => {
       //Store the Reward
       this.rewardValue = rewardValue;
 
-      //Passes the latest attack step into the tyrJS and to the timeline, for both to add them to their respective visualizations.
-      if (Object.keys(latestAttackSteps).length > 0) {
-        const parsedAttackSteps = parseLatestAttackSteps(latestAttackSteps);
-        for (let i = 0; i < parsedAttackSteps.length; i++) {
-          this.getNotificationFromPerformedNode(parsedAttackSteps[i].id);
-        }
+      //Gets the latest performed nodes
+      if (newPerformedNodes.length > 0) {
+        this.parsePerformedNodes(newPerformedNodes);
+        const iterations = newPerformedNodes.map((n: any) => {
+          return n.iteration;
+        });
+        this.iteration = Math.max(...iterations) + 1;
       }
 
       //If the agents suggestions are new, it send the data to tyrJS and updates the project's defender suggestion list (the one in the left side of the screen)

@@ -31,8 +31,16 @@ export class ApiService {
     return this.http.get(this.apiUrl + 'latest_attack_steps');
   }
 
-  getPerformedNodes(): Observable<any> {
-    return this.http.get(this.apiUrl + 'performed_nodes');
+  getPerformedNodes(from_iter?: number, iter?: number): Observable<any> {
+    let url = this.apiUrl + 'performed_nodes';
+
+    if (iter) {
+      url += '?iter=' + iter;
+    } else if (from_iter) {
+      url += '?from_iter=' + from_iter;
+    }
+
+    return this.http.get(url);
   }
 
   getLatestDefenceStep() {
