@@ -356,7 +356,10 @@ export class TimelineComponent {
       (this.attackGraphMode ? 2 : 1);
 
     //If asset graph mode, all notifications from 0, up until the circle position (rightIndex) are selected
-    const all = this.notifications.slice(0, rightIndex);
+
+    let all = this.notifications.slice(0, rightIndex);
+
+    if (rightPosition === 0) all = []; //Empty if nothing selected
 
     //If attack graph mode, all notifications in between the left and right circle are selected instead
     if (this.attackGraphMode) {

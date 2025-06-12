@@ -13,6 +13,8 @@ import {
   TyrNotification,
   TyrNotificationType,
   ExternalUtils,
+  TyrAlertStatus,
+  TyrAttackGraphNode,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
@@ -85,8 +87,8 @@ export class HomeComponent {
         getAssetNodeStatusIcon: this.iconManager.getNodeStatusIcon,
         getAlertIcon: this.iconManager.selectAlertIcon,
       };
-      this.retrieveInitialData();
     });
+    this.retrieveInitialData();
 
     /** It also initializes notifyClick, a function meant to be called each time
      * the user clicks, in this case, in the asset graph visualization.
@@ -147,36 +149,86 @@ export class HomeComponent {
    * the asset and attack graph visualizations by initializing their renderers.
    */
   private async retrieveInitialData() {
-    forkJoin({
-      receivedModel: this.apiService.getModel(),
-      receivedAttackGraph: this.apiService.getAttackGraph(),
-    }).subscribe(async ({ receivedModel, receivedAttackGraph }) => {
-      //Once the model and attack graph is received, this data is used to initialize tyr-js
-      this.tyrManager = new TyrManager(
-        receivedModel,
-        receivedAttackGraph,
-        this.externalTools
-      );
+    forkJoin([
+      this.apiService.getModel(),
+      this.apiService.getAttackGraph(),
+      this.apiService.getPerformedNodes(),
+    ]).subscribe({
+      next: async ([receivedModel, receivedAttackGraph]) => {
+        //Once the model and attack graph is received, this data is used to initialize tyr-js
+        this.tyrManager = new TyrManager(
+          receivedModel,
+          receivedAttackGraph,
+          this.externalTools
+        );
 
-      //Get the HTMLElements where to render both graphs
-      const assetGraphContainer =
-        this.assetGraph.getAssetGraphContainer().nativeElement;
-      const attackGraphContainer =
-        this.attackGraph.getAttackGraphContainer().nativeElement;
+        //Get the HTMLElements where to render both graphs
+        const assetGraphContainer =
+          this.assetGraph.getAssetGraphContainer().nativeElement;
+        const attackGraphContainer =
+          this.attackGraph.getAttackGraphContainer().nativeElement;
 
-      //Initialize renderers for the asset and attack graphs
-      this.tyrManager.assetGraphRenderer.init(
-        assetGraphContainer,
-        assetGraphRendererRules,
-        this.assetGraph.getConfig()
-      );
+        //Initialize renderers for the asset and attack graphs
+        this.tyrManager.assetGraphRenderer.init(
+          assetGraphContainer,
+          assetGraphRendererRules,
+          this.assetGraph.getConfig()
+        );
 
-      this.tyrManager.attackGraphRenderer.init(
-        attackGraphContainer,
-        [],
-        this.attackGraph.getConfig()
-      );
+        this.tyrManager.attackGraphRenderer.init(
+          attackGraphContainer,
+          [],
+          this.attackGraph.getConfig()
+        );
+      },
+      complete: () => {
+        this.apiService.getPerformedNodes().subscribe({
+          next: async (performedNodes) => {
+            for (let i = 0; i < performedNodes.length; i++) {
+              const node = performedNodes[i];
+
+              this.getNotificationFromPerformedNode(node.node_id);
+            }
+          },
+        });
+      },
     });
+  }
+
+  private getNotificationFromPerformedNode(nodeId: string) {
+    let alert: TyrNotification;
+    const attackGraph = this.tyrManager.getAttackGraphNodes();
+    const step = attackGraph.find((n) => n.id == nodeId);
+    if (!step) throw new Error('Step not found');
+
+    if (step.attackStep.type === 'defense') {
+      const step = attackGraph.find((n) => n.id === nodeId);
+      console.log(step);
+      const asset = step!.attackStep.asset;
+      alert = {
+        type: TyrNotificationType.suggestion,
+        node: asset,
+        description: '',
+        status: TyrAlertStatus.alerted,
+        timestamp: Date.now(),
+        attackStep: step!.attackStep,
+        hidden: this.timeline.automaticUpdate,
+        currentColor: 0x000000,
+        otherAffectedNodes: [],
+      };
+
+      this.createDefense(
+        step!.attackStep,
+        step!.attackStep.langGraphAttackStep,
+        step!.attackStep.name
+      );
+    } else {
+      alert = this.tyrManager.receiveLatestAttackStep(
+        nodeId,
+        this.timeline.automaticUpdate
+      )!;
+      this.timeline.addAlert(alert);
+    }
   }
 
   /**
@@ -198,11 +250,7 @@ export class HomeComponent {
       if (Object.keys(latestAttackSteps).length > 0) {
         const parsedAttackSteps = parseLatestAttackSteps(latestAttackSteps);
         for (let i = 0; i < parsedAttackSteps.length; i++) {
-          const alert = this.tyrManager.receiveLatestAttackStep(
-            parsedAttackSteps[i].id,
-            this.timeline.automaticUpdate
-          );
-          if (alert) this.timeline.addAlert(alert);
+          this.getNotificationFromPerformedNode(parsedAttackSteps[i].id);
         }
       }
 
@@ -237,6 +285,17 @@ export class HomeComponent {
    * @param { any } suggestion - the performed suggestion
    */
   addExecutedSuggestionToTimeline(suggestion: any) {
+    //Finds the suggested step in the attack graph
+    const attackstep = this.tyrManager
+      .getAttackSteps()
+      .find((a) => a.id == suggestion.stepId);
+
+    if (!attackstep) throw new Error('TODO');
+
+    this.createDefense(attackstep, suggestion.type, suggestion.description);
+  }
+
+  createDefense(attackStep: TyrAttackStep, type: string, description?: string) {
     const getNodeChildren = (
       node: TyrAssetGraphNode,
       isShutdownMachine: boolean
@@ -258,22 +317,15 @@ export class HomeComponent {
       return list;
     };
 
-    //Finds the suggested step in the attack graph
-    const attackstep = this.tyrManager
-      .getAttackSteps()
-      .find((a) => a.id == suggestion.stepId);
-
-    if (!attackstep) throw new Error('TODO');
-
     //Creates the notification with its information
     const tyrSuggestion: TyrNotification = {
-      node: attackstep.asset,
-      attackStep: attackstep,
+      node: attackStep.asset,
+      attackStep: attackStep,
       type: TyrNotificationType.suggestion,
       timestamp: Date.now(),
       hidden: false,
       currentColor: 0x9fd4f2,
-      description: suggestion.description,
+      description: description ?? '',
       otherAffectedNodes: [],
     };
 
@@ -282,7 +334,7 @@ export class HomeComponent {
     application:notPresent will shutdown the application, and therefore all its children (users and connection rules), which means 
     they also need to be "shutdown". All of this is decided here
     */
-    switch (suggestion.type) {
+    switch (type) {
       case 'Application:notPresent':
         tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
         tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;

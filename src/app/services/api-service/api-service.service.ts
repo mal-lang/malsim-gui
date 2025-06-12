@@ -31,6 +31,10 @@ export class ApiService {
     return this.http.get(this.apiUrl + 'latest_attack_steps');
   }
 
+  getPerformedNodes(): Observable<any> {
+    return this.http.get(this.apiUrl + 'performed_nodes');
+  }
+
   getLatestDefenceStep() {
     // Copy alternative before reset
     let latestDefenceStep = JSON.parse(JSON.stringify(this.chosenAlternative));
