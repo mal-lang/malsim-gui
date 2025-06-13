@@ -301,7 +301,8 @@ export class HomeComponent {
       .getAttackSteps()
       .find((a) => a.id == suggestion.stepId);
 
-    if (!attackstep) throw new Error('TODO');
+    if (!attackstep)
+      throw new Error('Unexpected Error. Attack step could not be found.');
 
     this.createDefense(attackstep, suggestion.type, suggestion.description);
   }
