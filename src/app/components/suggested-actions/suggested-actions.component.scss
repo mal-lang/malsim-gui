@@ -6,11 +6,15 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  z-index: 2;
 
   background-color: $dark;
   color: $white;
+  position: relative;
 
   min-width: 360px;
+  transition: transform 0.3s ease;
+  margin-left: 0;
 
   h2 {
     height: 32px;
@@ -44,6 +48,23 @@
       width: 80px;
     }
   }
+}
+
+.exit {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+  display: inline-block;
+  transform: rotate(0deg);
+}
+
+#suggested-actions.collapsed .exit {
+  transform: rotate(180deg);
+  transform-origin: center center;
 }
 
 .suggested-actions-list {

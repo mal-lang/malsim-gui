@@ -20,3 +20,10 @@ main {
     background-color: $asset-graph-background;
   }
 }
+
+.expanded {
+  margin-left: 0px;
+}
+.collapsed {
+  margin-left: -332px;
+}

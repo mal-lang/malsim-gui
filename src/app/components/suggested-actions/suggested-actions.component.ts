@@ -1,3 +1,4 @@
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -46,9 +47,11 @@ interface AgentSuggestion {
 export class SuggestedActionsComponent {
   suggestedActions: Array<SuggestedAction> = [];
   selectedActions: SelectedAction[];
+  isCollapsed = false;
 
   @Input() tyrManager: TyrManager;
   @Output() onSuggestionSelected = new EventEmitter<any>();
+  @Output() onToggleCollapse = new EventEmitter<any>();
 
   constructor(
     private apiService: ApiService,
@@ -122,5 +125,10 @@ export class SuggestedActionsComponent {
         );
         this.onSuggestionSelected.emit(this.suggestedActions[id]);
       });
+  }
+
+  public toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    this.onToggleCollapse.emit();
   }
 }

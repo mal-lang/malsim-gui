@@ -1,4 +1,11 @@
-<div id="suggested-actions">
+<div
+  id="suggested-actions"
+  [ngClass]="{ collapsed: isCollapsed, expanded: !isCollapsed }"
+>
+  <div class="exit" (click)="this.toggleCollapse()">
+    <app-left-arrows></app-left-arrows>
+  </div>
+
   <h2>Available Defense Actions</h2>
   <div class="actions-header">
     <p>INFORMATION</p>
