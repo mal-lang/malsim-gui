@@ -116,7 +116,11 @@ export class SuggestedActionsComponent {
   async selectAction(id: number, iteration: number) {
     await this.apiService
       .postDefenderAction(this.suggestedActions[id].stepId, iteration)
-      .then(() => {
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(
+            `HTTP error: ${response.status}. Something went wrong.`
+          );
         this.suggestedActions[id].performed = true;
         this.tyrManager.markDefensesAsPerformed(
           this.suggestedActions
