@@ -17,6 +17,12 @@ section {
 section.visible {
   width: calc(100vw - 360px);
   border-left: 2px solid $border;
+  transform: translateX(0px);
+}
+
+section.visible.extended {
+  width: calc(100vw - 28px);
+  border-left: 2px solid $border;
 }
 
 .top-left {

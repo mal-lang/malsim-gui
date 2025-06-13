@@ -18,6 +18,7 @@
     <app-attack-graph
       #attackGraph
       [tyrManager]="this.tyrManager"
+      [canBeExtended]="this.defensesCollapsed"
       [parentCloseAttackGraph]="this.closeAttackGraph"
       (emitter)="updateAttackGraph($event)"
     ></app-attack-graph>

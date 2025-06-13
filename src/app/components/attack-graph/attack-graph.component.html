@@ -1,7 +1,7 @@
 <section
   #graphContainer
   id="graphContainer"
-  [ngClass]="{ visible: this.isVisible }"
+  [ngClass]="{ visible: this.isVisible, extended: canBeExtended }"
   [style.cursor]="this.cursorStyle"
 >
   <div class="top-left">

@@ -30,6 +30,7 @@ import { CrossComponent } from '../../utils/components/cross/cross.component';
  */
 export class AttackGraphComponent {
   @Input() tyrManager: TyrManager;
+  @Input() canBeExtended: Boolean;
   @Input() parentCloseAttackGraph: () => void;
   @Output() emitter = new EventEmitter<any>();
 
