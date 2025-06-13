@@ -379,7 +379,10 @@ export class TimelineComponent {
       //Update the attack graph with these new selected alerts -> only happens because we are in attack graph mode
       const attackSteps = this.selectedNotifications
         .map((n) => n.attackStep)
-        .filter((step): step is NonNullable<typeof step> => step !== undefined);
+        .filter(
+          (step): step is NonNullable<typeof step> =>
+            step !== undefined && step.type != 'defense'
+        );
 
       if (!this.settingAttackGraph) this.displayAttackGraph(attackSteps);
     } else {
@@ -387,6 +390,7 @@ export class TimelineComponent {
     }
 
     //Updates the alert visibility in the tyr-js
+
     this.tyrManager.updateAlertVisibility(all);
     this.cdRef.detectChanges();
   }
