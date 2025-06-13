@@ -20,6 +20,7 @@ import { TimelineComponent } from './components/timeline/timeline.component';
 import { AssetGraphComponent } from './components/asset-graph/asset-graph.component';
 import { TimelineItemComponent } from './components/timeline/timeline-item/timeline-item.component';
 import { AssetMenuComponent } from './components/asset-menu/asset-menu.component';
+import { LeftArrowsComponent } from './utils/components/left-arrows/left-arrows.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { AssetMenuComponent } from './components/asset-menu/asset-menu.component
     TimelineComponent,
     AssetGraphComponent,
     SuggestedActionsComponent,
+    LeftArrowsComponent,
   ],
   imports: [
     BrowserModule,

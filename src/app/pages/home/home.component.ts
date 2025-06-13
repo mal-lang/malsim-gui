@@ -61,6 +61,8 @@ export class HomeComponent {
   public currentDefenderSuggestions: any;
   public notifyClick = (node: TyrAssetGraphNode) => {};
 
+  public defensesCollapsed = false;
+
   constructor(apiService: ApiService) {
     //Default data
     this.apiService = apiService;
@@ -455,4 +457,8 @@ export class HomeComponent {
 
     this.tyrManager.attackGraphRenderer.resizeViewport();
   };
+
+  public collapseDefenseSuggestions($event: any) {
+    this.defensesCollapsed = !this.defensesCollapsed;
+  }
 }
