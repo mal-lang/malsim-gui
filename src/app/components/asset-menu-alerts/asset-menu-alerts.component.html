@@ -1,7 +1,7 @@
 <div
   *ngFor="let n of this.node.notificationList"
   class="asset-menu-alert"
-  (click)="openAttackGraph(n.attackStep!)"
+  (click)="manageAttackGraph(n.attackStep!)"
 >
   <img src="{{ this.getNotificationImage(n) }}" />
   <div class="alert-info">

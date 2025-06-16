@@ -40,7 +40,7 @@ To serve a devlopment server run: `ng serve --open` in the /core-web folder
 
 Install all dependencies with `npm install --force` in malsim-gui/
 
-Download and set up TyrJS locally. Find how to do so in tyr-js/docs/installation.md.
+Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md.
 
 Then, execute `npm link tyr-js` under /malsim-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
 

@@ -89,6 +89,7 @@ export class HomeComponent {
         getAssetIcon: this.iconManager.getAssetIcon,
         getAssetNodeStatusIcon: this.iconManager.getNodeStatusIcon,
         getAlertIcon: this.iconManager.selectAlertIcon,
+        getCycleIcon: this.iconManager.getCycleIcon,
       };
     });
     this.retrieveInitialData();
@@ -407,7 +408,7 @@ export class HomeComponent {
       attackSteps,
       this.attackGraph.selectedDepth,
       this.attackGraph.selectedSuggestionDist,
-      true
+      this.attackGraph.isForward
     );
     //Center camera to graph
     this.tyrManager.attackGraphRenderer.resizeViewport();

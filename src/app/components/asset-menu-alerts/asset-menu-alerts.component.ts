@@ -58,4 +58,8 @@ export class AssetMenuAlertsComponent {
         return '';
     }
   }
+
+  public manageAttackGraph(attackStep: TyrAttackStep) {
+    if (attackStep.type != 'defense') this.openAttackGraph(attackStep);
+  }
 }
