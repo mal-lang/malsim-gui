@@ -90,6 +90,7 @@ export class HomeComponent {
         getAssetNodeStatusIcon: this.iconManager.getNodeStatusIcon,
         getAlertIcon: this.iconManager.selectAlertIcon,
         getCycleIcon: this.iconManager.getCycleIcon,
+        getAttackerIcon: this.iconManager.getAttackerIcon,
       };
     });
     this.retrieveInitialData();
