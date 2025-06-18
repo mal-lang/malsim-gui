@@ -11,7 +11,7 @@ Angular 18 application
 [How to install Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 NPM is recommended when updating or installing new javascript packages/librararies.
-New libraries or information about pre-installed can be searched fore [here](https://www.npmjs.com/)
+New libraries or information about pre-installed can be searched [here](https://www.npmjs.com/)
 You can read more about NPM [here](https://docs.npmjs.com/about-npm).
 
 To view all packages and their versions installed by npm check dependencies in 'core-web/package.json'.
@@ -20,7 +20,7 @@ To update version of a package/library simply update the version nr of the packa
 **Troubleshooting NPM**
 
 Sometimes when updating or installing a version of a package in npm the package is not installed correctly.
-To make sure the latest version is installed remove 'core-web/package-lock.json' and 'core-web/node_modules' and install all packages again with 'npm install'.
+To make sure the latest version is installed remove 'malsim-gui/package-lock.json' and 'malsim-gui/node_modules' and install all packages again with 'npm install'.
 
 ### Angular CLI
 
@@ -30,9 +30,9 @@ Angular cli is required to build for deployment or serve a development server.
 
 Install with NPM: `npm install -g @angular/cli@17.3.7`
 
-To build the application run: `ng build` in the /core-web folder
+To build the application run: `ng build` in the /malsim-gui folder
 
-To serve a devlopment server run: `ng serve --open` in the /core-web folder
+To serve a devlopment server run: `ng serve --open` in the /malsim-gui folder
 
 [About Angular cli](https://angular.io/cli)
 
@@ -40,7 +40,7 @@ To serve a devlopment server run: `ng serve --open` in the /core-web folder
 
 Install all dependencies with `npm install --force` in malsim-gui/
 
-Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md.
+Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md. Since you downloaded this project, you can skip the installation.md step 1.
 
 Then, execute `npm link tyr-js` under /malsim-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
 

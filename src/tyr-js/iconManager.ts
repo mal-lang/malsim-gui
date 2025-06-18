@@ -32,15 +32,16 @@ export interface AttackStepsStatusIcons {
   eyeSprite: Texture;
 }
 
-export interface CycleIcons {
+export interface ExtraIcons {
   cycleIcon: Texture;
+  attackerIcon: Texture;
 }
 
 export class IconManager {
   public assetIcons: AssetIcons;
   public assetStatusIcons: AssetStatusIcons;
   public attackStepsStatusIcons: AttackStepsStatusIcons;
-  public cycleIcons: CycleIcons;
+  public extraIcons: ExtraIcons;
   suggestedActions: any;
 
   constructor() {
@@ -49,6 +50,7 @@ export class IconManager {
     this.selectAlertIcon = this.selectAlertIcon.bind(this);
     this.getAttackGraphNodeIcon = this.getAttackGraphNodeIcon.bind(this);
     this.getCycleIcon = this.getCycleIcon.bind(this);
+    this.getAttackerIcon = this.getAttackerIcon.bind(this);
   }
 
   public async load() {
@@ -71,6 +73,7 @@ export class IconManager {
       warning: '/assets/icons/attack-graph/warning-sign.png',
 
       cycle: '/assets/icons/attack-graph/cycle.png',
+      attacker: '/assets/icons/attack-graph/attacker.png',
     };
 
     // Step 1: Add assets to the cache
@@ -90,6 +93,7 @@ export class IconManager {
       { alias: 'check', src: assetUrls.check },
       { alias: 'eye', src: assetUrls.eye },
       { alias: 'cycle', src: assetUrls.cycle },
+      { alias: 'attacker', src: assetUrls.attacker },
     ]);
 
     // Step 2: Load all assets in parallel
@@ -109,6 +113,7 @@ export class IconManager {
       eyeSprite,
       checkSprite,
       cycleSprite,
+      attackerSprite,
     ] = await Promise.all([
       Assets.load('network'),
       Assets.load('shield'),
@@ -125,6 +130,7 @@ export class IconManager {
       Assets.load('eye'),
       Assets.load('check'),
       Assets.load('cycle'),
+      Assets.load('attacker'),
     ]);
 
     // Step 3: Assign them to their interfaces
@@ -152,8 +158,9 @@ export class IconManager {
       checkSprite: checkSprite,
     };
 
-    this.cycleIcons = {
+    this.extraIcons = {
       cycleIcon: cycleSprite,
+      attackerIcon: attackerSprite,
     };
 
     console.log('✅ All assets added & loaded successfully!');
@@ -266,6 +273,10 @@ export class IconManager {
   }
 
   public getCycleIcon(): Sprite {
-    return new Sprite(this.cycleIcons.cycleIcon);
+    return new Sprite(this.extraIcons.cycleIcon);
+  }
+
+  public getAttackerIcon(): Sprite {
+    return new Sprite(this.extraIcons.attackerIcon);
   }
 }
