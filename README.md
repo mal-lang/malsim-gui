@@ -11,7 +11,7 @@ Angular 18 application
 [How to install Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 NPM is recommended when updating or installing new javascript packages/librararies.
-New libraries or information about pre-installed can be searched fore [here](https://www.npmjs.com/)
+New libraries or information about pre-installed can be searched [here](https://www.npmjs.com/)
 You can read more about NPM [here](https://docs.npmjs.com/about-npm).
 
 To view all packages and their versions installed by npm check dependencies in 'core-web/package.json'.
@@ -40,7 +40,7 @@ To serve a devlopment server run: `ng serve --open` in the /malsim-gui folder
 
 Install all dependencies with `npm install --force` in malsim-gui/
 
-Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md.
+Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md. Since you downloaded this project, you can skip the installation.md step 1.
 
 Then, execute `npm link tyr-js` under /malsim-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
 

@@ -433,6 +433,7 @@ export class HomeComponent {
     //Generate the attack graph
     this.displayAttackGraph([attackStep]);
     this.displayAssetGraph = false;
+    this.tyrManager.assetGraphRenderer.hideViewport();
   };
 
   /**
@@ -442,6 +443,7 @@ export class HomeComponent {
     this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
     this.tyrManager.attackGraphRenderer.setIsVisible(false);
     this.displayAssetGraph = true;
+    this.tyrManager.assetGraphRenderer.displayViewport();
   };
 
   /**
