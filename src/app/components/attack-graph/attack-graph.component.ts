@@ -38,7 +38,7 @@ export class AttackGraphComponent {
   @ViewChild('depthSlider') depthSlider!: ElementRef;
   @ViewChild('suggestionSlider') suggestionSlider!: ElementRef;
   @ViewChild('currentDepthSign') currentDepthSign!: ElementRef;
-  @ViewChild('currentSuggestionSign') currentSuggestionSign!: ElementRef;
+  //@ViewChild('currentSuggestionSign') currentSuggestionSign!: ElementRef;
   @ViewChild('forward') forward!: ElementRef;
   @ViewChild('backward') backward!: ElementRef;
 
@@ -47,7 +47,7 @@ export class AttackGraphComponent {
   public isVisible: boolean;
   public selectedDepth: number = 3;
   public maxDepth: number = 5;
-  public selectedSuggestionDist: number = 2;
+  public selectedSuggestionDist: number = 0;
   public maxSuggestionDist: number = 3;
   public cursorStyle = 'grab';
   public isForward: boolean = true;
@@ -103,6 +103,8 @@ export class AttackGraphComponent {
       }
     );
 
+    /*
+    SUGGESTION SLIDER
     this.suggestionSlider.nativeElement.addEventListener(
       'mousedown',
       (event: MouseEvent) => {
@@ -115,7 +117,7 @@ export class AttackGraphComponent {
       (event: MouseEvent) => {
         this.currentSuggestionSign.nativeElement.style.visibility = 'hidden';
       }
-    );
+    );*/
   }
 
   /**
@@ -190,7 +192,7 @@ export class AttackGraphComponent {
     }
     if (target === this.suggestionSlider.nativeElement) {
       this.selectedSuggestionDist = +target.value;
-      this.updateSign(this.currentSuggestionSign.nativeElement, value);
+      //this.updateSign(this.currentSuggestionSign.nativeElement, value);
     }
     this.emitValues();
   }
@@ -239,7 +241,7 @@ export class AttackGraphComponent {
         100;
 
     this.suggestionSlider.nativeElement.style.background = `linear-gradient(to right, #00e6ff ${value}%, #343a3e ${value}%)`;
-    this.updateSign(this.currentSuggestionSign.nativeElement, value);
+    //this.updateSign(this.currentSuggestionSign.nativeElement, value);
     this.emitValues();
   }
 
