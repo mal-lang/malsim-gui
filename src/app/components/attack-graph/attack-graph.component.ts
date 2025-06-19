@@ -76,6 +76,15 @@ export class AttackGraphComponent {
       },
       nodes: {
         imageMargin: 0,
+        onCyclePointerOn: () => {
+          this.cursorStyle = 'pointer';
+        },
+        onCyclePointerOut: () => {
+          this.cursorStyle = 'grab';
+        },
+        onCycleUnselected: () => {
+          this.cursorStyle = 'grab';
+        },
       },
     };
 

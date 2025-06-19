@@ -221,7 +221,7 @@ export class HomeComponent {
         type: TyrNotificationType.suggestion,
         node: asset,
         description: '',
-        status: TyrAlertStatus.alerted,
+        status: TyrAlertStatus.controlled,
         timestamp: Date.now(),
         attackStep: step!.attackStep,
         hidden: this.timeline.automaticUpdate,
@@ -377,6 +377,8 @@ export class HomeComponent {
       default:
         break;
     }
+
+    console.log(tyrSuggestion.node.asset.name, tyrSuggestion.node.status);
 
     //Send the performed suggestion to TyrJS for its effect to be visualized in the asset graph.
     this.tyrManager.receivePerformedSuggestion(

@@ -121,12 +121,6 @@ export class SuggestedActionsComponent {
           throw new Error(
             `HTTP error: ${response.status}. Something went wrong.`
           );
-        this.suggestedActions[id].performed = true;
-        this.tyrManager.markDefensesAsPerformed(
-          this.suggestedActions
-            .filter((a) => a.performed)
-            .map((a) => String(a.stepId))
-        );
         this.onSuggestionSelected.emit(this.suggestedActions[id]);
       });
   }
