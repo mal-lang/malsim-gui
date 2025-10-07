@@ -5,7 +5,6 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
 
 import {
-  parseLatestAttackSteps,
   TyrAssetGraphNode,
   TyrAssetGraphNodeStatus,
   TyrAttackStep,
@@ -14,7 +13,6 @@ import {
   TyrNotificationType,
   ExternalUtils,
   TyrAlertStatus,
-  TyrAttackGraphNode,
 } from 'tyr-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
