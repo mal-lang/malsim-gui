@@ -3,7 +3,7 @@ import {
   NodeAffectedCondition,
   RendererRule,
   RendererRuleScope,
-} from 'tyr-js';
+} from 'mal-js';
 
 //Conditions
 const generalNodeCondition: NodeAffectedCondition = {

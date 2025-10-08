@@ -1,5 +1,5 @@
 {
-  "name": "tyr-demo",
+  "name": "MAL-demo",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -25,7 +25,8 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "vis-network": "^9.1.9",
-    "zone.js": "~0.14.10"
+    "zone.js": "~0.14.10",
+    "@mal-lang/mal-js": "1.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.9",

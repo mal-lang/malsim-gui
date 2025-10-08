@@ -9,11 +9,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  TyrAssetGraphNode,
-  TyrAttackStep,
-  TyrManager,
-  TyrNotification,
-} from 'tyr-js';
+  MALAssetGraphNode,
+  MALAttackStep,
+  MALManager,
+  MALNotification,
+} from 'mal-js';
 
 @Component({
   selector: 'app-timeline',
@@ -26,9 +26,9 @@ import {
  * TimelineComponent is the component where all the performed activity (attack and defenses) are displayed in chronological order.
  */
 export class TimelineComponent {
-  @Input() tyrManager: TyrManager;
-  @Input() openAssetMenu: (node: TyrAssetGraphNode) => void;
-  @Input() displayAttackGraph: (attackSteps: TyrAttackStep[]) => void;
+  @Input() MALManager: MALManager;
+  @Input() openAssetMenu: (node: MALAssetGraphNode) => void;
+  @Input() displayAttackGraph: (attackSteps: MALAttackStep[]) => void;
   @Input() attackGraphMode: boolean;
 
   @ViewChild('slideCircleLeft') private slideCircleLeft!: ElementRef;
@@ -55,8 +55,8 @@ export class TimelineComponent {
   private colorAssetGraphMode: string = '#ffa100';
   private colorAttackGraphMode: string = '#00e6ff';
 
-  public notifications: TyrNotification[] = [];
-  public selectedNotifications: TyrNotification[] = [];
+  public notifications: MALNotification[] = [];
+  public selectedNotifications: MALNotification[] = [];
   public automaticUpdate = true;
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {}
@@ -389,9 +389,9 @@ export class TimelineComponent {
       this.selectedNotifications = all;
     }
 
-    //Updates the alert visibility in the tyr-js
+    //Updates the alert visibility in the mal-js
 
-    this.tyrManager.updateAlertVisibility(all);
+    this.MALManager.updateAlertVisibility(all);
     this.cdRef.detectChanges();
   }
 
@@ -494,7 +494,7 @@ export class TimelineComponent {
     const notification = this.notifications[index];
 
     if (!this.attackGraphMode) {
-      this.tyrManager.assetGraphRenderer.moveAndZoomCameraToNode(
+      this.MALManager.assetGraphRenderer.moveAndZoomCameraToNode(
         notification.node
       );
       this.notifications.forEach((n) => (n.node.style.selected = false));
@@ -512,9 +512,9 @@ export class TimelineComponent {
   /**
    * Adds an alert to the timeline, rendering it and updating its width and limits.
    *
-   * @param {TyrNotification} alert - The alert to be added.
+   * @param {MALNotification} alert - The alert to be added.
    */
-  public addAlert(alert: TyrNotification) {
+  public addAlert(alert: MALNotification) {
     const container = this.timeline.nativeElement as HTMLElement;
     this.draggableRightLimit +=
       container.scrollLeft + this.notifications.length > 0
@@ -534,9 +534,9 @@ export class TimelineComponent {
   /**
    * Adds a suggestion to the timeline, rendering it and updating its width and limits.
    *
-   * @param {TyrNotification} suggestion - The suggestion to be added.
+   * @param {MALNotification} suggestion - The suggestion to be added.
    */
-  public addPerformedSuggestion(suggestion: TyrNotification) {
+  public addPerformedSuggestion(suggestion: MALNotification) {
     const container = this.timeline.nativeElement as HTMLElement;
     this.draggableRightLimit +=
       container.scrollLeft + this.notifications.length > 0
@@ -556,9 +556,9 @@ export class TimelineComponent {
   /**
    * Deletes the passed alert from the timeline
    *
-   * @param {TyrNotification} alert - The suggestion to be deleted.
+   * @param {MALNotification} alert - The suggestion to be deleted.
    */
-  public deleteAlert(alert: TyrNotification) {
+  public deleteAlert(alert: MALNotification) {
     this.notifications = this.notifications.filter((a) => a !== alert);
   }
 
@@ -576,27 +576,27 @@ export class TimelineComponent {
   }
 
   /**
-   * Tells TyrJS to highlight (in the asset graph) the asset related to the timeline item that is being hovered
+   * Tells MALJS to highlight (in the asset graph) the asset related to the timeline item that is being hovered
    *
-   * @param {TyrNotification} notification - The alert whose asset will be highlighted.
+   * @param {MALNotification} notification - The alert whose asset will be highlighted.
    */
-  public hoverItem(notification: TyrNotification) {
-    this.tyrManager.assetGraphRenderer.highlightNode(notification.node);
+  public hoverItem(notification: MALNotification) {
+    this.MALManager.assetGraphRenderer.highlightNode(notification.node);
   }
 
   /**
-   * Tells TyrJS to unhighlight all nodes from the asset graph
+   * Tells MALJS to unhighlight all nodes from the asset graph
    */
   public unhoverItem() {
-    this.tyrManager.assetGraphRenderer.unhighlightNodes();
+    this.MALManager.assetGraphRenderer.unhighlightNodes();
   }
 
   /**
    * Finds the attack step and sets the timeline to select it.
    *
-   * @param {TyrAttackStep} attackStep - The attack step to be selected.
+   * @param {MALAttackStep} attackStep - The attack step to be selected.
    */
-  public setSlideOnStep(attackStep: TyrAttackStep) {
+  public setSlideOnStep(attackStep: MALAttackStep) {
     const index = this.notifications.findIndex((n) => {
       if (!n.attackStep) return;
       return n.attackStep.id === attackStep.id;

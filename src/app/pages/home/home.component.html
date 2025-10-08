@@ -4,7 +4,7 @@
     <app-suggested-actions
       [ngClass]="{ collapsed: defensesCollapsed, expanded: !defensesCollapsed }"
       #suggestedActions
-      [tyrManager]="this.tyrManager"
+      [MALManager]="this.MALManager"
       (onSuggestionSelected)="this.addExecutedSuggestionToTimeline($event)"
       (onToggleCollapse)="this.collapseDefenseSuggestions($event)"
     />
@@ -17,7 +17,7 @@
     />
     <app-attack-graph
       #attackGraph
-      [tyrManager]="this.tyrManager"
+      [MALManager]="this.MALManager"
       [canBeExtended]="this.defensesCollapsed"
       [parentCloseAttackGraph]="this.closeAttackGraph"
       (emitter)="updateAttackGraph($event)"
@@ -25,14 +25,14 @@
     <aside>
       <app-asset-menu
         #assetMenu
-        [tyrManager]="this.tyrManager"
+        [MALManager]="this.MALManager"
         [openAttackGraph]="this.openAttackGraph"
       />
     </aside>
   </main>
   <app-timeline
     #timeline
-    [tyrManager]="this.tyrManager"
+    [MALManager]="this.MALManager"
     [openAssetMenu]="notifyClick"
     [attackGraphMode]="this.isAttackGraphMode()"
     [displayAttackGraph]="this.displayAttackGraph"

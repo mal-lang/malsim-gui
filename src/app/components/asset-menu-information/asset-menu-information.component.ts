@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { selectAssetImage } from 'src/app/utils/functions/utils';
-import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
+import { MALAssetGraphNode, MALAssetGraphNodeStatus, MALManager } from 'mal-js';
 
 @Component({
   selector: 'app-asset-menu-information',
@@ -19,12 +19,12 @@ import { TyrAssetGraphNode, TyrAssetGraphNodeStatus, TyrManager } from 'tyr-js';
  * + Connections with other assets
  */
 export class AssetMenuInformationComponent {
-  @Input() node: TyrAssetGraphNode; //The currently displayed node
+  @Input() node: MALAssetGraphNode; //The currently displayed node
 
-  @Input() tyrManager: TyrManager;
+  @Input() MALManager: MALManager;
 
-  public relatedNodes: TyrAssetGraphNode[]; //Nodes connected to the currently displayed node
-  public selectAssetImage: (node: TyrAssetGraphNode) => void = selectAssetImage;
+  public relatedNodes: MALAssetGraphNode[]; //Nodes connected to the currently displayed node
+  public selectAssetImage: (node: MALAssetGraphNode) => void = selectAssetImage;
 
   /**
    * When the node is updated, it also updated the related nodes
@@ -32,7 +32,7 @@ export class AssetMenuInformationComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['node']) {
       if (!this.node) return;
-      this.relatedNodes = this.node.connections.children as TyrAssetGraphNode[];
+      this.relatedNodes = this.node.connections.children as MALAssetGraphNode[];
     }
   }
 
@@ -40,22 +40,22 @@ export class AssetMenuInformationComponent {
    * Returns the current node's status.
    */
   public getStatus() {
-    return TyrAssetGraphNodeStatus[this.node.status];
+    return MALAssetGraphNodeStatus[this.node.status];
   }
 
   /**
    * Highlights the node that is currently being hovered.
    *
-   * @param {TyrAssetGraphNode} node - The node being hovered.
+   * @param {MALAssetGraphNode} node - The node being hovered.
    */
-  public hoverItem(node: TyrAssetGraphNode) {
-    this.tyrManager.assetGraphRenderer.highlightNode(node);
+  public hoverItem(node: MALAssetGraphNode) {
+    this.MALManager.assetGraphRenderer.highlightNode(node);
   }
 
   /**
    * Unhighlights all nodes
    */
   public unhoverItem() {
-    this.tyrManager.assetGraphRenderer.unhighlightNodes();
+    this.MALManager.assetGraphRenderer.unhighlightNodes();
   }
 }

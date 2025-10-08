@@ -10,7 +10,7 @@ import {
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { selectActionImage } from 'src/app/utils/functions/utils';
-import { TyrManager } from 'tyr-js';
+import { MALManager } from 'mal-js';
 
 interface SuggestedAction {
   stepId: number;
@@ -49,7 +49,7 @@ export class SuggestedActionsComponent {
   selectedActions: SelectedAction[];
   isCollapsed = false;
 
-  @Input() tyrManager: TyrManager;
+  @Input() MALManager: MALManager;
   @Output() onSuggestionSelected = new EventEmitter<any>();
   @Output() onToggleCollapse = new EventEmitter<any>();
 
@@ -65,7 +65,7 @@ export class SuggestedActionsComponent {
    */
   updateSuggestedActions(defenderSuggestions: any) {
     let actions: Array<SuggestedAction> = [];
-    this.tyrManager.markDefensesAsPerformed([]);
+    this.MALManager.markDefensesAsPerformed([]);
 
     Object.keys(defenderSuggestions).forEach((agent) => {
       Object.keys(defenderSuggestions[agent]).forEach((stepId) => {
@@ -93,9 +93,9 @@ export class SuggestedActionsComponent {
               description: defenderSuggestion.action.description,
               systems: defenderSuggestion.action.systems.join(','),
               agents: [agentSuggestion],
-              type: this.tyrManager.getAttackStepType(stepId) ?? '',
+              type: this.MALManager.getAttackStepType(stepId) ?? '',
               image: selectActionImage(
-                this.tyrManager.getAttackStepType(stepId)
+                this.MALManager.getAttackStepType(stepId)
               ),
               performed: false,
             });

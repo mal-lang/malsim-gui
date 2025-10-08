@@ -6,11 +6,8 @@
   <img src="{{ this.getNotificationImage(n) }}" />
   <div class="alert-info">
     <p>{{ this.getName(n.type) }}</p>
-    <p *ngIf="n.type === 1">
-      {{ n.description }}
-    </p>
     <p>
-      System: <span>{{ this.node.asset.name }}</span>
+      <span>{{ this.node.asset.name }}: {{n.attackStep.name}}</span>
     </p>
   </div>
   <p class="timestamp">

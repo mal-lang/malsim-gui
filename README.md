@@ -5,7 +5,7 @@ Angular 18 application
 ## Requirements
 
 1. Node.js version 18 or higher
-2. Last version of TyrJS downloaded locally and ready for use
+2. Last version of MALJS downloaded locally and ready for use
 3. NPM version 10 or higher
 
 [How to install Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -40,9 +40,9 @@ To serve a devlopment server run: `ng serve --open` in the /malsim-gui folder
 
 Install all dependencies with `npm install --force` in malsim-gui/
 
-Download and set up TyrJS locally. Find how to do so in tyr-js/docs/guide/installation.md. Since you downloaded this project, you can skip the installation.md step 1.
+Download and set up MALJS locally. Find how to do so in mal-js/docs/guide/installation.md. Since you downloaded this project, you can skip the installation.md step 1.
 
-Then, execute `npm link tyr-js` under /malsim-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
+Then, execute `npm link mal-js` under /malsim-gui to manually link the library to this project. Remember, you will have to run this command each time you install new npm packages, since npm deletes local links when running `npm install`.
 
 Start and serve a development server with `ng serve --open`
 
@@ -54,4 +54,4 @@ The API setup is located in src\app\services\api-service\api-service.service.ts
 
 It is, by default, pointing at http://localhost:8888/ but feel free to change this by modifying the url in `apiUrl`
 
-This file contains the different routes the GUI can access to, so feel free to add, delete or change any of the existing ones if needed. Remember, the GUI expects all data in the same format as in the Tyr Monitor, so ensure that or modify this front end so that is able to parse the new format correctly.
+This file contains the different routes the GUI can access to, so feel free to add, delete or change any of the existing ones if needed. Remember, the GUI expects all data in the same format as in the MAL Monitor, so ensure that or modify this front end so that is able to parse the new format correctly.
