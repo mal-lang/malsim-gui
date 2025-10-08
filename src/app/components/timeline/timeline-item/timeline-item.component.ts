@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { selectAssetImage } from 'src/app/utils/functions/utils';
-import { MALNotification } from 'mal-js';
+import { MALNotification } from '@mal-lang/mal-js';
 
 @Component({
   selector: 'app-timeline-item',

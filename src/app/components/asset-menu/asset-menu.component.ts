@@ -9,7 +9,7 @@ import {
   MALAssetGraphNode,
   MALAttackStep,
   getEmptyAssetGraphNode,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 enum AvailableAssetMenus {
   information,

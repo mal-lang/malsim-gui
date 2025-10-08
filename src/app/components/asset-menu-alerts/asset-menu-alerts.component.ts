@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { getNotificationImage } from 'src/app/utils/functions/utils';
-import { MALNotificationType, MALAssetGraphNode, MALAttackStep } from 'mal-js';
+import { MALNotificationType, MALAssetGraphNode, MALAttackStep } from '@mal-lang/mal-js';
 
 @Component({
   selector: 'app-asset-menu-alerts',

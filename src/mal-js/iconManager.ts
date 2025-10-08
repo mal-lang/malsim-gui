@@ -7,7 +7,7 @@ import {
   MALAlertStatus,
   MALAssetGraphNodeStatus,
   MALAttackStep,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 export interface AssetIcons {
   networkSprite: Texture;

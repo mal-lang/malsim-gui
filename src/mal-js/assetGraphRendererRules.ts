@@ -3,7 +3,7 @@ import {
   NodeAffectedCondition,
   RendererRule,
   RendererRuleScope,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 //Conditions
 const generalNodeCondition: NodeAffectedCondition = {

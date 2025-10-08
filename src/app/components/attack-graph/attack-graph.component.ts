@@ -11,10 +11,9 @@ import {
   FillInput,
   TextStyleAlign,
   TextStyleFontWeight,
-  MALAttackStep,
   MALManager,
   MALAttackGraphConfig,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 import { CrossComponent } from '../../utils/components/cross/cross.component';
 @Component({
   selector: 'app-attack-graph',

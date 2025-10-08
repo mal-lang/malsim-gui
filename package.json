@@ -1,5 +1,5 @@
 {
-  "name": "MAL-demo",
+  "name": "malsim-gui",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -26,7 +26,7 @@
     "tslib": "^2.3.0",
     "vis-network": "^9.1.9",
     "zone.js": "~0.14.10",
-    "@mal-lang/mal-js": "1.0.0"
+    "@mal-lang/mal-js": "1.0.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.9",

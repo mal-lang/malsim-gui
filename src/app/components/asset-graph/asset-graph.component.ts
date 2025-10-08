@@ -16,7 +16,7 @@ import {
   MALAssetGraphNode,
   MALAssetGraphClusterRule,
   MALAssetGraphConfig,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 @Component({
   selector: 'app-asset-graph',

@@ -13,7 +13,7 @@ import {
   MALAttackStep,
   MALManager,
   MALNotification,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 @Component({
   selector: 'app-timeline',

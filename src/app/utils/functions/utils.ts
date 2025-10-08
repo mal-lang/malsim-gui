@@ -2,7 +2,7 @@ import {
   MALAssetGraphNode,
   MALNotification,
   MALNotificationType,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 
 /**
  * Returns the corresponding asset image for each asset type

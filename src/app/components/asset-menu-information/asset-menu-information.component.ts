@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { selectAssetImage } from 'src/app/utils/functions/utils';
-import { MALAssetGraphNode, MALAssetGraphNodeStatus, MALManager } from 'mal-js';
+import { MALAssetGraphNode, MALAssetGraphNodeStatus, MALManager } from '@mal-lang/mal-js';
 
 @Component({
   selector: 'app-asset-menu-information',

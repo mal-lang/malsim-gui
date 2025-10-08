@@ -10,7 +10,7 @@ import {
 
 import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { selectActionImage } from 'src/app/utils/functions/utils';
-import { MALManager } from 'mal-js';
+import { MALManager } from '@mal-lang/mal-js';
 
 interface SuggestedAction {
   stepId: number;

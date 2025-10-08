@@ -13,7 +13,7 @@ import {
   MALNotificationType,
   ExternalUtils,
   MALAlertStatus,
-} from 'mal-js';
+} from '@mal-lang/mal-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
