@@ -55,25 +55,25 @@ export class IconManager {
 
   public async load() {
     const assetUrls = {
-      network: '/assets/icons/network.png',
-      shield: '/assets/icons/shield.png',
-      connectionRule: '/assets/icons/networking.png',
-      id: '/assets/icons/id-card.png',
-      vulnerability: '/assets/icons/icognito.png',
-      application: '/assets/icons/app.png',
+      network: 'assets/icons/network.png',
+      shield: 'assets/icons/shield.png',
+      connectionRule: 'assets/icons/networking.png',
+      id: 'assets/icons/id-card.png',
+      vulnerability: 'assets/icons/icognito.png',
+      application: 'assets/icons/app.png',
 
-      alert: '/assets/icons/alert.png',
-      controlled: '/assets/icons/controlled.png',
-      disconnected: '/assets/icons/suggestions/suggestion-disconnect.png',
-      turnoff: '/assets/icons/suggestions/suggestion-turnoff.png',
+      alert: 'assets/icons/alert.png',
+      controlled: 'assets/icons/controlled.png',
+      disconnected: 'assets/icons/suggestions/suggestion-disconnect.png',
+      turnoff: 'assets/icons/suggestions/suggestion-turnoff.png',
 
-      bulb: '/assets/icons/attack-graph/light-bulb.png',
-      check: '/assets/icons/attack-graph/check.png',
-      eye: '/assets/icons/attack-graph/eye.png',
-      warning: '/assets/icons/attack-graph/warning-sign.png',
+      bulb: 'assets/icons/attack-graph/light-bulb.png',
+      check: 'assets/icons/attack-graph/check.png',
+      eye: 'assets/icons/attack-graph/eye.png',
+      warning: 'assets/icons/attack-graph/warning-sign.png',
 
-      cycle: '/assets/icons/attack-graph/cycle.png',
-      attacker: '/assets/icons/attack-graph/attacker.png',
+      cycle: 'assets/icons/attack-graph/cycle.png',
+      attacker: 'assets/icons/attack-graph/attacker.png',
     };
 
     // Step 1: Add assets to the cache

@@ -13,17 +13,17 @@ import {
 export function selectAssetImage(node: MALAssetGraphNode): string {
   switch (node.asset.type) {
     case 'Network':
-      return '/assets/icons/network.png';
+      return 'assets/icons/network.png';
     case 'Application':
-      return '/assets/icons/app.png';
+      return 'assets/icons/app.png';
     case 'ConnectionRule':
-      return '/assets/icons/networking.png';
+      return 'assets/icons/networking.png';
     case 'Identity':
-      return '/assets/icons/id-card.png';
+      return 'assets/icons/id-card.png';
     case 'SoftwareVulnerability':
-      return '/assets/icons/icognito.png';
+      return 'assets/icons/icognito.png';
     default:
-      return '/assets/icons/shield.png';
+      return 'assets/icons/shield.png';
   }
 }
 
