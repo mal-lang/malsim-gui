@@ -6,9 +6,9 @@ Angular 18 application for visualizing MAL simulator runs.
 
 ### Docker (recommended)
 
-- Install docker and docker compose
-- Run `docker compose up --build -d` to run the gui locally
-
+- Install docker on your system
+- Run `docker run -p 8888:8888 mrkickling/malsim-gui:0.0.0` to run the gui locally
+- Run the MAL-simulator and open http://localhost:8888 in your browser
 
 ### Angular + Python
 
