@@ -11,10 +11,10 @@ import {
   FillInput,
   TextStyleAlign,
   TextStyleFontWeight,
-  TyrAttackStep,
-  TyrManager,
-  TyrAttackGraphConfig,
-} from 'tyr-js';
+  MALAttackStep,
+  MALManager,
+  MALAttackGraphConfig,
+} from 'mal-js';
 import { CrossComponent } from '../../utils/components/cross/cross.component';
 @Component({
   selector: 'app-attack-graph',
@@ -26,10 +26,10 @@ import { CrossComponent } from '../../utils/components/cross/cross.component';
 
 /**
  * AttackGraphComponent is where the attack graph visualization will be hosted.
- * It contains the AttackGraphRenderer configuration which will be sent to tyrJS through HomeComponent -> AttackGraphComponent.getConfig()
+ * It contains the AttackGraphRenderer configuration which will be sent to MALJS through HomeComponent -> AttackGraphComponent.getConfig()
  */
 export class AttackGraphComponent {
-  @Input() tyrManager: TyrManager;
+  @Input() MALManager: MALManager;
   @Input() canBeExtended: Boolean;
   @Input() parentCloseAttackGraph: () => void;
   @Output() emitter = new EventEmitter<any>();
@@ -42,7 +42,7 @@ export class AttackGraphComponent {
   @ViewChild('forward') forward!: ElementRef;
   @ViewChild('backward') backward!: ElementRef;
 
-  private config: TyrAttackGraphConfig;
+  private config: MALAttackGraphConfig;
 
   public isVisible: boolean;
   public selectedDepth: number = 3;
@@ -151,7 +151,7 @@ export class AttackGraphComponent {
 
   /**
    * Emits the depth, suggestion distance and direction (forward) of the attack graph to HomeComponent,
-   * so it can later send it to TyrJS and build the graph with this information.
+   * so it can later send it to MALJS and build the graph with this information.
    *
    * This is determined by the sliders, and will be called each time they are updated.
    */
@@ -246,7 +246,7 @@ export class AttackGraphComponent {
   }
 
   /**
-   * Changes the attack graph direction to forward and emits the new values to HomeComponent, so it can later send it to TyrJS.
+   * Changes the attack graph direction to forward and emits the new values to HomeComponent, so it can later send it to MALJS.
    */
   public selectForward() {
     if (this.isForward) return;
@@ -254,7 +254,7 @@ export class AttackGraphComponent {
     this.emitValues();
   }
   /**
-   * Changes the attack graph direction to backwards and emits the new values to HomeComponent, so it can later send it to TyrJS.
+   * Changes the attack graph direction to backwards and emits the new values to HomeComponent, so it can later send it to MALJS.
    */
   public selectBackwards() {
     if (!this.isForward) return;

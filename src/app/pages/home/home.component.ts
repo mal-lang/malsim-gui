@@ -5,20 +5,20 @@ import { ApiService } from 'src/app/services/api-service/api-service.service';
 import { forkJoin } from 'rxjs';
 
 import {
-  TyrAssetGraphNode,
-  TyrAssetGraphNodeStatus,
-  TyrAttackStep,
-  TyrManager,
-  TyrNotification,
-  TyrNotificationType,
+  MALAssetGraphNode,
+  MALAssetGraphNodeStatus,
+  MALAttackStep,
+  MALManager,
+  MALNotification,
+  MALNotificationType,
   ExternalUtils,
-  TyrAlertStatus,
-} from 'tyr-js';
+  MALAlertStatus,
+} from 'mal-js';
 import { TimelineComponent } from 'src/app/components/timeline/timeline.component';
 import { AssetMenuComponent } from 'src/app/components/asset-menu/asset-menu.component';
 import { AttackGraphComponent } from 'src/app/components/attack-graph/attack-graph.component';
-import { assetGraphRendererRules } from 'src/tyr-js/assetGraphRendererRules';
-import { IconManager } from 'src/tyr-js/iconManager';
+import { assetGraphRendererRules } from 'src/mal-js/assetGraphRendererRules';
+import { IconManager } from 'src/mal-js/iconManager';
 
 interface RewardValue {
   reward: number;
@@ -32,8 +32,8 @@ interface RewardValue {
 })
 
 /**
- * HomeComponent acts like the main component of this project. It aims to initialize the rest of components as well as TyrJS, and act like
- * central point where all information from all components, TyrJS and the API converge.
+ * HomeComponent acts like the main component of this project. It aims to initialize the rest of components as well as MALJS, and act like
+ * central point where all information from all components, MALJS and the API converge.
  */
 export class HomeComponent {
   //All child components
@@ -52,12 +52,12 @@ export class HomeComponent {
   private iconManager: IconManager;
   private externalTools: ExternalUtils;
 
-  public tyrManager: TyrManager;
+  public MALManager: MALManager;
   public rewardValue: RewardValue;
   public cursorStyle: string;
   public displayAssetGraph: boolean;
   public currentDefenderSuggestions: any;
-  public notifyClick = (node: TyrAssetGraphNode) => {};
+  public notifyClick = (node: MALAssetGraphNode) => {};
 
   public defensesCollapsed = false;
 
@@ -96,11 +96,11 @@ export class HomeComponent {
     /** It also initializes notifyClick, a function meant to be called each time
      * the user clicks, in this case, in the asset graph visualization.
      *
-     * This is necessary since these interactions are triggered in the tyrJS library
+     * This is necessary since these interactions are triggered in the MALJS library
      * and not this project, and therefore, we need to "listen" to them.
      */
-    this.notifyClick = (node: TyrAssetGraphNode) => {
-      if (!this.tyrManager.attackGraphRenderer.getIsVisible()) {
+    this.notifyClick = (node: MALAssetGraphNode) => {
+      if (!this.MALManager.attackGraphRenderer.getIsVisible()) {
         this.assetMenu.selectNode(node);
       }
     };
@@ -148,7 +148,7 @@ export class HomeComponent {
   //API data retriever functions
 
   /**
-   * Receives the model and attack graph from the API. Then, it initializes TyrJS and
+   * Receives the model and attack graph from the API. Then, it initializes MALJS and
    * the asset and attack graph visualizations by initializing their renderers.
    */
   private async retrieveInitialData() {
@@ -158,8 +158,8 @@ export class HomeComponent {
       this.apiService.getPerformedNodes(),
     ]).subscribe({
       next: async ([receivedModel, receivedAttackGraph]) => {
-        //Once the model and attack graph is received, this data is used to initialize tyr-js
-        this.tyrManager = new TyrManager(
+        //Once the model and attack graph is received, this data is used to initialize mal-js
+        this.MALManager = new MALManager(
           receivedModel,
           receivedAttackGraph,
           this.externalTools
@@ -172,13 +172,13 @@ export class HomeComponent {
           this.attackGraph.getAttackGraphContainer().nativeElement;
 
         //Initialize renderers for the asset and attack graphs
-        this.tyrManager.assetGraphRenderer.init(
+        this.MALManager.assetGraphRenderer.init(
           assetGraphContainer,
           assetGraphRendererRules,
           this.assetGraph.getConfig()
         );
 
-        this.tyrManager.attackGraphRenderer.init(
+        this.MALManager.attackGraphRenderer.init(
           attackGraphContainer,
           [],
           this.attackGraph.getConfig()
@@ -206,8 +206,8 @@ export class HomeComponent {
   }
 
   private getNotificationFromPerformedNode(nodeId: string) {
-    let alert: TyrNotification;
-    const attackGraph = this.tyrManager.getAttackGraphNodes();
+    let alert: MALNotification;
+    const attackGraph = this.MALManager.getAttackGraphNodes();
     const step = attackGraph.find((n) => n.id == nodeId);
     if (!step) throw new Error('Step not found');
 
@@ -216,10 +216,10 @@ export class HomeComponent {
 
       const asset = step!.attackStep.asset;
       alert = {
-        type: TyrNotificationType.suggestion,
+        type: MALNotificationType.suggestion,
         node: asset,
         description: '',
-        status: TyrAlertStatus.controlled,
+        status: MALAlertStatus.controlled,
         timestamp: Date.now(),
         attackStep: step!.attackStep,
         hidden: this.timeline.automaticUpdate,
@@ -233,7 +233,7 @@ export class HomeComponent {
         step!.attackStep.name
       );
     } else {
-      alert = this.tyrManager.receiveLatestAttackStep(
+      alert = this.MALManager.receiveLatestAttackStep(
         nodeId,
         this.timeline.automaticUpdate
       )!;
@@ -265,11 +265,11 @@ export class HomeComponent {
         this.iteration = Math.max(...iterations) + 1;
       }
 
-      //If the agents suggestions are new, it send the data to tyrJS and updates the project's defender suggestion list (the one in the left side of the screen)
+      //If the agents suggestions are new, it send the data to MALJS and updates the project's defender suggestion list (the one in the left side of the screen)
       if (this.checkDefenderSuggestions(defenderSuggestions)) {
         this.currentDefenderSuggestions = defenderSuggestions;
         this.suggestedActions.updateSuggestedActions(defenderSuggestions);
-        this.tyrManager.attackGraphRenderer.updateSuggestedDefenses(
+        this.MALManager.attackGraphRenderer.updateSuggestedDefenses(
           this.suggestedActions.suggestedActions.map((a) => String(a.stepId))
         );
       }
@@ -281,7 +281,7 @@ export class HomeComponent {
   /**
    * Initializes the interval to call retrieveAlerts() iteratively
    * This function is passed to the asset graph component, which contains the asset graph renderer configuration. This is done so, so that
-   * TyrJS can call this once everything, and not get any alert prior to the initialization of the asset graph visualization.
+   * MALJS can call this once everything, and not get any alert prior to the initialization of the asset graph visualization.
    */
   public setAlertsInterval() {
     this.intervalId = setInterval(() => {
@@ -291,13 +291,13 @@ export class HomeComponent {
 
   //Timeline related functions
   /**
-   * Adds the executed suggestion to the timeline, and sends the suggestion to TyrJS to visualize its effects in the network.
+   * Adds the executed suggestion to the timeline, and sends the suggestion to MALJS to visualize its effects in the network.
    *
    * @param { any } suggestion - the performed suggestion
    */
   addExecutedSuggestionToTimeline(suggestion: any) {
     //Finds the suggested step in the attack graph
-    const attackstep = this.tyrManager
+    const attackstep = this.MALManager
       .getAttackSteps()
       .find((a) => a.id == suggestion.stepId);
 
@@ -307,13 +307,13 @@ export class HomeComponent {
     this.createDefense(attackstep, suggestion.type, suggestion.description);
   }
 
-  createDefense(attackStep: TyrAttackStep, type: string, description?: string) {
+  createDefense(attackStep: MALAttackStep, type: string, description?: string) {
     const getNodeChildren = (
-      node: TyrAssetGraphNode,
+      node: MALAssetGraphNode,
       isShutdownMachine: boolean
     ) => {
       let list = node.connections.children;
-      const nodes = this.tyrManager
+      const nodes = this.MALManager
         .getAssetGraphNodes()
         .filter((n) => list.includes(n));
 
@@ -330,10 +330,10 @@ export class HomeComponent {
     };
 
     //Creates the notification with its information
-    const tyrSuggestion: TyrNotification = {
+    const MALSuggestion: MALNotification = {
       node: attackStep.asset,
       attackStep: attackStep,
-      type: TyrNotificationType.suggestion,
+      type: MALNotificationType.suggestion,
       timestamp: Date.now(),
       hidden: false,
       currentColor: 0x9fd4f2,
@@ -348,81 +348,81 @@ export class HomeComponent {
     */
     switch (type) {
       case 'Application:notPresent':
-        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+        MALSuggestion.nodeStatus = MALAssetGraphNodeStatus.inactive;
+        MALSuggestion.node.status = MALAssetGraphNodeStatus.inactive;
 
         //All its children are also shutdown
-        tyrSuggestion.otherAffectedNodes = getNodeChildren(
-          tyrSuggestion.node,
+        MALSuggestion.otherAffectedNodes = getNodeChildren(
+          MALSuggestion.node,
           true
-        ) as TyrAssetGraphNode[];
+        ) as MALAssetGraphNode[];
         break;
       case 'Identity:notPresent':
-        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+        MALSuggestion.nodeStatus = MALAssetGraphNodeStatus.inactive;
+        MALSuggestion.node.status = MALAssetGraphNodeStatus.inactive;
 
         //All its children, except applications will be shutdown
-        tyrSuggestion.otherAffectedNodes = getNodeChildren(
-          tyrSuggestion.node,
+        MALSuggestion.otherAffectedNodes = getNodeChildren(
+          MALSuggestion.node,
           false
-        ) as TyrAssetGraphNode[];
+        ) as MALAssetGraphNode[];
         break;
       case 'ConnectionRule:restricted':
-        tyrSuggestion.nodeStatus = TyrAssetGraphNodeStatus.inactive;
-        tyrSuggestion.node.status = TyrAssetGraphNodeStatus.inactive;
+        MALSuggestion.nodeStatus = MALAssetGraphNodeStatus.inactive;
+        MALSuggestion.node.status = MALAssetGraphNodeStatus.inactive;
         //There are no other affected nodes in this case, only the CR will be turned off.
         break;
       default:
         break;
     }
 
-    console.log(tyrSuggestion.node.asset.name, tyrSuggestion.node.status);
+    console.log(MALSuggestion.node.asset.name, MALSuggestion.node.status);
 
-    //Send the performed suggestion to TyrJS for its effect to be visualized in the asset graph.
-    this.tyrManager.receivePerformedSuggestion(
-      tyrSuggestion,
+    //Send the performed suggestion to MALJS for its effect to be visualized in the asset graph.
+    this.MALManager.receivePerformedSuggestion(
+      MALSuggestion,
       this.timeline.automaticUpdate
     );
 
     //Add the suggestion to the timeline
-    this.timeline.addPerformedSuggestion(tyrSuggestion);
+    this.timeline.addPerformedSuggestion(MALSuggestion);
 
     if (this.timeline.automaticUpdate)
-      tyrSuggestion.node.style.timelineStatus = tyrSuggestion.node.status;
-    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(
-      tyrSuggestion.node
+      MALSuggestion.node.style.timelineStatus = MALSuggestion.node.status;
+    this.MALManager.assetGraphRenderer.resetStyleToNodeStatus(
+      MALSuggestion.node
     );
   }
 
   //Attack graph related functions
   isAttackGraphMode() {
-    return this.tyrManager?.attackGraphRenderer?.getIsVisible?.();
+    return this.MALManager?.attackGraphRenderer?.getIsVisible?.();
   }
 
   /**
    * Creates the attack graph from the àssed attack steps
    *
-   * @param { TyrAttackStep[] } attackSteps - the attack step(s) to build the attack graph(s) from
+   * @param { MALAttackStep[] } attackSteps - the attack step(s) to build the attack graph(s) from
    */
-  displayAttackGraph = (attackSteps: TyrAttackStep[]) => {
-    this.tyrManager.attackGraphRenderer.displaySubgraph(
+  displayAttackGraph = (attackSteps: MALAttackStep[]) => {
+    this.MALManager.attackGraphRenderer.displaySubgraph(
       attackSteps,
       this.attackGraph.selectedDepth,
       this.attackGraph.selectedSuggestionDist,
       this.attackGraph.isForward
     );
     //Center camera to graph
-    this.tyrManager.attackGraphRenderer.resizeViewport();
+    this.MALManager.attackGraphRenderer.resizeViewport();
   };
 
   /**
    * Creates the attack graph and expands its HTML element to allow for its visualization.
    *
-   * @param { TyrAttackStep } attackStep - the attack step to build the attack graph from
+   * @param { MALAttackStep } attackStep - the attack step to build the attack graph from
    */
-  openAttackGraph = (attackStep: TyrAttackStep) => {
+  openAttackGraph = (attackStep: MALAttackStep) => {
     //Activate the attack graph mode
-    this.tyrManager.assetGraphRenderer.activateAttackGraphMode();
+    this.MALManager.assetGraphRenderer.activateAttackGraphMode();
 
     //Expand the attack graph HTML element so its visible now
     this.attackGraph.openAttackGraph();
@@ -433,17 +433,17 @@ export class HomeComponent {
     //Generate the attack graph
     this.displayAttackGraph([attackStep]);
     this.displayAssetGraph = false;
-    this.tyrManager.assetGraphRenderer.hideViewport();
+    this.MALManager.assetGraphRenderer.hideViewport();
   };
 
   /**
    * Closes the attack graph, shrinking its HTML element and setting everything necessary to only display the asset graph
    */
   closeAttackGraph = () => {
-    this.tyrManager.assetGraphRenderer.deactivateAttackGraphMode();
-    this.tyrManager.attackGraphRenderer.setIsVisible(false);
+    this.MALManager.assetGraphRenderer.deactivateAttackGraphMode();
+    this.MALManager.attackGraphRenderer.setIsVisible(false);
     this.displayAssetGraph = true;
-    this.tyrManager.assetGraphRenderer.displayViewport();
+    this.MALManager.assetGraphRenderer.displayViewport();
   };
 
   /**
@@ -453,14 +453,14 @@ export class HomeComponent {
    * @param {any} event - the emitted value with depth, suggestionDist and forward to update the visualization
    */
   updateAttackGraph = (event: any) => {
-    this.tyrManager.attackGraphRenderer.displaySubgraph(
+    this.MALManager.attackGraphRenderer.displaySubgraph(
       this.timeline.selectedNotifications.map((n) => n.attackStep!),
       event.depth,
       event.suggestionDist,
       event.forward
     );
 
-    this.tyrManager.attackGraphRenderer.resizeViewport();
+    this.MALManager.attackGraphRenderer.resizeViewport();
   };
 
   public collapseDefenseSuggestions($event: any) {

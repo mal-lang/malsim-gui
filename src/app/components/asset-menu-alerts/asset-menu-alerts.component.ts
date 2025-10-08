@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { getNotificationImage } from 'src/app/utils/functions/utils';
-import { TyrNotificationType, TyrAssetGraphNode, TyrAttackStep } from 'tyr-js';
+import { MALNotificationType, MALAssetGraphNode, MALAttackStep } from 'mal-js';
 
 @Component({
   selector: 'app-asset-menu-alerts',
@@ -15,8 +15,8 @@ import { TyrNotificationType, TyrAssetGraphNode, TyrAttackStep } from 'tyr-js';
  * AssetMenuAlertsComponent is the dedicated menu that display the asset's alerts.
  */
 export class AssetMenuAlertsComponent {
-  @Input() node: TyrAssetGraphNode;
-  @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
+  @Input() node: MALAssetGraphNode;
+  @Input() openAttackGraph: (attackStep: MALAttackStep) => void;
 
   /**
    * Utils function that returns the correct image depending on the notification type.
@@ -45,21 +45,21 @@ export class AssetMenuAlertsComponent {
   /**
    * Returns the notification name depending on its type
    *
-   * @param {TyrNotificationType} value - The notification type.
+   * @param {MALNotificationType} value - The notification type.
    * @returns {string} - The name of the notification.
    */
-  public getName(value: TyrNotificationType) {
+  public getName(value: MALNotificationType) {
     switch (value) {
-      case TyrNotificationType.alert:
+      case MALNotificationType.alert:
         return 'Alert';
-      case TyrNotificationType.suggestion:
+      case MALNotificationType.suggestion:
         return 'Performed Suggestion';
       default:
         return '';
     }
   }
 
-  public manageAttackGraph(attackStep: TyrAttackStep) {
+  public manageAttackGraph(attackStep: MALAttackStep) {
     if (attackStep.type != 'defense') this.openAttackGraph(attackStep);
   }
 }

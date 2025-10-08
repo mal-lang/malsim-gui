@@ -1,4 +1,4 @@
-name: NG Tests Tyr GUI
+name: NG Tests MAL GUI
 on: [push]
 
 jobs:

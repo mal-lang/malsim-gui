@@ -13,10 +13,10 @@ import {
   SimulationConfig,
   TextStyleAlign,
   TextStyleFontWeight,
-  TyrAssetGraphNode,
-  TyrAssetGraphClusterRule,
-  TyrAssetGraphConfig,
-} from 'tyr-js';
+  MALAssetGraphNode,
+  MALAssetGraphClusterRule,
+  MALAssetGraphConfig,
+} from 'mal-js';
 
 @Component({
   selector: 'app-asset-graph',
@@ -26,17 +26,17 @@ import {
 
 /**
  * AssetGraphComponent is where the asset graph visualization will be hosted.
- * It contains the AssetGraphRenderer configuration which will be sent to tyrJS through HomeComponent -> AssetGraphComponent.getConfig()
+ * It contains the AssetGraphRenderer configuration which will be sent to MALJS through HomeComponent -> AssetGraphComponent.getConfig()
  */
 export class AssetGraphComponent {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @Input() isVisible: boolean;
   @Input() attackStepMap: any;
-  @Input() onNodeClick: (node: TyrAssetGraphNode) => void;
+  @Input() onNodeClick: (node: MALAssetGraphNode) => void;
   @Output() simulationStatusEmitter = new EventEmitter<any>();
 
-  private config: TyrAssetGraphConfig;
-  private clusterRules: TyrAssetGraphClusterRule[] = [
+  private config: MALAssetGraphConfig;
+  private clusterRules: MALAssetGraphClusterRule[] = [
     {
       type: 'Network',
     },
@@ -100,7 +100,7 @@ export class AssetGraphComponent {
         onPointerOut: () => {
           this.cursorStyle = 'grab';
         },
-        onClick: (node: TyrAssetGraphNode) => {
+        onClick: (node: MALAssetGraphNode) => {
           this.onNodeClick(node);
         },
         onFirstRendered: () => {

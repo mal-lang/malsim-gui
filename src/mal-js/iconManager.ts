@@ -4,10 +4,10 @@ import {
   ColorMatrixFilter,
   Sprite,
   Texture,
-  TyrAlertStatus,
-  TyrAssetGraphNodeStatus,
-  TyrAttackStep,
-} from 'tyr-js';
+  MALAlertStatus,
+  MALAssetGraphNodeStatus,
+  MALAttackStep,
+} from 'mal-js';
 
 export interface AssetIcons {
   networkSprite: Texture;
@@ -211,13 +211,13 @@ export class IconManager {
     return sprite;
   }
 
-  public selectAlertIcon(alert: TyrAlertStatus): Sprite {
+  public selectAlertIcon(alert: MALAlertStatus): Sprite {
     let texture;
     switch (alert) {
-      case TyrAlertStatus.alerted:
+      case MALAlertStatus.alerted:
         texture = this.assetStatusIcons.alertSprite;
         break;
-      case TyrAlertStatus.controlled:
+      case MALAlertStatus.controlled:
         texture = this.assetStatusIcons.controlledSprite;
         break;
       default:
@@ -228,13 +228,13 @@ export class IconManager {
     return new Sprite(texture);
   }
 
-  public getNodeStatusIcon(status: TyrAssetGraphNodeStatus): Sprite {
+  public getNodeStatusIcon(status: MALAssetGraphNodeStatus): Sprite {
     let texture;
     switch (status) {
-      case TyrAssetGraphNodeStatus.inactive:
+      case MALAssetGraphNodeStatus.inactive:
         texture = this.assetStatusIcons.inactiveSprite;
         break;
-      case TyrAssetGraphNodeStatus.disconnected:
+      case MALAssetGraphNodeStatus.disconnected:
         texture = this.assetStatusIcons.disconnectedSprite;
         break;
       default:
@@ -244,7 +244,7 @@ export class IconManager {
     return new Sprite(texture);
   }
 
-  public getAttackGraphNodeIcon(attackStep: TyrAttackStep): AttackGraphSprite {
+  public getAttackGraphNodeIcon(attackStep: MALAttackStep): AttackGraphSprite {
     const result: AttackGraphSprite = {
       sprite: undefined,
       background: undefined,

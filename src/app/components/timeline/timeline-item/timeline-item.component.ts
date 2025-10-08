@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { selectAssetImage } from 'src/app/utils/functions/utils';
-import { TyrNotification } from 'tyr-js';
+import { MALNotification } from 'mal-js';
 
 @Component({
   selector: 'app-timeline-item',
@@ -10,7 +10,7 @@ import { TyrNotification } from 'tyr-js';
   styleUrl: './timeline-item.component.scss',
 })
 export class TimelineItemComponent {
-  @Input() notification: TyrNotification;
+  @Input() notification: MALNotification;
   alertImageURL: string;
   timestamp: string;
 

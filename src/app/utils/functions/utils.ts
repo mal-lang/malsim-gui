@@ -1,16 +1,16 @@
 import {
-  TyrAssetGraphNode,
-  TyrNotification,
-  TyrNotificationType,
-} from 'tyr-js';
+  MALAssetGraphNode,
+  MALNotification,
+  MALNotificationType,
+} from 'mal-js';
 
 /**
  * Returns the corresponding asset image for each asset type
  *
- * @param {TyrAssetGraphNode} node - The asset node object to determine the image from.
+ * @param {MALAssetGraphNode} node - The asset node object to determine the image from.
  * @return {string} - The url to the image.
  */
-export function selectAssetImage(node: TyrAssetGraphNode): string {
+export function selectAssetImage(node: MALAssetGraphNode): string {
   switch (node.asset.type) {
     case 'Network':
       return '/assets/icons/network.png';
@@ -30,10 +30,10 @@ export function selectAssetImage(node: TyrAssetGraphNode): string {
 /**
  * Returns the corresponding image for each suggestion type
  *
- * @param {TyrNotification} suggestion - The notification object to determine the image from.
+ * @param {MALNotification} suggestion - The notification object to determine the image from.
  * @return {string} - The url to the image.
  */
-function getSuggestionImage(suggestion: TyrNotification) {
+function getSuggestionImage(suggestion: MALNotification) {
   switch (suggestion.attackStep?.langGraphAttackStep) {
     case 'Application:notPresent':
       return 'assets/icons/suggestions/suggestion-turnoff.png';
@@ -49,14 +49,14 @@ function getSuggestionImage(suggestion: TyrNotification) {
 /**
  * Returns the corresponding image for each notification type
  *
- * @param {TyrNotification} notification - The notification object to determine the image from.
+ * @param {MALNotification} notification - The notification object to determine the image from.
  * @return {string} - The url to the image.
  */
-export function getNotificationImage(notification: TyrNotification) {
+export function getNotificationImage(notification: MALNotification) {
   switch (notification.type) {
-    case TyrNotificationType.alert:
+    case MALNotificationType.alert:
       return 'assets/icons/alert.png';
-    case TyrNotificationType.suggestion:
+    case MALNotificationType.suggestion:
       return getSuggestionImage(notification);
     default:
       return '';

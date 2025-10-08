@@ -4,17 +4,12 @@ import { NgClass, NgIf } from '@angular/common';
 import { AssetMenuInformationComponent } from '../asset-menu-information/asset-menu-information.component';
 import { CrossComponent } from '../../utils/components/cross/cross.component';
 import {
-  TyrManager,
-  getEmptyNodeStyle,
-  getEmptyNodeConnectionInfo,
-  getEmptyNodeCluster,
-  TyrNotification,
-  TyrAssetGraphNode,
-  TyrAssetGraphNodeStatus,
-  TyrAttackStep,
-  getEmptyAnimationHelper,
+  MALManager,
+  MALNotification,
+  MALAssetGraphNode,
+  MALAttackStep,
   getEmptyAssetGraphNode,
-} from 'tyr-js';
+} from 'mal-js';
 
 enum AvailableAssetMenus {
   information,
@@ -40,10 +35,10 @@ enum AvailableAssetMenus {
  * It displays information about the asset, its CIA values, its status, its alerts and its connected assets.
  */
 export class AssetMenuComponent {
-  @Input() tyrManager: TyrManager;
-  @Input() openAttackGraph: (attackStep: TyrAttackStep) => void;
-  public node: TyrAssetGraphNode;
-  public notifications: TyrNotification[] = [];
+  @Input() MALManager: MALManager;
+  @Input() openAttackGraph: (attackStep: MALAttackStep) => void;
+  public node: MALAssetGraphNode;
+  public notifications: MALNotification[] = [];
   public closed: boolean = true;
   AvailableAssetMenus = AvailableAssetMenus; //expose to html
   public openedMenu: AvailableAssetMenus = AvailableAssetMenus.information;
@@ -57,9 +52,9 @@ export class AssetMenuComponent {
   /**
    * Select the node. Meant to be used when the targetted node is changed.
    *
-   * @param {TyrAssetGraphNode} node - The node to be selected.
+   * @param {MALAssetGraphNode} node - The node to be selected.
    */
-  public selectNode(node: TyrAssetGraphNode) {
+  public selectNode(node: MALAssetGraphNode) {
     this.node = node;
     this.closed = false;
   }
@@ -79,16 +74,16 @@ export class AssetMenuComponent {
   public close() {
     this.closed = true;
     this.node.style.selected = false;
-    this.tyrManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
+    this.MALManager.assetGraphRenderer.resetStyleToNodeStatus(this.node);
   }
 
   /**
    * Opens the attack graph window.
    * Meant to be used when an alert(attackStep) has been selected.
    *
-   * @param {TyrAttackStep} attackStep - The attack step to build the attack graph from.
+   * @param {MALAttackStep} attackStep - The attack step to build the attack graph from.
    */
-  openAttackGraphWindow = (attackStep: TyrAttackStep) => {
+  openAttackGraphWindow = (attackStep: MALAttackStep) => {
     this.close();
     this.openAttackGraph(attackStep);
   };
