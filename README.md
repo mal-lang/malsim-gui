@@ -10,8 +10,9 @@ Angular 18 application for visualizing MAL simulator runs.
 
 - Install docker on your system
 - Run `docker run -p 8888:8888 mrkickling/malsim-gui:0.0.0` to run the gui locally
+- If you run simulations via script, you will need to pass `send_to_api=True` as an argument when instatiating the MalSimulator() object. However, if you run the simulations from the command line, you will need to use the -g flag.
 - Run the MAL-simulator and open http://localhost:8888 in your browser
-
+  
 ### Angular + Python
 
 You will need to run the FastAPI python application and the angular application separately.
